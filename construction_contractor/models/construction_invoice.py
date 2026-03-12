@@ -75,6 +75,14 @@ class ConstructionInvoice(models.Model):
 
     notes = fields.Text(string='Notes / Remarks')
 
+    # Payment source — set when payment is registered via the payment wizard
+    payment_source = fields.Selection([
+        ('payroll_card', 'Payroll Card'),
+        ('employer_cash', 'Employer Account - Cash'),
+        ('employer_check', 'Employer Account - Check'),
+    ], string='Payment Source', tracking=True,
+        help='Account from which this invoice was (or will be) paid')
+
     # Link to native Odoo vendor bill
     account_move_id = fields.Many2one(
         'account.move',
@@ -214,13 +222,20 @@ class ConstructionInvoice(models.Model):
         }
 
     def action_register_payment(self):
-        """Open the native Odoo payment registration wizard."""
+        """Open the construction payment wizard to select payment source and journal."""
         self.ensure_one()
         if not self.account_move_id:
             raise ValidationError(_('Please create the vendor bill first.'))
-        if self.account_move_id.state == 'draft':
-            self.account_move_id.action_post()
-        return self.account_move_id.action_register_payment()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Register Payment'),
+            'res_model': 'construction.invoice.payment.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_invoice_id': self.id,
+            },
+        }
 
     def action_cancel(self):
         for rec in self:

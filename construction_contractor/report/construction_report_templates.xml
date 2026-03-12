@@ -212,41 +212,81 @@
                             </tbody>
                         </table>
 
-                        <!-- Payment Source Breakdown -->
+                        <!-- Payment Source Breakdown (Expenses + Invoice Payments) -->
                         <h4 class="mt-4">Payment Source Breakdown</h4>
                         <t t-set="confirmed_expenses" t-value="project.env['construction.expense'].search([
                             ('project_id','=',project.id),
                             ('state','=','confirmed'),
                         ])"/>
+                        <t t-set="all_invoices" t-value="project.env['construction.invoice'].search([
+                            ('project_id','=',project.id),
+                        ])"/>
                         <table class="table table-bordered table-sm">
                             <thead class="table-light">
                                 <tr>
                                     <th>Payment Source</th>
-                                    <th class="text-end">Total Amount</th>
+                                    <th class="text-end">Expenses</th>
+                                    <th class="text-end">Invoice Payments</th>
+                                    <th class="text-end">Total</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <t t-set="card_total" t-value="sum(confirmed_expenses.filtered(lambda e: e.payment_source == 'payroll_card').mapped('amount'))"/>
-                                <t t-set="cash_total" t-value="sum(confirmed_expenses.filtered(lambda e: e.payment_source == 'employer_cash').mapped('amount'))"/>
-                                <t t-set="check_total" t-value="sum(confirmed_expenses.filtered(lambda e: e.payment_source == 'employer_check').mapped('amount'))"/>
+                                <t t-set="exp_card" t-value="sum(confirmed_expenses.filtered(lambda e: e.payment_source == 'payroll_card').mapped('amount'))"/>
+                                <t t-set="exp_cash" t-value="sum(confirmed_expenses.filtered(lambda e: e.payment_source == 'employer_cash').mapped('amount'))"/>
+                                <t t-set="exp_check" t-value="sum(confirmed_expenses.filtered(lambda e: e.payment_source == 'employer_check').mapped('amount'))"/>
+                                <t t-set="inv_card" t-value="sum(all_invoices.filtered(lambda i: i.payment_source == 'payroll_card').mapped('amount_paid'))"/>
+                                <t t-set="inv_cash" t-value="sum(all_invoices.filtered(lambda i: i.payment_source == 'employer_cash').mapped('amount_paid'))"/>
+                                <t t-set="inv_check" t-value="sum(all_invoices.filtered(lambda i: i.payment_source == 'employer_check').mapped('amount_paid'))"/>
                                 <tr>
                                     <td>Payroll Card</td>
                                     <td class="text-end">
-                                        <t t-esc="card_total"
+                                        <t t-esc="exp_card"
+                                           t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                    </td>
+                                    <td class="text-end">
+                                        <t t-esc="inv_card"
+                                           t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                    </td>
+                                    <td class="text-end fw-bold">
+                                        <t t-esc="exp_card + inv_card"
                                            t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Employer Cash</td>
                                     <td class="text-end">
-                                        <t t-esc="cash_total"
+                                        <t t-esc="exp_cash"
+                                           t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                    </td>
+                                    <td class="text-end">
+                                        <t t-esc="inv_cash"
+                                           t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                    </td>
+                                    <td class="text-end fw-bold">
+                                        <t t-esc="exp_cash + inv_cash"
                                            t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Employer Check</td>
                                     <td class="text-end">
-                                        <t t-esc="check_total"
+                                        <t t-esc="exp_check"
+                                           t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                    </td>
+                                    <td class="text-end">
+                                        <t t-esc="inv_check"
+                                           t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                    </td>
+                                    <td class="text-end fw-bold">
+                                        <t t-esc="exp_check + inv_check"
+                                           t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                    </td>
+                                </tr>
+                                <!-- Payroll Card Balance row -->
+                                <tr class="table-info">
+                                    <td colspan="3"><strong>Payroll Card Balance (Deposits − Card Payments)</strong></td>
+                                    <td class="text-end fw-bold">
+                                        <t t-esc="project.payroll_card_balance"
                                            t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
                                     </td>
                                 </tr>
