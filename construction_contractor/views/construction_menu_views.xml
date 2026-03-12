@@ -3,6 +3,7 @@
     <!-- Top-level menu -->
     <menuitem id="menu_construction_root"
               name="Construction"
+              web_icon="construction_contractor,static/description/icon.svg"
               groups="construction_contractor.group_construction_manager"
               sequence="50"/>
 
