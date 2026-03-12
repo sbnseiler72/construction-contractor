@@ -1,0 +1,1405 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* construction_contractor
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-11 16:44+0000\n"
+"PO-Revision-Date: 2026-03-11 16:44+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+msgid "<strong>Contracted Amount</strong>"
+msgstr "<strong>مبلغ قرارداد</strong>"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+msgid "<strong>Employer</strong>"
+msgstr "<strong>کارفرما</strong>"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+msgid "<strong>End Date</strong>"
+msgstr "<strong>تاریخ پایان</strong>"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+msgid "<strong>Manager</strong>"
+msgstr "<strong>مدیر پروژه</strong>"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+msgid "<strong>Outstanding Balance</strong>"
+msgstr "<strong>مانده بدهی</strong>"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+msgid "<strong>Start Date</strong>"
+msgstr "<strong>تاریخ شروع</strong>"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+msgid "<strong>Status</strong>"
+msgstr "<strong>وضعیت</strong>"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+msgid "<strong>Total Card Deposits</strong>"
+msgstr "<strong>جمع واریزهای کارت حقوق</strong>"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+msgid "<strong>Total Expenses</strong>"
+msgstr "<strong>جمع هزینه‌ها</strong>"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+msgid "<strong>Total Invoiced</strong>"
+msgstr "<strong>جمع صورت‌حساب‌ها</strong>"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+msgid "<strong>Total Paid on Invoices</strong>"
+msgstr "<strong>جمع پرداخت‌شده بابت صورت‌حساب‌ها</strong>"
+
+#. module: construction_contractor
+#. odoo-python
+#: code:addons/construction_contractor/models/construction_project.py:0
+msgid "A payroll card journal already exists for this project."
+msgstr "دفتر کارت حقوق برای این پروژه از قبل ثبت شده است."
+
+#. module: construction_contractor
+#. odoo-python
+#: code:addons/construction_contractor/models/construction_card_transaction.py:0
+msgid ""
+"A receipt reference or file attachment is required before confirming a card "
+"transaction."
+msgstr ""
+"پیش از تأیید تراکنش کارت، ارائه شماره رسید یا فایل پیوست الزامی است."
+
+#. module: construction_contractor
+#. odoo-python
+#: code:addons/construction_contractor/models/construction_expense.py:0
+msgid ""
+"A receipt reference or file attachment is required before confirming an "
+"expense."
+msgstr ""
+"پیش از تأیید هزینه، ارائه شماره رسید یا فایل پیوست الزامی است."
+
+#. module: construction_contractor
+#. odoo-python
+#: code:addons/construction_contractor/models/construction_invoice.py:0
+msgid "A vendor bill already exists for this invoice."
+msgstr "فاکتور خرید برای این صورت‌حساب از قبل ثبت شده است."
+
+#. module: construction_contractor
+#: model:res.groups,name:construction_contractor.group_construction_accountant
+msgid "Accountant"
+msgstr "حسابدار"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__message_needaction
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__message_needaction
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__message_needaction
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__message_needaction
+msgid "Action Needed"
+msgstr "نیاز به اقدام"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_form
+msgid "Activate"
+msgstr "فعال‌سازی"
+
+#. module: construction_contractor
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_project__state__active
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_search
+msgid "Active"
+msgstr "فعال"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__activity_ids
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__activity_ids
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__activity_ids
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__activity_ids
+msgid "Activities"
+msgstr "فعالیت‌ها"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__activity_exception_decoration
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__activity_exception_decoration
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__activity_exception_decoration
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "نشانگر استثنای فعالیت"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__activity_state
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__activity_state
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__activity_state
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__activity_state
+msgid "Activity State"
+msgstr "وضعیت فعالیت"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__activity_type_icon
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__activity_type_icon
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__activity_type_icon
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "آیکون نوع فعالیت"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_form
+msgid "Additional notes..."
+msgstr "یادداشت‌های تکمیلی..."
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_form
+msgid "Additional remarks..."
+msgstr "توضیحات تکمیلی..."
+
+#. module: construction_contractor
+#: model:ir.ui.menu,name:construction_contractor.menu_construction_invoices
+msgid "All Invoices"
+msgstr "همه صورت‌حساب‌ها"
+
+#. module: construction_contractor
+#: model:ir.ui.menu,name:construction_contractor.menu_construction_project_list
+msgid "All Projects"
+msgstr "همه پروژه‌ها"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__amount
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__amount
+msgid "Amount"
+msgstr "مبلغ"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__amount_paid
+msgid "Amount Paid"
+msgstr "مبلغ پرداخت‌شده"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_form
+msgid "Amounts"
+msgstr "مبالغ"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__message_attachment_count
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__message_attachment_count
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__message_attachment_count
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__message_attachment_count
+msgid "Attachment Count"
+msgstr "تعداد پیوست‌ها"
+
+#. module: construction_contractor
+#: model:res.groups,comment:construction_contractor.group_construction_manager
+msgid "Can create and manage projects, record expenses, and view reports."
+msgstr "امکان ایجاد و مدیریت پروژه، ثبت هزینه و مشاهده گزارش‌ها."
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_card_transaction_form
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_form
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_form
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_form
+msgid "Cancel"
+msgstr "لغو"
+
+#. module: construction_contractor
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_card_transaction__state__cancelled
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_expense__state__cancelled
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_invoice__state__cancelled
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_project__state__cancelled
+msgid "Cancelled"
+msgstr "لغوشده"
+
+#. module: construction_contractor
+#. odoo-python
+#: code:addons/construction_contractor/models/construction_invoice.py:0
+msgid ""
+"Cannot cancel: the linked vendor bill is already posted. Please cancel or "
+"reset it in accounting first."
+msgstr ""
+"لغو امکان‌پذیر نیست: فاکتور خرید مرتبط قبلاً ثبت شده است. لطفاً ابتدا آن را در حسابداری لغو یا بازنشانی کنید."
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__card_transaction_count
+msgid "Card Transaction Count"
+msgstr "تعداد تراکنش‌های کارت"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_form
+msgid "Card Transactions"
+msgstr "تراکنش‌های کارت"
+
+#. module: construction_contractor
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_card_transaction__transaction_type__withdrawal
+msgid "Cash Withdrawal / Expense"
+msgstr "برداشت نقدی / هزینه"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_form
+msgid "Close Project"
+msgstr "بستن پروژه"
+
+#. module: construction_contractor
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_project__state__closed
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_search
+msgid "Closed"
+msgstr "بسته‌شده"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+msgid "Code:"
+msgstr "کد:"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__company_id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__company_id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__company_id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__company_id
+msgid "Company"
+msgstr "شرکت"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_card_transaction_form
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_form
+msgid "Confirm"
+msgstr "تأیید"
+
+#. module: construction_contractor
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_card_transaction__state__confirmed
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_expense__state__confirmed
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_card_transaction_search
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_search
+msgid "Confirmed"
+msgstr "تأییدشده"
+
+#. module: construction_contractor
+#: model:ir.module.category,name:construction_contractor.module_category_construction
+#: model:ir.ui.menu,name:construction_contractor.menu_construction_root
+msgid "Construction"
+msgstr "پیمانکاری ساخت‌وساز"
+
+#. module: construction_contractor
+#: model:ir.model,name:construction_contractor.model_construction_project
+msgid "Construction Contractor Project"
+msgstr "پروژه پیمانکاری ساخت‌وساز"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_form
+msgid "Construction Project"
+msgstr "پروژه ساخت‌وساز"
+
+#. module: construction_contractor
+#: model:ir.model,name:construction_contractor.model_construction_expense
+msgid "Construction Project Expense"
+msgstr "هزینه پروژه ساخت‌وساز"
+
+#. module: construction_contractor
+#: model:ir.model,name:construction_contractor.model_construction_invoice
+msgid "Construction Project Invoice"
+msgstr "صورت‌حساب پروژه ساخت‌وساز"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_list
+msgid "Construction Projects"
+msgstr "پروژه‌های ساخت‌وساز"
+
+#. module: construction_contractor
+#. odoo-python
+#: code:addons/construction_contractor/models/construction_invoice.py:0
+msgid "Construction services - %s"
+msgstr "خدمات ساخت‌وساز - %s"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__contracted_amount
+msgid "Contracted Amount"
+msgstr "مبلغ قرارداد"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_form
+msgid "Create Payroll Card Journal"
+msgstr "ایجاد دفتر کارت حقوق"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_form
+msgid "Create Vendor Bill"
+msgstr "ایجاد فاکتور خرید"
+
+#. module: construction_contractor
+#: model_terms:ir.actions.act_window,help:construction_contractor.action_construction_project
+msgid "Create your first construction project"
+msgstr "اولین پروژه ساخت‌وساز خود را ایجاد کنید"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__create_uid
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__create_uid
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__create_uid
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__create_uid
+msgid "Created by"
+msgstr "ایجادشده توسط"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__create_date
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__create_date
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__create_date
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__create_date
+msgid "Created on"
+msgstr "تاریخ ایجاد"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__currency_id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__currency_id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__currency_id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__currency_id
+msgid "Currency"
+msgstr "واحد پول"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+msgid "Date"
+msgstr "تاریخ"
+
+#. module: construction_contractor
+#: model:ir.model.fields,help:construction_contractor.field_construction_project__payroll_journal_id
+msgid "Dedicated cash/bank journal acting as the project payroll card"
+msgstr "دفتر نقدی/بانکی اختصاصی که به‌عنوان کارت حقوق پروژه عمل می‌کند"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+msgid "Deposit"
+msgstr "واریز"
+
+#. module: construction_contractor
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_card_transaction__transaction_type__deposit
+msgid "Deposit to Card"
+msgstr "واریز به کارت"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_card_transaction_search
+msgid "Deposits"
+msgstr "واریزها"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__description
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__description
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__description
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_form
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_form
+msgid "Description"
+msgstr "شرح"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__description
+msgid "Description / Scope"
+msgstr "شرح / حوزه کار"
+
+#. module: construction_contractor
+#: model:ir.model.fields,help:construction_contractor.field_construction_invoice__description
+msgid "Description of work or services covered by this invoice"
+msgstr "شرح کار یا خدمات مشمول این صورت‌حساب"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__display_name
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__display_name
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__display_name
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__display_name
+msgid "Display Name"
+msgstr "نام نمایشی"
+
+#. module: construction_contractor
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_card_transaction__state__draft
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_expense__state__draft
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_invoice__state__draft
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_project__state__draft
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_card_transaction_search
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_search
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_search
+msgid "Draft"
+msgstr "پیش‌نویس"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__employer_id
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_search
+msgid "Employer"
+msgstr "کارفرما"
+
+#. module: construction_contractor
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_expense__payment_source__employer_cash
+msgid "Employer Account - Cash"
+msgstr "حساب کارفرما - نقدی"
+
+#. module: construction_contractor
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_expense__payment_source__employer_check
+msgid "Employer Account - Check"
+msgstr "حساب کارفرما - چک"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_search
+msgid "Employer Cash"
+msgstr "نقدی کارفرما"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_search
+msgid "Employer Check"
+msgstr "چک کارفرما"
+
+#. module: construction_contractor
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_expense__expense_type__equipment
+msgid "Equipment Rental"
+msgstr "اجاره ماشین‌آلات"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__date_end
+msgid "Expected End Date"
+msgstr "تاریخ پایان پیش‌بینی‌شده"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_form
+msgid "Expense"
+msgstr "هزینه"
+
+#. module: construction_contractor
+#: model:ir.ui.menu,name:construction_contractor.menu_construction_report_expense
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_pivot
+msgid "Expense Analysis"
+msgstr "تحلیل هزینه‌ها"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__expense_count
+msgid "Expense Count"
+msgstr "تعداد هزینه‌ها"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__date
+msgid "Expense Date"
+msgstr "تاریخ هزینه"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_form
+msgid "Expense Details"
+msgstr "جزئیات هزینه"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__expense_type
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_search
+msgid "Expense Type"
+msgstr "نوع هزینه"
+
+#. module: construction_contractor
+#. odoo-python
+#: code:addons/construction_contractor/models/construction_expense.py:0
+msgid "Expense amount must be greater than zero."
+msgstr "مبلغ هزینه باید بزرگ‌تر از صفر باشد."
+
+#. module: construction_contractor
+#. odoo-python
+#: code:addons/construction_contractor/models/construction_project.py:0
+#: model:ir.actions.act_window,name:construction_contractor.action_construction_expense
+#: model:ir.ui.menu,name:construction_contractor.menu_construction_expenses
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_list
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_form
+msgid "Expenses"
+msgstr "هزینه‌ها"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+msgid "Expenses by Type"
+msgstr "هزینه‌ها بر اساس نوع"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_form
+msgid "Financial"
+msgstr "مالی"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_form
+msgid "Financial Summary"
+msgstr "خلاصه مالی"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__message_follower_ids
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__message_follower_ids
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__message_follower_ids
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__message_follower_ids
+msgid "Followers"
+msgstr "دنبال‌کنندگان"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__message_partner_ids
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__message_partner_ids
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__message_partner_ids
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "دنبال‌کنندگان (شرکا)"
+
+#. module: construction_contractor
+#: model:ir.model.fields,help:construction_contractor.field_construction_card_transaction__activity_type_icon
+#: model:ir.model.fields,help:construction_contractor.field_construction_expense__activity_type_icon
+#: model:ir.model.fields,help:construction_contractor.field_construction_invoice__activity_type_icon
+#: model:ir.model.fields,help:construction_contractor.field_construction_project__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "آیکون Font Awesome مثلاً fa-tasks"
+
+#. module: construction_contractor
+#: model:res.groups,comment:construction_contractor.group_construction_accountant
+msgid ""
+"Full access: deposits, invoices, payments, reports, and financial data."
+msgstr ""
+"دسترسی کامل: واریزها، صورت‌حساب‌ها، پرداخت‌ها، گزارش‌ها و اطلاعات مالی."
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__has_message
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__has_message
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__has_message
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__has_message
+msgid "Has Message"
+msgstr "دارای پیام"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__id
+msgid "ID"
+msgstr "شناسه"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__activity_exception_icon
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__activity_exception_icon
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__activity_exception_icon
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__activity_exception_icon
+msgid "Icon"
+msgstr "آیکون"
+
+#. module: construction_contractor
+#: model:ir.model.fields,help:construction_contractor.field_construction_card_transaction__activity_exception_icon
+#: model:ir.model.fields,help:construction_contractor.field_construction_expense__activity_exception_icon
+#: model:ir.model.fields,help:construction_contractor.field_construction_invoice__activity_exception_icon
+#: model:ir.model.fields,help:construction_contractor.field_construction_project__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "آیکون نشان‌دهنده فعالیت استثنایی."
+
+#. module: construction_contractor
+#: model:ir.model.fields,help:construction_contractor.field_construction_card_transaction__message_needaction
+#: model:ir.model.fields,help:construction_contractor.field_construction_expense__message_needaction
+#: model:ir.model.fields,help:construction_contractor.field_construction_invoice__message_needaction
+#: model:ir.model.fields,help:construction_contractor.field_construction_project__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "در صورت فعال بودن، پیام‌های جدید نیاز به توجه شما دارند."
+
+#. module: construction_contractor
+#: model:ir.model.fields,help:construction_contractor.field_construction_card_transaction__message_has_error
+#: model:ir.model.fields,help:construction_contractor.field_construction_card_transaction__message_has_sms_error
+#: model:ir.model.fields,help:construction_contractor.field_construction_expense__message_has_error
+#: model:ir.model.fields,help:construction_contractor.field_construction_expense__message_has_sms_error
+#: model:ir.model.fields,help:construction_contractor.field_construction_invoice__message_has_error
+#: model:ir.model.fields,help:construction_contractor.field_construction_invoice__message_has_sms_error
+#: model:ir.model.fields,help:construction_contractor.field_construction_project__message_has_error
+#: model:ir.model.fields,help:construction_contractor.field_construction_project__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "در صورت فعال بودن، برخی پیام‌ها دارای خطای ارسال هستند."
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_form
+msgid "Invoice"
+msgstr "صورت‌حساب"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__invoice_count
+msgid "Invoice Count"
+msgstr "تعداد صورت‌حساب‌ها"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__invoice_date
+msgid "Invoice Date"
+msgstr "تاریخ صورت‌حساب"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_form
+msgid "Invoice Details"
+msgstr "جزئیات صورت‌حساب"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__receipt_file
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_form
+msgid "Invoice Document"
+msgstr "سند صورت‌حساب"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__receipt_filename
+msgid "Invoice Filename"
+msgstr "نام فایل صورت‌حساب"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+msgid "Invoice No."
+msgstr "شماره صورت‌حساب"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__invoice_number
+msgid "Invoice Number"
+msgstr "شماره صورت‌حساب"
+
+#. module: construction_contractor
+#: model:ir.ui.menu,name:construction_contractor.menu_construction_report_invoice
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+msgid "Invoice Status"
+msgstr "وضعیت صورت‌حساب"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__amount_total
+msgid "Invoice Total"
+msgstr "جمع کل صورت‌حساب"
+
+#. module: construction_contractor
+#. odoo-python
+#: code:addons/construction_contractor/models/construction_invoice.py:0
+msgid "Invoice total must be greater than zero."
+msgstr "جمع کل صورت‌حساب باید بزرگ‌تر از صفر باشد."
+
+#. module: construction_contractor
+#. odoo-python
+#: code:addons/construction_contractor/models/construction_project.py:0
+#: model:ir.actions.act_window,name:construction_contractor.action_construction_invoice
+#: model:ir.ui.menu,name:construction_contractor.menu_construction_invoices_parent
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_list
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_form
+msgid "Invoices"
+msgstr "صورت‌حساب‌ها"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__message_is_follower
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__message_is_follower
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__message_is_follower
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__message_is_follower
+msgid "Is Follower"
+msgstr "دنبال‌کننده است"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__account_move_id
+msgid "Journal Entry"
+msgstr "سند حسابداری"
+
+#. module: construction_contractor
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_expense__expense_type__labor
+msgid "Labor / Worker Wages"
+msgstr "دستمزد کارگری"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__write_uid
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__write_uid
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__write_uid
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__write_uid
+msgid "Last Updated by"
+msgstr "آخرین ویرایش توسط"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__write_date
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__write_date
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__write_date
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__write_date
+msgid "Last Updated on"
+msgstr "تاریخ آخرین ویرایش"
+
+#. module: construction_contractor
+#: model_terms:ir.actions.act_window,help:construction_contractor.action_construction_project
+msgid "Manage contractor projects with payroll cards, expenses, and invoices."
+msgstr "مدیریت پروژه‌های پیمانکاری با کارت حقوق، هزینه‌ها و صورت‌حساب‌ها."
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_search
+msgid "Manager"
+msgstr "مدیر"
+
+#. module: construction_contractor
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_expense__expense_type__materials
+msgid "Materials & Supplies"
+msgstr "مصالح و لوازم"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__message_has_error
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__message_has_error
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__message_has_error
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__message_has_error
+msgid "Message Delivery error"
+msgstr "خطای ارسال پیام"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__message_ids
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__message_ids
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__message_ids
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__message_ids
+msgid "Messages"
+msgstr "پیام‌ها"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_card_transaction_search
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_search
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_search
+msgid "Month"
+msgstr "ماه"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__my_activity_date_deadline
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__my_activity_date_deadline
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__my_activity_date_deadline
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "مهلت فعالیت من"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_search
+msgid "My Projects"
+msgstr "پروژه‌های من"
+
+#. module: construction_contractor
+#: model:ir.model.fields,help:construction_contractor.field_construction_project__name
+msgid "Name of the construction project"
+msgstr "نام پروژه ساخت‌وساز"
+
+#. module: construction_contractor
+#. odoo-python
+#: code:addons/construction_contractor/models/construction_card_transaction.py:0
+#: code:addons/construction_contractor/models/construction_expense.py:0
+#: code:addons/construction_contractor/models/construction_invoice.py:0
+#: code:addons/construction_contractor/models/construction_project.py:0
+msgid "New"
+msgstr "جدید"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__activity_date_deadline
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__activity_date_deadline
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__activity_date_deadline
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "مهلت فعالیت بعدی"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__activity_summary
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__activity_summary
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__activity_summary
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__activity_summary
+msgid "Next Activity Summary"
+msgstr "خلاصه فعالیت بعدی"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__activity_type_id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__activity_type_id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__activity_type_id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__activity_type_id
+msgid "Next Activity Type"
+msgstr "نوع فعالیت بعدی"
+
+#. module: construction_contractor
+#. odoo-python
+#: code:addons/construction_contractor/models/construction_invoice.py:0
+msgid "No expense account found. Please configure a chart of accounts."
+msgstr "حساب هزینه‌ای یافت نشد. لطفاً نمودار حساب‌ها را پیکربندی کنید."
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_search
+msgid "Not Paid"
+msgstr "پرداخت‌نشده"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__notes
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_form
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_form
+msgid "Notes"
+msgstr "یادداشت‌ها"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__notes
+msgid "Notes / Remarks"
+msgstr "یادداشت / توضیحات"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__message_needaction_counter
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__message_needaction_counter
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__message_needaction_counter
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__message_needaction_counter
+msgid "Number of Actions"
+msgstr "تعداد اقدامات"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__message_has_error_counter
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__message_has_error_counter
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__message_has_error_counter
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__message_has_error_counter
+msgid "Number of errors"
+msgstr "تعداد خطاها"
+
+#. module: construction_contractor
+#: model:ir.model.fields,help:construction_contractor.field_construction_card_transaction__message_needaction_counter
+#: model:ir.model.fields,help:construction_contractor.field_construction_expense__message_needaction_counter
+#: model:ir.model.fields,help:construction_contractor.field_construction_invoice__message_needaction_counter
+#: model:ir.model.fields,help:construction_contractor.field_construction_project__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "تعداد پیام‌هایی که نیاز به اقدام دارند"
+
+#. module: construction_contractor
+#: model:ir.model.fields,help:construction_contractor.field_construction_card_transaction__message_has_error_counter
+#: model:ir.model.fields,help:construction_contractor.field_construction_expense__message_has_error_counter
+#: model:ir.model.fields,help:construction_contractor.field_construction_invoice__message_has_error_counter
+#: model:ir.model.fields,help:construction_contractor.field_construction_project__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "تعداد پیام‌های دارای خطای ارسال"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_form
+msgid "Open Vendor Bill"
+msgstr "بازکردن فاکتور خرید"
+
+#. module: construction_contractor
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_expense__expense_type__other
+msgid "Other Operational Cost"
+msgstr "سایر هزینه‌های عملیاتی"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+msgid "Outstanding"
+msgstr "مانده"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__amount_residual
+msgid "Outstanding Balance"
+msgstr "مانده بدهی"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__outstanding_invoices
+msgid "Outstanding Invoice Balance"
+msgstr "مانده صورت‌حساب‌های پرداخت‌نشده"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_search
+msgid "Paid"
+msgstr "پرداخت‌شده"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_search
+msgid "Partially Paid"
+msgstr "پرداخت جزئی"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_list
+msgid "Pay"
+msgstr "پرداخت"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_form
+msgid "Payment"
+msgstr "پرداخت"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__payment_source
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_search
+msgid "Payment Source"
+msgstr "منبع پرداخت"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+msgid "Payment Source Breakdown"
+msgstr "تفکیک منابع پرداخت"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__payment_state
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_search
+msgid "Payment Status"
+msgstr "وضعیت پرداخت"
+
+#. module: construction_contractor
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_expense__payment_source__payroll_card
+#: model:ir.ui.menu,name:construction_contractor.menu_construction_card_transactions
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_search
+msgid "Payroll Card"
+msgstr "کارت حقوق"
+
+#. module: construction_contractor
+#. odoo-python
+#: code:addons/construction_contractor/models/construction_project.py:0
+msgid "Payroll Card - %s"
+msgstr "کارت حقوق - %s"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__payroll_journal_id
+msgid "Payroll Card Journal"
+msgstr "دفتر کارت حقوق"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+msgid "Payroll Card Ledger"
+msgstr "دفتر معین کارت حقوق"
+
+#. module: construction_contractor
+#: model:ir.model,name:construction_contractor.model_construction_card_transaction
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_card_transaction_form
+msgid "Payroll Card Transaction"
+msgstr "تراکنش کارت حقوق"
+
+#. module: construction_contractor
+#. odoo-python
+#: code:addons/construction_contractor/models/construction_project.py:0
+#: model:ir.actions.act_window,name:construction_contractor.action_construction_card_transaction
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_card_transaction_list
+msgid "Payroll Card Transactions"
+msgstr "تراکنش‌های کارت حقوق"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__performed_by
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_card_transaction_form
+msgid "Performed By"
+msgstr "انجام‌داده‌شده توسط"
+
+#. module: construction_contractor
+#. odoo-python
+#: code:addons/construction_contractor/models/construction_invoice.py:0
+msgid "Please create the vendor bill first."
+msgstr "لطفاً ابتدا فاکتور خرید را ایجاد کنید."
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__project_id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__project_id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__project_id
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_card_transaction_search
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_search
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_search
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_search
+msgid "Project"
+msgstr "پروژه"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__code
+msgid "Project Code"
+msgstr "کد پروژه"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_form
+msgid "Project Details"
+msgstr "جزئیات پروژه"
+
+#. module: construction_contractor
+#: model:ir.actions.report,name:construction_contractor.action_report_construction_project_summary
+#: model:ir.ui.menu,name:construction_contractor.menu_construction_report_project
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+msgid "Project Financial Summary"
+msgstr "خلاصه مالی پروژه"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__manager_id
+#: model:res.groups,name:construction_contractor.group_construction_manager
+msgid "Project Manager"
+msgstr "مدیر پروژه"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__name
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_form
+msgid "Project Name"
+msgstr "نام پروژه"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_form
+msgid "Project description, scope, or notes..."
+msgstr "شرح پروژه، حوزه کار یا یادداشت‌ها..."
+
+#. module: construction_contractor
+#: model:ir.actions.act_window,name:construction_contractor.action_construction_project
+#: model:ir.ui.menu,name:construction_contractor.menu_construction_projects
+msgid "Projects"
+msgstr "پروژه‌ها"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__rating_ids
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__rating_ids
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__rating_ids
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__rating_ids
+msgid "Ratings"
+msgstr "امتیازدهی‌ها"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_card_transaction_form
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_form
+msgid "Receipt"
+msgstr "رسید"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__receipt_file
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__receipt_file
+msgid "Receipt Attachment"
+msgstr "فایل پیوست رسید"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__receipt_filename
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__receipt_filename
+msgid "Receipt Filename"
+msgstr "نام فایل رسید"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__receipt_ref
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__receipt_ref
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__receipt_ref
+msgid "Receipt Reference"
+msgstr "شماره رسید"
+
+#. module: construction_contractor
+#: model:ir.model.fields,help:construction_contractor.field_construction_card_transaction__receipt_ref
+msgid "Receipt or voucher number"
+msgstr "شماره رسید یا برگه"
+
+#. module: construction_contractor
+#: model:ir.model.fields,help:construction_contractor.field_construction_expense__receipt_ref
+msgid "Receipt, invoice, or voucher number"
+msgstr "شماره رسید، فاکتور یا برگه"
+
+#. module: construction_contractor
+#: model_terms:ir.actions.act_window,help:construction_contractor.action_construction_expense
+msgid "Record your first expense"
+msgstr "اولین هزینه خود را ثبت کنید"
+
+#. module: construction_contractor
+#: model_terms:ir.actions.act_window,help:construction_contractor.action_construction_invoice
+msgid "Record your first invoice"
+msgstr "اولین صورت‌حساب خود را ثبت کنید"
+
+#. module: construction_contractor
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_invoice__state__posted
+msgid "Recorded"
+msgstr "ثبت‌شده"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__recorded_by
+msgid "Recorded By"
+msgstr "ثبت‌شده توسط"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__name
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__name
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__name
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+msgid "Reference"
+msgstr "مرجع"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_form
+msgid "Register Payment"
+msgstr "ثبت پرداخت"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+msgid "Report generated on"
+msgstr "گزارش تهیه‌شده در"
+
+#. module: construction_contractor
+#: model:ir.ui.menu,name:construction_contractor.menu_construction_reports
+msgid "Reports"
+msgstr "گزارش‌ها"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_card_transaction_form
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_form
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_form
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_form
+msgid "Reset to Draft"
+msgstr "بازگشت به پیش‌نویس"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__activity_user_id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__activity_user_id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__activity_user_id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__activity_user_id
+msgid "Responsible User"
+msgstr "کاربر مسئول"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__message_has_sms_error
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__message_has_sms_error
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__message_has_sms_error
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "خطای ارسال پیامک"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_form
+msgid "Scope of work or services covered..."
+msgstr "حوزه کار یا خدمات مشمول..."
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_card_transaction_search
+msgid "Search Card Transactions"
+msgstr "جستجوی تراکنش‌های کارت"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_search
+msgid "Search Expenses"
+msgstr "جستجوی هزینه‌ها"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_search
+msgid "Search Invoices"
+msgstr "جستجوی صورت‌حساب‌ها"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_search
+msgid "Search Projects"
+msgstr "جستجوی پروژه‌ها"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__date_start
+msgid "Start Date"
+msgstr "تاریخ شروع"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__state
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__state
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__state
+msgid "State"
+msgstr "وضعیت"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__state
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_search
+msgid "Status"
+msgstr "وضعیت"
+
+#. module: construction_contractor
+#: model:ir.model.fields,help:construction_contractor.field_construction_card_transaction__activity_state
+#: model:ir.model.fields,help:construction_contractor.field_construction_expense__activity_state
+#: model:ir.model.fields,help:construction_contractor.field_construction_invoice__activity_state
+#: model:ir.model.fields,help:construction_contractor.field_construction_project__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"وضعیت بر اساس فعالیت‌ها\n"
+"عقب‌افتاده: تاریخ سررسید گذشته است\n"
+"امروز: تاریخ فعالیت امروز است\n"
+"برنامه‌ریزی‌شده: فعالیت‌های آینده."
+
+#. module: construction_contractor
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_expense__expense_type__subcontractor
+msgid "Sub-contractor Payment"
+msgstr "پرداخت به پیمانکار فرعی"
+
+#. module: construction_contractor
+#: model:ir.model.fields,help:construction_contractor.field_construction_project__employer_id
+msgid "The employer / client funding this project"
+msgstr "کارفرما / کارفرمایی که این پروژه را تأمین مالی می‌کند"
+
+#. module: construction_contractor
+#. odoo-python
+#: code:addons/construction_contractor/models/construction_expense.py:0
+msgid ""
+"The project \"%s\" does not have a payroll card journal configured. Please "
+"create the payroll card journal first."
+msgstr ""
+"پروژه \"%s\" فاقد دفتر کارت حقوق است. لطفاً ابتدا دفتر کارت حقوق را ایجاد کنید."
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_search
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_search
+msgid "This Month"
+msgstr "این ماه"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_form
+msgid "This invoice is fully paid."
+msgstr "این صورت‌حساب به‌طور کامل پرداخت شده است."
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_form
+msgid "This invoice is partially paid. Outstanding balance:"
+msgstr "این صورت‌حساب به‌طور جزئی پرداخت شده است. مانده بدهی:"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_card_transaction_list
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_list
+msgid "Total"
+msgstr "جمع"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+msgid "Total Amount"
+msgstr "جمع کل مبلغ"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__total_card_deposits
+msgid "Total Card Deposits"
+msgstr "جمع واریزهای کارت"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_list
+msgid "Total Contracted"
+msgstr "جمع قراردادها"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__total_expenses
+msgid "Total Expenses"
+msgstr "جمع هزینه‌ها"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__total_invoiced
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_list
+msgid "Total Invoiced"
+msgstr "جمع صورت‌حساب‌شده"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_list
+msgid "Total Outstanding"
+msgstr "جمع مانده‌های پرداخت‌نشده"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_list
+msgid "Total Paid"
+msgstr "جمع پرداخت‌شده"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__total_paid_invoices
+msgid "Total Paid on Invoices"
+msgstr "جمع پرداخت‌شده بابت صورت‌حساب‌ها"
+
+#. module: construction_contractor
+#: model:ir.model.fields,help:construction_contractor.field_construction_project__contracted_amount
+msgid "Total contracted value of the project"
+msgstr "ارزش کل قراردادشده پروژه"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__date
+msgid "Transaction Date"
+msgstr "تاریخ تراکنش"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_card_transaction_form
+msgid "Transaction Details"
+msgstr "جزئیات تراکنش"
+
+#. module: construction_contractor
+#. odoo-python
+#: code:addons/construction_contractor/models/construction_card_transaction.py:0
+msgid "Transaction amount must be greater than zero."
+msgstr "مبلغ تراکنش باید بزرگ‌تر از صفر باشد."
+
+#. module: construction_contractor
+#: model:ir.ui.menu,name:construction_contractor.menu_construction_transactions
+msgid "Transactions"
+msgstr "تراکنش‌ها"
+
+#. module: construction_contractor
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_expense__expense_type__transport
+msgid "Transport / Fuel"
+msgstr "حمل‌ونقل / سوخت"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__transaction_type
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_card_transaction_search
+msgid "Type"
+msgstr "نوع"
+
+#. module: construction_contractor
+#: model:ir.model.fields,help:construction_contractor.field_construction_card_transaction__activity_exception_decoration
+#: model:ir.model.fields,help:construction_contractor.field_construction_expense__activity_exception_decoration
+#: model:ir.model.fields,help:construction_contractor.field_construction_invoice__activity_exception_decoration
+#: model:ir.model.fields,help:construction_contractor.field_construction_project__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "نوع فعالیت استثنایی ثبت‌شده."
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_search
+msgid "Vendor"
+msgstr "فروشنده"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__partner_id
+msgid "Vendor / Contractor"
+msgstr "فروشنده / پیمانکار"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__partner_id
+msgid "Vendor / Payee"
+msgstr "فروشنده / دریافت‌کننده"
+
+#. module: construction_contractor
+#. odoo-python
+#: code:addons/construction_contractor/models/construction_invoice.py:0
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__account_move_id
+msgid "Vendor Bill"
+msgstr "فاکتور خرید"
+
+#. module: construction_contractor
+#: model:ir.model.fields,help:construction_contractor.field_construction_invoice__invoice_number
+msgid "Vendor invoice number / reference"
+msgstr "شماره / مرجع فاکتور فروشنده"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_form
+msgid "Vendor invoice ref"
+msgstr "مرجع فاکتور فروشنده"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__website_message_ids
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__website_message_ids
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__website_message_ids
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__website_message_ids
+msgid "Website Messages"
+msgstr "پیام‌های وب‌سایت"
+
+#. module: construction_contractor
+#: model:ir.model.fields,help:construction_contractor.field_construction_card_transaction__website_message_ids
+#: model:ir.model.fields,help:construction_contractor.field_construction_expense__website_message_ids
+#: model:ir.model.fields,help:construction_contractor.field_construction_invoice__website_message_ids
+#: model:ir.model.fields,help:construction_contractor.field_construction_project__website_message_ids
+msgid "Website communication history"
+msgstr "تاریخچه ارتباطات وب‌سایت"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+msgid "Withdrawal"
+msgstr "برداشت"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_card_transaction_search
+msgid "Withdrawals"
+msgstr "برداشت‌ها"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_card_transaction_form
+msgid "e.g. DEP-2024-001"
+msgstr "مثلاً DEP-2024-001"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_form
+msgid "e.g. INV-VND-0042"
+msgstr "مثلاً INV-VND-0042"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_form
+msgid "e.g. REC-2024-001"
+msgstr "مثلاً REC-2024-001"
+
+#. module: construction_contractor
+#. odoo-python
+#: code:addons/construction_contractor/models/construction_project.py:0
+msgid "project_id"
+msgstr "project_id"
+

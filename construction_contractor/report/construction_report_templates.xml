@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ===================================================================
+         Project Financial Summary Report
+    =================================================================== -->
+    <template id="report_construction_project_summary_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="project">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <!-- Header -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h2>Project Financial Summary</h2>
+                                <h3 t-esc="project.name"/>
+                                <p>Code: <span t-esc="project.code"/></p>
+                            </div>
+                        </div>
+
+                        <!-- Project Info -->
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td><strong>Employer</strong></td>
+                                        <td t-esc="project.employer_id.name"/>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Manager</strong></td>
+                                        <td t-esc="project.manager_id.name"/>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Start Date</strong></td>
+                                        <td t-esc="project.date_start"/>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>End Date</strong></td>
+                                        <td t-esc="project.date_end"/>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Status</strong></td>
+                                        <td t-esc="dict(project._fields['state'].selection).get(project.state)"/>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-6">
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td><strong>Contracted Amount</strong></td>
+                                        <td class="text-end">
+                                            <t t-esc="project.contracted_amount"
+                                               t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total Card Deposits</strong></td>
+                                        <td class="text-end">
+                                            <t t-esc="project.total_card_deposits"
+                                               t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total Expenses</strong></td>
+                                        <td class="text-end">
+                                            <t t-esc="project.total_expenses"
+                                               t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total Invoiced</strong></td>
+                                        <td class="text-end">
+                                            <t t-esc="project.total_invoiced"
+                                               t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total Paid on Invoices</strong></td>
+                                        <td class="text-end">
+                                            <t t-esc="project.total_paid_invoices"
+                                               t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr class="table-warning">
+                                        <td><strong>Outstanding Balance</strong></td>
+                                        <td class="text-end">
+                                            <strong>
+                                                <t t-esc="project.outstanding_invoices"
+                                                   t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Expenses by Type -->
+                        <h4 class="mt-4">Expenses by Type</h4>
+                        <t t-set="expense_types" t-value="[
+                            ('labor', 'Labor / Worker Wages'),
+                            ('materials', 'Materials and Supplies'),
+                            ('equipment', 'Equipment Rental'),
+                            ('subcontractor', 'Sub-contractor Payment'),
+                            ('transport', 'Transport / Fuel'),
+                            ('other', 'Other Operational Cost'),
+                        ]"/>
+                        <table class="table table-bordered table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Expense Type</th>
+                                    <th class="text-end">Total Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="expense_types" t-as="etype">
+                                    <t t-set="etype_expenses" t-value="project.env['construction.expense'].search([
+                                        ('project_id','=',project.id),
+                                        ('state','=','confirmed'),
+                                        ('expense_type','=',etype[0]),
+                                    ])"/>
+                                    <t t-if="etype_expenses">
+                                        <tr>
+                                            <td t-esc="etype[1]"/>
+                                            <td class="text-end">
+                                                <t t-esc="sum(etype_expenses.mapped('amount'))"
+                                                   t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <!-- Payroll Card Ledger -->
+                        <h4 class="mt-4">Payroll Card Ledger</h4>
+                        <t t-set="card_txns" t-value="project.env['construction.card.transaction'].search([
+                            ('project_id','=',project.id),
+                            ('state','=','confirmed'),
+                        ], order='date asc')"/>
+                        <table class="table table-bordered table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Reference</th>
+                                    <th>Description</th>
+                                    <th>Type</th>
+                                    <th class="text-end">Deposit</th>
+                                    <th class="text-end">Withdrawal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="card_txns" t-as="txn">
+                                    <tr>
+                                        <td t-esc="txn.date"/>
+                                        <td t-esc="txn.receipt_ref or txn.name"/>
+                                        <td t-esc="txn.description"/>
+                                        <td t-esc="dict(txn._fields['transaction_type'].selection).get(txn.transaction_type)"/>
+                                        <td class="text-end">
+                                            <t t-if="txn.transaction_type == 'deposit'">
+                                                <t t-esc="txn.amount"
+                                                   t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                            </t>
+                                        </td>
+                                        <td class="text-end">
+                                            <t t-if="txn.transaction_type == 'withdrawal'">
+                                                <t t-esc="txn.amount"
+                                                   t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <!-- Invoice Status -->
+                        <h4 class="mt-4">Invoice Status</h4>
+                        <t t-set="invoices" t-value="project.env['construction.invoice'].search([
+                            ('project_id','=',project.id),
+                        ], order='invoice_date asc')"/>
+                        <table class="table table-bordered table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Invoice No.</th>
+                                    <th>Vendor</th>
+                                    <th class="text-end">Total</th>
+                                    <th class="text-end">Paid</th>
+                                    <th class="text-end">Outstanding</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="invoices" t-as="inv">
+                                    <tr>
+                                        <td t-esc="inv.invoice_date"/>
+                                        <td t-esc="inv.invoice_number or inv.name"/>
+                                        <td t-esc="inv.partner_id.name"/>
+                                        <td class="text-end">
+                                            <t t-esc="inv.amount_total"
+                                               t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                        </td>
+                                        <td class="text-end">
+                                            <t t-esc="inv.amount_paid"
+                                               t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                        </td>
+                                        <td class="text-end">
+                                            <t t-esc="inv.amount_residual"
+                                               t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                        </td>
+                                        <td t-esc="inv.payment_state"/>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <!-- Payment Source Breakdown -->
+                        <h4 class="mt-4">Payment Source Breakdown</h4>
+                        <t t-set="confirmed_expenses" t-value="project.env['construction.expense'].search([
+                            ('project_id','=',project.id),
+                            ('state','=','confirmed'),
+                        ])"/>
+                        <table class="table table-bordered table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Payment Source</th>
+                                    <th class="text-end">Total Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="card_total" t-value="sum(confirmed_expenses.filtered(lambda e: e.payment_source == 'payroll_card').mapped('amount'))"/>
+                                <t t-set="cash_total" t-value="sum(confirmed_expenses.filtered(lambda e: e.payment_source == 'employer_cash').mapped('amount'))"/>
+                                <t t-set="check_total" t-value="sum(confirmed_expenses.filtered(lambda e: e.payment_source == 'employer_check').mapped('amount'))"/>
+                                <tr>
+                                    <td>Payroll Card</td>
+                                    <td class="text-end">
+                                        <t t-esc="card_total"
+                                           t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Employer Cash</td>
+                                    <td class="text-end">
+                                        <t t-esc="cash_total"
+                                           t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Employer Check</td>
+                                    <td class="text-end">
+                                        <t t-esc="check_total"
+                                           t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="text-muted mt-4">
+                            <small>Report generated on
+                                <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
+                            </small>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

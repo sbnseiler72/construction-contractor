@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Project sequence -->
+        <record id="seq_construction_project" model="ir.sequence">
+            <field name="name">Construction Project</field>
+            <field name="code">construction.project</field>
+            <field name="prefix">PROJ/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Card transaction sequence -->
+        <record id="seq_construction_card_transaction" model="ir.sequence">
+            <field name="name">Construction Card Transaction</field>
+            <field name="code">construction.card.transaction</field>
+            <field name="prefix">CARD/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Expense sequence -->
+        <record id="seq_construction_expense" model="ir.sequence">
+            <field name="name">Construction Expense</field>
+            <field name="code">construction.expense</field>
+            <field name="prefix">EXP/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Invoice sequence -->
+        <record id="seq_construction_invoice" model="ir.sequence">
+            <field name="name">Construction Invoice</field>
+            <field name="code">construction.invoice</field>
+            <field name="prefix">INV/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

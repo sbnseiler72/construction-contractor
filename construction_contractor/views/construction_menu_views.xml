@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Top-level menu -->
+    <menuitem id="menu_construction_root"
+              name="Construction"
+              sequence="50"/>
+
+    <!-- Projects -->
+    <menuitem id="menu_construction_projects"
+              name="Projects"
+              parent="menu_construction_root"
+              sequence="10"/>
+
+    <menuitem id="menu_construction_project_list"
+              name="All Projects"
+              parent="menu_construction_projects"
+              action="action_construction_project"
+              sequence="10"/>
+
+    <!-- Transactions -->
+    <menuitem id="menu_construction_transactions"
+              name="Transactions"
+              parent="menu_construction_root"
+              sequence="20"/>
+
+    <menuitem id="menu_construction_card_transactions"
+              name="Payroll Card"
+              parent="menu_construction_transactions"
+              action="action_construction_card_transaction"
+              sequence="10"/>
+
+    <menuitem id="menu_construction_expenses"
+              name="Expenses"
+              parent="menu_construction_transactions"
+              action="action_construction_expense"
+              sequence="20"/>
+
+    <!-- Invoices -->
+    <menuitem id="menu_construction_invoices_parent"
+              name="Invoices"
+              parent="menu_construction_root"
+              sequence="30"/>
+
+    <menuitem id="menu_construction_invoices"
+              name="All Invoices"
+              parent="menu_construction_invoices_parent"
+              action="action_construction_invoice"
+              sequence="10"/>
+
+    <!-- Reporting -->
+    <menuitem id="menu_construction_reports"
+              name="Reports"
+              parent="menu_construction_root"
+              sequence="40"/>
+
+    <menuitem id="menu_construction_report_project"
+              name="Project Financial Summary"
+              parent="menu_construction_reports"
+              action="action_report_construction_project_summary"
+              sequence="10"/>
+
+    <menuitem id="menu_construction_report_expense"
+              name="Expense Analysis"
+              parent="menu_construction_reports"
+              action="action_construction_expense"
+              sequence="20"/>
+
+    <menuitem id="menu_construction_report_invoice"
+              name="Invoice Status"
+              parent="menu_construction_reports"
+              action="action_construction_invoice"
+              sequence="30"/>
+</odoo>

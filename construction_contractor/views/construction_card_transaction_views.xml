@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ===================================================================
+         Card Transaction: List View
+    =================================================================== -->
+    <record id="view_construction_card_transaction_list" model="ir.ui.view">
+        <field name="name">construction.card.transaction.list</field>
+        <field name="model">construction.card.transaction</field>
+        <field name="arch" type="xml">
+            <list string="Payroll Card Transactions"
+                  decoration-success="transaction_type == 'deposit' and state == 'confirmed'"
+                  decoration-warning="transaction_type == 'withdrawal' and state == 'confirmed'"
+                  decoration-muted="state == 'cancelled'">
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="date"/>
+                <field name="transaction_type"/>
+                <field name="description"/>
+                <field name="amount" sum="Total"/>
+                <field name="receipt_ref"/>
+                <field name="performed_by"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-success="state == 'confirmed'"
+                       decoration-danger="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ===================================================================
+         Card Transaction: Form View
+    =================================================================== -->
+    <record id="view_construction_card_transaction_form" model="ir.ui.view">
+        <field name="name">construction.card.transaction.form</field>
+        <field name="model">construction.card.transaction</field>
+        <field name="arch" type="xml">
+            <form string="Payroll Card Transaction">
+                <header>
+                    <button name="action_confirm" string="Confirm"
+                            type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_cancel" string="Cancel"
+                            type="object"
+                            invisible="state != 'draft'"/>
+                    <button name="action_reset_draft" string="Reset to Draft"
+                            type="object"
+                            invisible="state not in ('confirmed', 'cancelled')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Transaction Details">
+                            <field name="project_id"/>
+                            <field name="transaction_type"/>
+                            <field name="date"/>
+                            <field name="amount"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="description"/>
+                        </group>
+                        <group string="Performed By">
+                            <field name="performed_by"/>
+                        </group>
+                    </group>
+                    <group string="Receipt">
+                        <field name="receipt_ref" placeholder="e.g. DEP-2024-001"
+                               required="state == 'confirmed'"/>
+                        <field name="receipt_file" filename="receipt_filename"
+                               widget="binary"/>
+                        <field name="receipt_filename" invisible="1"/>
+                    </group>
+                </sheet>
+                 <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ===================================================================
+         Card Transaction: Search
+    =================================================================== -->
+    <record id="view_construction_card_transaction_search" model="ir.ui.view">
+        <field name="name">construction.card.transaction.search</field>
+        <field name="model">construction.card.transaction</field>
+        <field name="arch" type="xml">
+            <search string="Search Card Transactions">
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="receipt_ref"/>
+                <separator/>
+                <filter string="Deposits" name="deposits"
+                        domain="[('transaction_type','=','deposit')]"/>
+                <filter string="Withdrawals" name="withdrawals"
+                        domain="[('transaction_type','=','withdrawal')]"/>
+                <separator/>
+                <filter string="Confirmed" name="confirmed"
+                        domain="[('state','=','confirmed')]"/>
+                <filter string="Draft" name="draft"
+                        domain="[('state','=','draft')]"/>
+                <group>
+                    <filter string="Project" name="group_project"
+                            context="{'group_by': 'project_id'}"/>
+                    <filter string="Type" name="group_type"
+                            context="{'group_by': 'transaction_type'}"/>
+                    <filter string="Month" name="group_month"
+                            context="{'group_by': 'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_construction_card_transaction" model="ir.actions.act_window">
+        <field name="name">Payroll Card Transactions</field>
+        <field name="res_model">construction.card.transaction</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_construction_card_transaction_search"/>
+    </record>
+</odoo>

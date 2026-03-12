@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!--
+        Demo: How to use the jalali_date widget in form/list views.
+        
+        Apply widget="jalali_date" to any field of type `date` in your module's view arch.
+        No Python model changes are required — the widget is purely frontend.
+        
+        EXAMPLE 1: Basic usage
+        ========================
+        <field name="date_order" widget="jalali_date"/>
+        
+        EXAMPLE 2: With min/max date constraints (Gregorian ISO strings in options)
+        ============================================================================
+        <field
+            name="deadline_date"
+            widget="jalali_date"
+            options="{'min_date': '2024-01-01', 'max_date': '2025-12-31'}"
+        />
+        
+        EXAMPLE 3: Custom placeholder and no holiday highlighting
+        ===========================================================
+        <field
+            name="birth_date"
+            widget="jalali_date"
+            placeholder="Year/Month/Day"
+            options="{'highlight_holidays': false}"
+        />
+        
+        EXAMPLE 4: Inline in a tree/list view (readonly rendering)
+        ============================================================
+        <tree>
+            <field name="date_order" widget="jalali_date"/>
+        </tree>
+        
+        NOTE: In list/kanban views, the field renders as readonly (span),
+        so no picker is initialised and there is no DOM overhead.
+    -->
+</odoo>

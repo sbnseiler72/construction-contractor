@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!--
+        Template: jalali_datepicker.JalaliDateField
+
+        jalaliDisplayValue is a PURE GETTER computed from props.record on every render.
+        It is NOT stored in reactive state — this is the core fix for the
+        "refresh shows Gregorian" bug. OWL re-renders the input with the correct
+        Jalali value on every render cycle because it reads directly from the record.
+
+        The input's `value` attribute is set via t-att-value on every render,
+        which keeps the DOM in sync with the record without any state management.
+    -->
+    <t t-name="jalali_datepicker.JalaliDateField">
+
+        <!-- READONLY MODE -->
+        <span
+            t-if="isReadonly"
+            class="o_field_widget o_field_jalali_date o_field_jalali_date_readonly"
+            dir="rtl"
+            t-esc="jalaliDisplayValue"
+        />
+
+        <!-- EDIT MODE -->
+        <div t-else="" class="o_field_jalali_date_wrapper o_field_widget d-flex align-items-center">
+            <input
+                t-ref="jalali-input"
+                t-att-class="inputClasses"
+                dir="rtl"
+                type="text"
+                t-att-id="props.id"
+                t-att-value="jalaliDisplayValue"
+                t-att-placeholder="props.placeholder"
+                t-on-blur="onInputBlur"
+                autocomplete="off"
+                inputmode="numeric"
+            />
+            <button
+                t-if="hasValue"
+                class="o_field_jalali_date_clear btn btn-sm btn-link p-0 ms-1"
+                type="button"
+                title="Clear date"
+                t-on-click="onClear"
+            >
+                <i class="fa fa-times text-muted"/>
+            </button>
+        </div>
+
+    </t>
+
+</templates>

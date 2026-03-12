@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Security category -->
+        <record id="module_category_construction" model="ir.module.category">
+            <field name="name">Construction</field>
+            <field name="sequence">100</field>
+        </record>
+
+        <!-- Project Manager group -->
+        <record id="group_construction_manager" model="res.groups">
+            <field name="name">Project Manager</field>
+<!--            <field name="category_id" ref="module_category_construction"/>-->
+            <field name="comment">Can create and manage projects, record expenses, and view reports.</field>
+        </record>
+
+        <!-- Accountant group -->
+        <record id="group_construction_accountant" model="res.groups">
+            <field name="name">Accountant</field>
+<!--            <field name="category_id" ref="module_category_construction"/>-->
+            <field name="implied_ids" eval="[(4, ref('group_construction_manager'))]"/>
+            <field name="comment">Full access: deposits, invoices, payments, reports, and financial data.</field>
+        </record>
+    </data>
+</odoo>

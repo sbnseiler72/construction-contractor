@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Project Financial Summary Report Action -->
+    <record id="action_report_construction_project_summary" model="ir.actions.report">
+        <field name="name">Project Financial Summary</field>
+        <field name="model">construction.project</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">construction_contractor.report_construction_project_summary_template</field>
+        <field name="report_file">construction_contractor.report_construction_project_summary_template</field>
+        <field name="binding_model_id" ref="model_construction_project"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

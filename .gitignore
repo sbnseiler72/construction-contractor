@@ -1,0 +1,63 @@
+# Odoo specific
+*.pyc
+__pycache__/
+*.py[cod]
+*$py.class
+.*.swp
+.~*
+
+# Odoo filestore and sessions
+filestore/
+sessions/
+*.log
+
+# Database dumps
+*.sql
+*.dump
+*.backup
+
+# Configuration with passwords
+odoo.conf
+!odoo.conf.example
+
+# Virtual environment
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+.DS_Store
+
+# OS
+Thumbs.db
+.directory
+
+# Backup files
+*~
+*.bak
+*.backup
+
+# Compiled translations
+*.pot~
+
+# Local data
+data/filestore/
+data/sessions/
+data/backups/
+*.csv
+*.xlsx
+!data/demo/*.csv
+!data/demo/*.xlsx
+
+# Docker
+docker-compose.override.yml
+.env
+
+# Temporary files
+tmp/
+temp/
+*.tmp
