@@ -13,8 +13,8 @@
                 <field name="name"/>
                 <field name="employer_id"/>
                 <field name="manager_id"/>
-                <field name="date_start"/>
-                <field name="date_end"/>
+                <field name="date_start" widget="jalali_date"/>
+                <field name="date_end" widget="jalali_date"/>
                 <field name="contracted_amount" sum="Total Contracted"/>
                 <field name="state" widget="badge"
                        decoration-info="state == 'draft'"
@@ -82,8 +82,8 @@
                         <group string="Project Details">
                             <field name="employer_id"/>
                             <field name="manager_id"/>
-                            <field name="date_start"/>
-                            <field name="date_end"/>
+                            <field name="date_start" widget="jalali_date"/>
+                            <field name="date_end" widget="jalali_date"/>
                             <field name="company_id" groups="base.group_multi_company"/>
                         </group>
                         <group string="Financial">

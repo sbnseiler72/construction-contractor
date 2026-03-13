@@ -21,7 +21,7 @@
                         <group string="Payment Details">
                             <field name="payment_source"/>
                             <field name="amount"/>
-                            <field name="payment_date"/>
+                            <field name="payment_date" widget="jalali_date"/>
                             <field name="memo" placeholder="e.g. INV-VND-0042 payment"/>
                         </group>
                     </group>
