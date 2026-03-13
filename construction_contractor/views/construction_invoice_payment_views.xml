@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ===================================================================
+         Invoice Payment Wizard: Form View
+    =================================================================== -->
+    <record id="view_construction_invoice_payment_wizard_form" model="ir.ui.view">
+        <field name="name">construction.invoice.payment.wizard.form</field>
+        <field name="model">construction.invoice.payment.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Register Invoice Payment">
+                <sheet>
+                    <div class="oe_title">
+                        <h2>Register Payment</h2>
+                    </div>
+                    <group>
+                        <group string="Invoice">
+                            <field name="invoice_id" readonly="1"/>
+                            <field name="project_id" readonly="1"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group string="Payment Details">
+                            <field name="payment_source"/>
+                            <field name="amount"/>
+                            <field name="payment_date"/>
+                            <field name="memo" placeholder="e.g. INV-VND-0042 payment"/>
+                        </group>
+                    </group>
+                    <group string="Journal">
+                        <field name="journal_id" readonly="1"
+                               help="Auto-selected based on payment source configured on the project"/>
+                    </group>
+                    <div class="alert alert-warning" role="alert"
+                         invisible="journal_id != False">
+                        <strong>Warning:</strong> No journal configured for the selected payment source on this project.
+                        Please set the Payroll Card Journal or Employer Journal on the project before registering payment.
+                    </div>
+                </sheet>
+                <footer>
+                    <button name="action_pay" string="Register Payment"
+                            type="object" class="btn-primary"
+                            invisible="journal_id == False"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

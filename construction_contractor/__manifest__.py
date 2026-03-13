@@ -29,6 +29,7 @@
         'views/construction_project_views.xml',
         'views/construction_expense_views.xml',
         'views/construction_card_transaction_views.xml',
+        'views/construction_invoice_payment_views.xml',
         'views/construction_invoice_views.xml',
         'report/construction_report_templates.xml',
         'report/construction_reports.xml',

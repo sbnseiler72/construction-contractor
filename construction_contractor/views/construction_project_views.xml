@@ -91,19 +91,36 @@
                                     type="object"
                                     class="btn-secondary"
                                     invisible="payroll_journal_id != False"/>
+                            <field name="employer_journal_id"/>
+                            <button name="action_create_employer_journal"
+                                    string="Create Employer Journal"
+                                    type="object"
+                                    class="btn-secondary"
+                                    invisible="employer_journal_id != False"/>
                         </group>
                     </group>
 
                     <!-- Financial Summary -->
                     <group string="Financial Summary" invisible="state == 'draft'">
-                        <group>
-                            <field name="total_card_deposits" readonly="1"/>
-                            <field name="total_expenses" readonly="1"/>
-                        </group>
-                        <group>
+                        <group string="Invoices">
                             <field name="total_invoiced" readonly="1"/>
                             <field name="total_paid_invoices" readonly="1"/>
                             <field name="outstanding_invoices" readonly="1"/>
+                        </group>
+                        <group string="Expenses">
+                            <field name="total_expenses" readonly="1"/>
+                        </group>
+                    </group>
+                    <!-- Account Balances -->
+                    <group string="Account Balances" invisible="state == 'draft'">
+                        <group string="Payroll Card">
+                            <field name="total_card_deposits" readonly="1"/>
+                            <field name="total_paid_from_card" readonly="1"/>
+                            <field name="payroll_card_balance" readonly="1"
+                                   class="fw-bold"/>
+                        </group>
+                        <group string="Employer">
+                            <field name="total_paid_by_employer" readonly="1"/>
                         </group>
                     </group>
 

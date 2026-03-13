@@ -79,6 +79,15 @@ class ConstructionProject(models.Model):
         help='Dedicated cash/bank journal acting as the project payroll card',
     )
 
+    # Employer journal: used when employer pays invoices/expenses directly
+    employer_journal_id = fields.Many2one(
+        'account.journal',
+        string='Employer Journal',
+        domain=[('type', 'in', ['cash', 'bank'])],
+        tracking=True,
+        help='Journal used when the employer pays invoices or expenses directly',
+    )
+
     # -------------------------------------------------------------------------
     # Computed financial summaries
     # -------------------------------------------------------------------------
@@ -113,6 +122,29 @@ class ConstructionProject(models.Model):
         store=False,
     )
 
+    # Payment source breakdowns
+    total_paid_from_card = fields.Monetary(
+        string='Total Paid from Payroll Card',
+        compute='_compute_financials',
+        currency_field='currency_id',
+        store=False,
+        help='Sum of confirmed payroll-card expenses plus invoice payments made from the payroll card',
+    )
+    total_paid_by_employer = fields.Monetary(
+        string='Total Paid by Employer',
+        compute='_compute_financials',
+        currency_field='currency_id',
+        store=False,
+        help='Sum of confirmed employer expenses plus invoice payments made by the employer',
+    )
+    payroll_card_balance = fields.Monetary(
+        string='Payroll Card Balance',
+        compute='_compute_financials',
+        currency_field='currency_id',
+        store=False,
+        help='Remaining balance on the payroll card: Deposits minus all card payments',
+    )
+
     # Related record counts for smart buttons
     expense_count = fields.Integer(compute='_compute_counts')
     card_transaction_count = fields.Integer(compute='_compute_counts')
@@ -143,6 +175,32 @@ class ConstructionProject(models.Model):
             project.total_invoiced = sum(invoices.mapped('amount_total'))
             project.total_paid_invoices = sum(invoices.mapped('amount_paid'))
             project.outstanding_invoices = sum(invoices.mapped('amount_residual'))
+
+            # Payment source breakdowns
+            card_expenses = expenses.filtered(
+                lambda e: e.payment_source == 'payroll_card'
+            )
+            employer_expenses = expenses.filtered(
+                lambda e: e.payment_source in ('employer_cash', 'employer_check')
+            )
+            card_invoices = invoices.filtered(
+                lambda i: i.payment_source == 'payroll_card'
+            )
+            employer_invoices = invoices.filtered(
+                lambda i: i.payment_source in ('employer_cash', 'employer_check')
+            )
+
+            project.total_paid_from_card = (
+                sum(card_expenses.mapped('amount'))
+                + sum(card_invoices.mapped('amount_paid'))
+            )
+            project.total_paid_by_employer = (
+                sum(employer_expenses.mapped('amount'))
+                + sum(employer_invoices.mapped('amount_paid'))
+            )
+            project.payroll_card_balance = (
+                project.total_card_deposits - project.total_paid_from_card
+            )
 
     def _compute_counts(self):
         for project in self:
@@ -211,6 +269,20 @@ class ConstructionProject(models.Model):
             'company_id': self.company_id.id,
         })
         self.payroll_journal_id = journal
+        return True
+
+    def action_create_employer_journal(self):
+        """Create a dedicated cash journal for this project's employer payments."""
+        self.ensure_one()
+        if self.employer_journal_id:
+            raise ValidationError(_('An employer journal already exists for this project.'))
+        journal = self.env['account.journal'].create({
+            'name': _('Employer - %s') % self.name,
+            'code': ('EM%s' % self.code)[:5],
+            'type': 'cash',
+            'company_id': self.company_id.id,
+        })
+        self.employer_journal_id = journal
         return True
 
     def action_set_active(self):
