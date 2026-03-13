@@ -29,14 +29,13 @@ class ConstructionExpense(models.Model):
         default=fields.Date.today,
         tracking=True,
     )
-    expense_type = fields.Selection([
-        ('labor', 'Labor / Worker Wages'),
-        ('materials', 'Materials & Supplies'),
-        ('equipment', 'Equipment Rental'),
-        ('subcontractor', 'Sub-contractor Payment'),
-        ('transport', 'Transport / Fuel'),
-        ('other', 'Other Operational Cost'),
-    ], string='Expense Type', required=True, tracking=True)
+    expense_type_id = fields.Many2one(
+        'construction.expense.type',
+        string='Expense Type',
+        required=True,
+        ondelete='restrict',
+        tracking=True,
+    )
 
     description = fields.Char(string='Description', required=True)
     amount = fields.Monetary(

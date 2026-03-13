@@ -15,7 +15,7 @@
                 <field name="project_id"/>
                 <field name="transaction_type"/>
                 <field name="project_phase_id" optional="show"/>
-                <field name="expense_type" optional="show"/>
+                <field name="expense_type_id" optional="show"/>
                 <field name="description"/>
                 <field name="partner_id"/>
                 <field name="payment_source"/>
@@ -69,8 +69,8 @@
                             context="{'group_by': 'transaction_type'}"/>
                     <filter string="Payment Source" name="group_payment"
                             context="{'group_by': 'payment_source'}"/>
-                    <filter string="Expense Type" name="group_expense_type"
-                            context="{'group_by': 'expense_type'}"/>
+                    <filter string="Expense Type" name="group_expense_type_id"
+                            context="{'group_by': 'expense_type_id'}"/>
                     <filter string="Month" name="group_month"
                             context="{'group_by': 'date:month'}"/>
                     <filter string="Vendor" name="group_partner"

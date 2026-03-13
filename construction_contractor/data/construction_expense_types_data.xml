@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="expense_type_labor" model="construction.expense.type">
+            <field name="key">labor</field>
+            <field name="label">دستمزد کارگران</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="expense_type_materials" model="construction.expense.type">
+            <field name="key">materials</field>
+            <field name="label">مصالح و تجهیزات ساختمانی</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <record id="expense_type_equipment" model="construction.expense.type">
+            <field name="key">equipment</field>
+            <field name="label">اجاره ماشین‌آلات و تجهیزات</field>
+            <field name="sequence">30</field>
+        </record>
+
+        <record id="expense_type_subcontractor" model="construction.expense.type">
+            <field name="key">subcontractor</field>
+            <field name="label">پرداخت پیمانکار فرعی</field>
+            <field name="sequence">40</field>
+        </record>
+
+        <record id="expense_type_transport" model="construction.expense.type">
+            <field name="key">transport</field>
+            <field name="label">حمل و نقل و سوخت</field>
+            <field name="sequence">50</field>
+        </record>
+
+        <record id="expense_type_demolition" model="construction.expense.type">
+            <field name="key">demolition</field>
+            <field name="label">تخریب و خاکبرداری</field>
+            <field name="sequence">60</field>
+        </record>
+
+        <record id="expense_type_survey" model="construction.expense.type">
+            <field name="key">survey</field>
+            <field name="label">نقشه‌برداری و آزمایش خاک</field>
+            <field name="sequence">70</field>
+        </record>
+
+        <record id="expense_type_design" model="construction.expense.type">
+            <field name="key">design</field>
+            <field name="label">هزینه‌های طراحی و نقشه‌کشی</field>
+            <field name="sequence">80</field>
+        </record>
+
+        <record id="expense_type_permit" model="construction.expense.type">
+            <field name="key">permit</field>
+            <field name="label">هزینه‌های مجوز و صدور پروانه</field>
+            <field name="sequence">90</field>
+        </record>
+
+        <record id="expense_type_site_setup" model="construction.expense.type">
+            <field name="key">site_setup</field>
+            <field name="label">تاسیسات موقت کارگاه</field>
+            <field name="sequence">100</field>
+        </record>
+
+        <record id="expense_type_scaffolding" model="construction.expense.type">
+            <field name="key">scaffolding</field>
+            <field name="label">داربست‌بندی</field>
+            <field name="sequence">110</field>
+        </record>
+
+        <record id="expense_type_concrete" model="construction.expense.type">
+            <field name="key">concrete</field>
+            <field name="label">بتن‌ریزی و قالب‌بندی</field>
+            <field name="sequence">120</field>
+        </record>
+
+        <record id="expense_type_steel" model="construction.expense.type">
+            <field name="key">steel</field>
+            <field name="label">آرماتوربندی و سازه فولادی</field>
+            <field name="sequence">130</field>
+        </record>
+
+        <record id="expense_type_waterproofing" model="construction.expense.type">
+            <field name="key">waterproofing</field>
+            <field name="label">عایق‌کاری و آب‌بندی</field>
+            <field name="sequence">140</field>
+        </record>
+
+        <record id="expense_type_electrical" model="construction.expense.type">
+            <field name="key">electrical</field>
+            <field name="label">برق‌کشی و تاسیسات برقی</field>
+            <field name="sequence">150</field>
+        </record>
+
+        <record id="expense_type_plumbing" model="construction.expense.type">
+            <field name="key">plumbing</field>
+            <field name="label">لوله‌کشی و تاسیسات آبی</field>
+            <field name="sequence">160</field>
+        </record>
+
+        <record id="expense_type_hvac" model="construction.expense.type">
+            <field name="key">hvac</field>
+            <field name="label">تهویه مطبوع و گرمایش و سرمایش</field>
+            <field name="sequence">170</field>
+        </record>
+
+        <record id="expense_type_finishing" model="construction.expense.type">
+            <field name="key">finishing</field>
+            <field name="label">نازک‌کاری و کارهای تکمیلی</field>
+            <field name="sequence">180</field>
+        </record>
+
+        <record id="expense_type_landscaping" model="construction.expense.type">
+            <field name="key">landscaping</field>
+            <field name="label">محوطه‌سازی و فضای سبز</field>
+            <field name="sequence">190</field>
+        </record>
+
+        <record id="expense_type_insurance" model="construction.expense.type">
+            <field name="key">insurance</field>
+            <field name="label">بیمه و تامین اجتماعی کارگران</field>
+            <field name="sequence">200</field>
+        </record>
+
+        <record id="expense_type_safety" model="construction.expense.type">
+            <field name="key">safety</field>
+            <field name="label">ایمنی و بهداشت کار</field>
+            <field name="sequence">210</field>
+        </record>
+
+        <record id="expense_type_utilities" model="construction.expense.type">
+            <field name="key">utilities</field>
+            <field name="label">آب، برق و گاز موقت کارگاه</field>
+            <field name="sequence">220</field>
+        </record>
+
+        <record id="expense_type_rental_tools" model="construction.expense.type">
+            <field name="key">rental_tools</field>
+            <field name="label">ابزار و لوازم اجاره‌ای</field>
+            <field name="sequence">230</field>
+        </record>
+
+        <record id="expense_type_guard" model="construction.expense.type">
+            <field name="key">guard</field>
+            <field name="label">نگهبانی و حفاظت کارگاه</field>
+            <field name="sequence">240</field>
+        </record>
+
+        <record id="expense_type_testing" model="construction.expense.type">
+            <field name="key">testing</field>
+            <field name="label">آزمایش و کنترل کیفیت</field>
+            <field name="sequence">250</field>
+        </record>
+
+        <record id="expense_type_cleaning" model="construction.expense.type">
+            <field name="key">cleaning</field>
+            <field name="label">نظافت و پاکسازی کارگاه</field>
+            <field name="sequence">260</field>
+        </record>
+
+        <record id="expense_type_office" model="construction.expense.type">
+            <field name="key">office</field>
+            <field name="label">هزینه‌های اداری و دفتری</field>
+            <field name="sequence">270</field>
+        </record>
+
+        <record id="expense_type_other" model="construction.expense.type">
+            <field name="key">other</field>
+            <field name="label">سایر هزینه‌های عملیاتی</field>
+            <field name="sequence">280</field>
+        </record>
+
+    </data>
+</odoo>

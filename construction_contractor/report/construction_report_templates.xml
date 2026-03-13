@@ -125,14 +125,7 @@
 
                         <!-- Expenses by Type -->
                         <h4 class="mt-4">Expenses by Type</h4>
-                        <t t-set="expense_types" t-value="[
-                            ('labor', 'Labor / Worker Wages'),
-                            ('materials', 'Materials and Supplies'),
-                            ('equipment', 'Equipment Rental'),
-                            ('subcontractor', 'Sub-contractor Payment'),
-                            ('transport', 'Transport / Fuel'),
-                            ('other', 'Other Operational Cost'),
-                        ]"/>
+                        <t t-set="expense_types" t-value="project.env['construction.expense.type'].search([('active','=',True)], order='sequence, id')"/>
                         <table class="table table-bordered table-sm">
                             <thead class="table-light">
                                 <tr>
@@ -145,11 +138,11 @@
                                     <t t-set="etype_expenses" t-value="project.env['construction.expense'].search([
                                         ('project_id','=',project.id),
                                         ('state','=','confirmed'),
-                                        ('expense_type','=',etype[0]),
+                                        ('expense_type_id','=',etype.id),
                                     ])"/>
                                     <t t-if="etype_expenses">
                                         <tr>
-                                            <td t-esc="etype[1]"/>
+                                            <td t-esc="etype.label"/>
                                             <td class="text-end">
                                                 <t t-esc="sum(etype_expenses.mapped('amount'))"
                                                    t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
