@@ -30,10 +30,7 @@
                        decoration-success="payment_state == 'paid'"
                        decoration-warning="payment_state == 'partial'"
                        decoration-info="payment_state == 'not_paid'"/>
-                <field name="payment_source" widget="badge"
-                       decoration-info="payment_source == 'payroll_card'"
-                       decoration-success="payment_source in ('employer_cash', 'employer_check')"
-                       optional="show"/>
+                <field name="amount_prepaid" sum="Total Prepaid" optional="show"/>
                 <field name="state" widget="badge"
                        decoration-info="state == 'draft'"
                        decoration-success="state == 'posted'"
@@ -124,7 +121,6 @@
                             <field name="amount_paid" readonly="1"/>
                             <field name="amount_residual" readonly="1"/>
                             <field name="payment_state" readonly="1"/>
-                            <field name="payment_source" readonly="1"/>
                         </group>
                     </group>
                     <group string="Description">

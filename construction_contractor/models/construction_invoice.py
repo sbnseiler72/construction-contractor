@@ -52,9 +52,9 @@ class ConstructionInvoice(models.Model):
     )
     amount_total = fields.Monetary(
         string='Invoice Total',
-        required=True,
         currency_field='currency_id',
         tracking=True,
+        help='Leave empty on draft invoices when the final amount is not yet known.',
     )
     currency_id = fields.Many2one(
         'res.currency',
@@ -174,13 +174,25 @@ class ConstructionInvoice(models.Model):
                 vals['name'] = self.env['ir.sequence'].next_by_code('construction.invoice') or _('New')
         return super().create(vals_list)
 
+    def write(self, vals):
+        res = super().write(vals)
+        if 'amount_total' in vals:
+            for rec in self:
+                rec._sync_amount_to_vendor_bill()
+        return res
+
+    def unlink(self):
+        for rec in self:
+            rec._cancel_vendor_bill(force_delete=True)
+        return super().unlink()
+
     # -------------------------------------------------------------------------
     # Constraints
     # -------------------------------------------------------------------------
-    @api.constrains('amount_total')
+    @api.constrains('amount_total', 'state')
     def _check_amount(self):
         for rec in self:
-            if rec.amount_total <= 0:
+            if rec.state != 'draft' and rec.amount_total <= 0:
                 raise ValidationError(_('Invoice total must be greater than zero.'))
 
     # -------------------------------------------------------------------------
@@ -211,6 +223,10 @@ class ConstructionInvoice(models.Model):
         self.ensure_one()
         if self.account_move_id:
             raise ValidationError(_('A vendor bill already exists for this invoice.'))
+        if not self.amount_total or self.amount_total <= 0:
+            raise ValidationError(
+                _('Please enter the Invoice Total before creating the vendor bill.')
+            )
 
         # Resolve expense account: use partner's default purchase account,
         # then fall back to any expense-type account in the company.
@@ -320,11 +336,6 @@ class ConstructionInvoice(models.Model):
 
     def action_cancel(self):
         for rec in self:
-            if rec.account_move_id and rec.account_move_id.state == 'posted':
-                raise ValidationError(
-                    _('Cannot cancel: the linked vendor bill is already posted. '
-                      'Please cancel or reset it in accounting first.')
-                )
             active_prepayments = rec.prepayment_ids.filtered(
                 lambda p: p.account_payment_id
                 and p.account_payment_id.state == 'posted'
@@ -335,7 +346,69 @@ class ConstructionInvoice(models.Model):
                       'Please cancel those prepayments first.')
                     % (rec.name, len(active_prepayments))
                 )
+            rec._cancel_vendor_bill()
             rec.state = 'cancelled'
 
     def action_reset_draft(self):
         self.write({'state': 'draft'})
+
+    # -------------------------------------------------------------------------
+    # Private helpers
+    # -------------------------------------------------------------------------
+    def _cancel_vendor_bill(self, force_delete=False):
+        """
+        Cancel (and optionally delete) the linked vendor bill when the
+        construction invoice is cancelled or deleted.
+
+        Rules:
+        - Draft bill: always cancel/delete.
+        - Posted bill with no payments: reset to draft then cancel/delete.
+        - Posted bill with payments: raise – user must reverse payments first.
+        """
+        self.ensure_one()
+        move = self.account_move_id
+        if not move:
+            return
+
+        if move.state == 'posted':
+            # Block if payments have been registered
+            if move.payment_state not in ('not_paid', False):
+                raise ValidationError(
+                    _('Cannot cancel invoice %s: the linked vendor bill has registered '
+                      'payments. Please reverse those payments in accounting first.')
+                    % self.name
+                )
+            move.button_draft()
+
+        if force_delete:
+            self.account_move_id = False
+            move.unlink()
+        else:
+            move.button_cancel()
+
+    def _sync_amount_to_vendor_bill(self):
+        """
+        Keep the vendor bill's invoice line in sync when amount_total is edited.
+        Only runs when a bill is linked and not yet fully paid.
+        """
+        self.ensure_one()
+        move = self.account_move_id
+        if not move or not self.amount_total:
+            return
+
+        if move.payment_state not in ('not_paid', False):
+            raise ValidationError(
+                _('Cannot change the invoice total after payments have been registered. '
+                  'Please reverse the payments first.')
+            )
+
+        was_posted = move.state == 'posted'
+        if was_posted:
+            move.button_draft()
+
+        # Update the single catch-all line with the new amount
+        if move.invoice_line_ids:
+            move.invoice_line_ids[0].price_unit = self.amount_total
+
+        if was_posted:
+            move.action_post()
