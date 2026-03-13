@@ -73,6 +73,12 @@ class ConstructionInvoice(models.Model):
     )
     receipt_filename = fields.Char(string='Invoice Filename')
 
+    project_phase_id = fields.Many2one(
+        'construction.project.phase',
+        string='Project Phase',
+        tracking=True,
+    )
+
     notes = fields.Text(string='Notes / Remarks')
 
     # Payment source — set when payment is registered via the payment wizard

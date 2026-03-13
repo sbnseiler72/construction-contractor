@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Default Construction Project Phases -->
+    <record id="phase_feasibility_study" model="construction.project.phase">
+        <field name="key">feasibility_study</field>
+        <field name="label">مطالعه امکان‌سنجی</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="phase_site_selection" model="construction.project.phase">
+        <field name="key">site_selection</field>
+        <field name="label">انتخاب زمین</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="phase_land_survey" model="construction.project.phase">
+        <field name="key">land_survey</field>
+        <field name="label">نقشه‌برداری زمین</field>
+        <field name="sequence">30</field>
+    </record>
+    <record id="phase_soil_test" model="construction.project.phase">
+        <field name="key">soil_test</field>
+        <field name="label">آزمایش مکانیک خاک</field>
+        <field name="sequence">40</field>
+    </record>
+    <record id="phase_architectural_design" model="construction.project.phase">
+        <field name="key">architectural_design</field>
+        <field name="label">طراحی معماری</field>
+        <field name="sequence">50</field>
+    </record>
+    <record id="phase_structural_design" model="construction.project.phase">
+        <field name="key">structural_design</field>
+        <field name="label">طراحی سازه</field>
+        <field name="sequence">60</field>
+    </record>
+    <record id="phase_mep_design" model="construction.project.phase">
+        <field name="key">mep_design</field>
+        <field name="label">طراحی تأسیسات مکانیکی و برقی</field>
+        <field name="sequence">70</field>
+    </record>
+    <record id="phase_cost_estimation" model="construction.project.phase">
+        <field name="key">cost_estimation</field>
+        <field name="label">برآورد هزینه</field>
+        <field name="sequence">80</field>
+    </record>
+    <record id="phase_budget_planning" model="construction.project.phase">
+        <field name="key">budget_planning</field>
+        <field name="label">برنامه‌ریزی بودجه</field>
+        <field name="sequence">90</field>
+    </record>
+    <record id="phase_permits_approval" model="construction.project.phase">
+        <field name="key">permits_approval</field>
+        <field name="label">اخذ مجوز و پروانه ساخت</field>
+        <field name="sequence">100</field>
+    </record>
+    <record id="phase_site_clearing" model="construction.project.phase">
+        <field name="key">site_clearing</field>
+        <field name="label">پاکسازی زمین</field>
+        <field name="sequence">110</field>
+    </record>
+    <record id="phase_demolition" model="construction.project.phase">
+        <field name="key">demolition</field>
+        <field name="label">تخریب ساختمان موجود</field>
+        <field name="sequence">120</field>
+    </record>
+    <record id="phase_site_layout" model="construction.project.phase">
+        <field name="key">site_layout</field>
+        <field name="label">پیاده‌سازی نقشه در زمین</field>
+        <field name="sequence">130</field>
+    </record>
+    <record id="phase_excavation" model="construction.project.phase">
+        <field name="key">excavation</field>
+        <field name="label">گودبرداری</field>
+        <field name="sequence">140</field>
+    </record>
+    <record id="phase_earthwork" model="construction.project.phase">
+        <field name="key">earthwork</field>
+        <field name="label">عملیات خاکی</field>
+        <field name="sequence">150</field>
+    </record>
+    <record id="phase_temporary_utilities" model="construction.project.phase">
+        <field name="key">temporary_utilities</field>
+        <field name="label">ایجاد تأسیسات موقت کارگاه</field>
+        <field name="sequence">160</field>
+    </record>
+    <record id="phase_blinding_concrete" model="construction.project.phase">
+        <field name="key">blinding_concrete</field>
+        <field name="label">بتن مگر</field>
+        <field name="sequence">170</field>
+    </record>
+    <record id="phase_foundation_layout" model="construction.project.phase">
+        <field name="key">foundation_layout</field>
+        <field name="label">پیاده‌سازی فونداسیون</field>
+        <field name="sequence">180</field>
+    </record>
+    <record id="phase_rebar_installation" model="construction.project.phase">
+        <field name="key">rebar_installation</field>
+        <field name="label">آرماتوربندی</field>
+        <field name="sequence">190</field>
+    </record>
+    <record id="phase_foundation_waterproofing" model="construction.project.phase">
+        <field name="key">foundation_waterproofing</field>
+        <field name="label">عایق‌کاری فونداسیون</field>
+        <field name="sequence">200</field>
+    </record>
+    <record id="phase_column_construction" model="construction.project.phase">
+        <field name="key">column_construction</field>
+        <field name="label">اجرای ستون</field>
+        <field name="sequence">210</field>
+    </record>
+    <record id="phase_shear_wall" model="construction.project.phase">
+        <field name="key">shear_wall</field>
+        <field name="label">اجرای دیوار برشی</field>
+        <field name="sequence">220</field>
+    </record>
+    <record id="phase_steel_structure" model="construction.project.phase">
+        <field name="key">steel_structure</field>
+        <field name="label">نصب اسکلت فلزی</field>
+        <field name="sequence">230</field>
+    </record>
+    <record id="phase_welding" model="construction.project.phase">
+        <field name="key">welding</field>
+        <field name="label">جوشکاری</field>
+        <field name="sequence">240</field>
+    </record>
+    <record id="phase_roof_waterproofing" model="construction.project.phase">
+        <field name="key">roof_waterproofing</field>
+        <field name="label">عایق‌کاری بام</field>
+        <field name="sequence">250</field>
+    </record>
+    <record id="phase_masonry_walls" model="construction.project.phase">
+        <field name="key">masonry_walls</field>
+        <field name="label">دیوارچینی</field>
+        <field name="sequence">260</field>
+    </record>
+    <record id="phase_partition_walls" model="construction.project.phase">
+        <field name="key">partition_walls</field>
+        <field name="label">اجرای دیوارهای داخلی</field>
+        <field name="sequence">270</field>
+    </record>
+    <record id="phase_exterior_walls" model="construction.project.phase">
+        <field name="key">exterior_walls</field>
+        <field name="label">اجرای دیوارهای خارجی</field>
+        <field name="sequence">280</field>
+    </record>
+    <record id="phase_plumbing" model="construction.project.phase">
+        <field name="key">plumbing</field>
+        <field name="label">لوله‌کشی آب</field>
+        <field name="sequence">290</field>
+    </record>
+    <record id="phase_sewer_piping" model="construction.project.phase">
+        <field name="key">sewer_piping</field>
+        <field name="label">لوله‌کشی فاضلاب</field>
+        <field name="sequence">300</field>
+    </record>
+    <record id="phase_gas_piping" model="construction.project.phase">
+        <field name="key">gas_piping</field>
+        <field name="label">لوله‌کشی گاز</field>
+        <field name="sequence">310</field>
+    </record>
+    <record id="phase_electrical_wiring" model="construction.project.phase">
+        <field name="key">electrical_wiring</field>
+        <field name="label">سیم‌کشی برق</field>
+        <field name="sequence">320</field>
+    </record>
+    <record id="phase_hvac" model="construction.project.phase">
+        <field name="key">hvac</field>
+        <field name="label">نصب سیستم گرمایش و سرمایش</field>
+        <field name="sequence">330</field>
+    </record>
+    <record id="phase_fire_fighting" model="construction.project.phase">
+        <field name="key">fire_fighting</field>
+        <field name="label">نصب سیستم اطفاء حریق</field>
+        <field name="sequence">340</field>
+    </record>
+    <record id="phase_thermal_insulation" model="construction.project.phase">
+        <field name="key">thermal_insulation</field>
+        <field name="label">عایق حرارتی</field>
+        <field name="sequence">350</field>
+    </record>
+    <record id="phase_sound_insulation" model="construction.project.phase">
+        <field name="key">sound_insulation</field>
+        <field name="label">عایق صوتی</field>
+        <field name="sequence">360</field>
+    </record>
+    <record id="phase_window_installation" model="construction.project.phase">
+        <field name="key">window_installation</field>
+        <field name="label">نصب پنجره</field>
+        <field name="sequence">370</field>
+    </record>
+    <record id="phase_door_installation" model="construction.project.phase">
+        <field name="key">door_installation</field>
+        <field name="label">نصب درب</field>
+        <field name="sequence">380</field>
+    </record>
+    <record id="phase_plastering" model="construction.project.phase">
+        <field name="key">plastering</field>
+        <field name="label">گچ و خاک</field>
+        <field name="sequence">390</field>
+    </record>
+    <record id="phase_floor_screeding" model="construction.project.phase">
+        <field name="key">floor_screeding</field>
+        <field name="label">کف‌سازی</field>
+        <field name="sequence">400</field>
+    </record>
+    <record id="phase_tile_installation" model="construction.project.phase">
+        <field name="key">tile_installation</field>
+        <field name="label">نصب کاشی</field>
+        <field name="sequence">410</field>
+    </record>
+    <record id="phase_ceramic_installation" model="construction.project.phase">
+        <field name="key">ceramic_installation</field>
+        <field name="label">نصب سرامیک</field>
+        <field name="sequence">420</field>
+    </record>
+    <record id="phase_stone_flooring" model="construction.project.phase">
+        <field name="key">stone_flooring</field>
+        <field name="label">سنگ‌فرش</field>
+        <field name="sequence">430</field>
+    </record>
+    <record id="phase_parquet_installation" model="construction.project.phase">
+        <field name="key">parquet_installation</field>
+        <field name="label">نصب پارکت</field>
+        <field name="sequence">440</field>
+    </record>
+    <record id="phase_false_ceiling" model="construction.project.phase">
+        <field name="key">false_ceiling</field>
+        <field name="label">اجرای سقف کاذب</field>
+        <field name="sequence">450</field>
+    </record>
+    <record id="phase_painting" model="construction.project.phase">
+        <field name="key">painting</field>
+        <field name="label">نقاشی</field>
+        <field name="sequence">460</field>
+    </record>
+    <record id="phase_wall_covering" model="construction.project.phase">
+        <field name="key">wall_covering</field>
+        <field name="label">نصب دیوارپوش</field>
+        <field name="sequence">470</field>
+    </record>
+    <record id="phase_cabinet_installation" model="construction.project.phase">
+        <field name="key">cabinet_installation</field>
+        <field name="label">نصب کابینت</field>
+        <field name="sequence">480</field>
+    </record>
+    <record id="phase_interior_joinery" model="construction.project.phase">
+        <field name="key">interior_joinery</field>
+        <field name="label">نجاری داخلی</field>
+        <field name="sequence">490</field>
+    </record>
+    <record id="phase_sanitary_fixtures" model="construction.project.phase">
+        <field name="key">sanitary_fixtures</field>
+        <field name="label">نصب تجهیزات بهداشتی</field>
+        <field name="sequence">500</field>
+    </record>
+    <record id="phase_lighting_installation" model="construction.project.phase">
+        <field name="key">lighting_installation</field>
+        <field name="label">نصب روشنایی</field>
+        <field name="sequence">510</field>
+    </record>
+    <record id="phase_electrical_panel" model="construction.project.phase">
+        <field name="key">electrical_panel</field>
+        <field name="label">نصب تابلو برق</field>
+        <field name="sequence">520</field>
+    </record>
+    <record id="phase_elevator_installation" model="construction.project.phase">
+        <field name="key">elevator_installation</field>
+        <field name="label">نصب آسانسور</field>
+        <field name="sequence">530</field>
+    </record>
+    <record id="phase_facade_installation" model="construction.project.phase">
+        <field name="key">facade_installation</field>
+        <field name="label">اجرای نما</field>
+        <field name="sequence">540</field>
+    </record>
+    <record id="phase_exterior_painting" model="construction.project.phase">
+        <field name="key">exterior_painting</field>
+        <field name="label">رنگ‌آمیزی نما</field>
+        <field name="sequence">550</field>
+    </record>
+    <record id="phase_handrail_installation" model="construction.project.phase">
+        <field name="key">handrail_installation</field>
+        <field name="label">نصب نرده</field>
+        <field name="sequence">560</field>
+    </record>
+    <record id="phase_parking_construction" model="construction.project.phase">
+        <field name="key">parking_construction</field>
+        <field name="label">ساخت پارکینگ</field>
+        <field name="sequence">570</field>
+    </record>
+    <record id="phase_driveway_construction" model="construction.project.phase">
+        <field name="key">driveway_construction</field>
+        <field name="label">ساخت مسیر خودرو</field>
+        <field name="sequence">580</field>
+    </record>
+    <record id="phase_landscaping" model="construction.project.phase">
+        <field name="key">landscaping</field>
+        <field name="label">محوطه‌سازی</field>
+        <field name="sequence">590</field>
+    </record>
+    <record id="phase_pavement_installation" model="construction.project.phase">
+        <field name="key">pavement_installation</field>
+        <field name="label">کف‌سازی محوطه</field>
+        <field name="sequence">600</field>
+    </record>
+    <record id="phase_fence_installation" model="construction.project.phase">
+        <field name="key">fence_installation</field>
+        <field name="label">نصب حصار</field>
+        <field name="sequence">610</field>
+    </record>
+    <record id="phase_site_cleaning" model="construction.project.phase">
+        <field name="key">site_cleaning</field>
+        <field name="label">نظافت کارگاه</field>
+        <field name="sequence">620</field>
+    </record>
+    <record id="phase_quality_inspection" model="construction.project.phase">
+        <field name="key">quality_inspection</field>
+        <field name="label">بازرسی کیفیت</field>
+        <field name="sequence">630</field>
+    </record>
+    <record id="phase_defect_rectification" model="construction.project.phase">
+        <field name="key">defect_rectification</field>
+        <field name="label">رفع نواقص</field>
+        <field name="sequence">640</field>
+    </record>
+</odoo>

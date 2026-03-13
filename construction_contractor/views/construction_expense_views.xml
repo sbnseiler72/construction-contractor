@@ -12,6 +12,7 @@
                 <field name="name"/>
                 <field name="project_id"/>
                 <field name="date" widget="jalali_date"/>
+                <field name="project_phase_id" optional="show"/>
                 <field name="expense_type"/>
                 <field name="description"/>
                 <field name="partner_id"/>
@@ -56,6 +57,7 @@
                         <group string="Expense Details">
                             <field name="project_id"/>
                             <field name="date" widget="jalali_date"/>
+                            <field name="project_phase_id"/>
                             <field name="expense_type"/>
                             <field name="description"/>
                             <field name="partner_id"/>
@@ -92,6 +94,7 @@
             <search string="Search Expenses">
                 <field name="name"/>
                 <field name="project_id"/>
+                <field name="project_phase_id"/>
                 <field name="partner_id"/>
                 <field name="receipt_ref"/>
                 <separator/>
@@ -110,6 +113,8 @@
                 <group>
                     <filter string="Project" name="group_project"
                             context="{'group_by': 'project_id'}"/>
+                    <filter string="Project Phase" name="group_phase"
+                            context="{'group_by': 'project_phase_id'}"/>
                     <filter string="Expense Type" name="group_type"
                             context="{'group_by': 'expense_type'}"/>
                     <filter string="Payment Source" name="group_payment"

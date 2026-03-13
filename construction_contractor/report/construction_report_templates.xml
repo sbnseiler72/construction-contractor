@@ -93,6 +93,36 @@
                             </div>
                         </div>
 
+                        <!-- Expenses by Phase -->
+                        <h4 class="mt-4">Expenses by Project Phase</h4>
+                        <t t-set="phase_expenses" t-value="project.env['construction.expense'].search([
+                            ('project_id','=',project.id),
+                            ('state','=','confirmed'),
+                            ('project_phase_id','!=',False),
+                        ])"/>
+                        <t t-if="phase_expenses">
+                            <t t-set="phases_used" t-value="phase_expenses.mapped('project_phase_id')"/>
+                            <table class="table table-bordered table-sm">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Project Phase</th>
+                                        <th class="text-end">Total Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="phases_used" t-as="phase">
+                                        <tr>
+                                            <td t-esc="phase.label"/>
+                                            <td class="text-end">
+                                                <t t-esc="sum(phase_expenses.filtered(lambda e: e.project_phase_id.id == phase.id).mapped('amount'))"
+                                                   t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </t>
+
                         <!-- Expenses by Type -->
                         <h4 class="mt-4">Expenses by Type</h4>
                         <t t-set="expense_types" t-value="[
@@ -182,6 +212,7 @@
                                     <th>Date</th>
                                     <th>Invoice No.</th>
                                     <th>Vendor</th>
+                                    <th>Project Phase</th>
                                     <th class="text-end">Total</th>
                                     <th class="text-end">Paid</th>
                                     <th class="text-end">Outstanding</th>
@@ -194,6 +225,7 @@
                                         <td t-esc="inv.invoice_date"/>
                                         <td t-esc="inv.invoice_number or inv.name"/>
                                         <td t-esc="inv.partner_id.name"/>
+                                        <td t-esc="inv.project_phase_id.label or ''"/>
                                         <td class="text-end">
                                             <t t-esc="inv.amount_total"
                                                t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>

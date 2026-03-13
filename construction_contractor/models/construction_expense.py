@@ -77,6 +77,12 @@ class ConstructionExpense(models.Model):
     )
     receipt_filename = fields.Char(string='Receipt Filename')
 
+    project_phase_id = fields.Many2one(
+        'construction.project.phase',
+        string='Project Phase',
+        tracking=True,
+    )
+
     # Who recorded/paid this expense
     recorded_by = fields.Many2one(
         'res.users',

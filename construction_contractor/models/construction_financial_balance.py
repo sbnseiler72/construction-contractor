@@ -45,6 +45,11 @@ class ConstructionFinancialBalance(models.Model):
         readonly=True,
     )
     receipt_ref = fields.Char(string='Receipt Ref', readonly=True)
+    project_phase_id = fields.Many2one(
+        'construction.project.phase',
+        string='Project Phase',
+        readonly=True,
+    )
     source_model = fields.Char(string='Source Model', readonly=True)
     source_id = fields.Integer(string='Source ID', readonly=True)
     company_id = fields.Many2one(
@@ -71,6 +76,7 @@ class ConstructionFinancialBalance(models.Model):
                     e.amount AS amount,
                     e.currency_id AS currency_id,
                     e.receipt_ref AS receipt_ref,
+                    e.project_phase_id AS project_phase_id,
                     'construction.expense' AS source_model,
                     e.id AS source_id,
                     e.company_id AS company_id
@@ -93,6 +99,7 @@ class ConstructionFinancialBalance(models.Model):
                     (i.amount_total - COALESCE(am.amount_residual, i.amount_total)) AS amount,
                     i.currency_id AS currency_id,
                     i.receipt_ref AS receipt_ref,
+                    i.project_phase_id AS project_phase_id,
                     'construction.invoice' AS source_model,
                     i.id AS source_id,
                     i.company_id AS company_id
