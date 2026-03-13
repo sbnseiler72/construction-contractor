@@ -10,7 +10,7 @@
             <list string="Financial Balance" create="false" edit="false" delete="false"
                   decoration-warning="transaction_type == 'expense'"
                   decoration-info="transaction_type == 'invoice_payment'">
-                <field name="date"/>
+                <field name="date" widget="jalali_date"/>
                 <field name="name"/>
                 <field name="project_id"/>
                 <field name="transaction_type"/>
