@@ -90,4 +90,18 @@
               action="action_construction_invoice"
               groups="construction_contractor.group_construction_manager"
               sequence="30"/>
+
+    <!-- Configuration -->
+    <menuitem id="menu_construction_configuration"
+              name="Configuration"
+              parent="menu_construction_root"
+              groups="construction_contractor.group_construction_accountant"
+              sequence="90"/>
+
+    <menuitem id="menu_construction_project_phases"
+              name="Project Phases"
+              parent="menu_construction_configuration"
+              action="action_construction_project_phase"
+              groups="construction_contractor.group_construction_accountant"
+              sequence="10"/>
 </odoo>

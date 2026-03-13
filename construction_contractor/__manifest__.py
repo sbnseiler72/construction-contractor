@@ -26,6 +26,8 @@
         'security/construction_security.xml',
         'security/ir.model.access.csv',
         'data/construction_data.xml',
+        'data/construction_project_phases_data.xml',
+        'views/construction_project_phase_views.xml',
         'views/construction_project_views.xml',
         'views/construction_expense_views.xml',
         'views/construction_card_transaction_views.xml',

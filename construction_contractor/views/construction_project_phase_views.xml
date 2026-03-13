@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ===================================================================
+         Project Phase: List View
+    =================================================================== -->
+    <record id="view_construction_project_phase_list" model="ir.ui.view">
+        <field name="name">construction.project.phase.list</field>
+        <field name="model">construction.project.phase</field>
+        <field name="arch" type="xml">
+            <list string="Project Phases" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="key"/>
+                <field name="label"/>
+                <field name="active" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ===================================================================
+         Project Phase: Form View
+    =================================================================== -->
+    <record id="view_construction_project_phase_form" model="ir.ui.view">
+        <field name="name">construction.project.phase.form</field>
+        <field name="model">construction.project.phase</field>
+        <field name="arch" type="xml">
+            <form string="Project Phase">
+                <sheet>
+                    <group>
+                        <field name="sequence"/>
+                        <field name="key" placeholder="e.g. foundation_work"/>
+                        <field name="label" placeholder="e.g. Foundation Work — اجرای فونداسیون"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ===================================================================
+         Project Phase: Search View
+    =================================================================== -->
+    <record id="view_construction_project_phase_search" model="ir.ui.view">
+        <field name="name">construction.project.phase.search</field>
+        <field name="model">construction.project.phase</field>
+        <field name="arch" type="xml">
+            <search string="Search Project Phases">
+                <field name="key"/>
+                <field name="label"/>
+                <filter string="Archived" name="archived" domain="[('active','=',False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_construction_project_phase" model="ir.actions.act_window">
+        <field name="name">Project Phases</field>
+        <field name="res_model">construction.project.phase</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_construction_project_phase_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Add your first project phase</p>
+            <p>Project phases are used to categorize expenses and invoices by construction stage.</p>
+        </field>
+    </record>
+</odoo>
