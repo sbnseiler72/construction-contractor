@@ -59,7 +59,7 @@
                 <filter string="This Year" name="this_year"
                         domain="[('date','&gt;=', (context_today()).strftime('%Y-01-01'))]"/>
                 <separator/>
-                <group expand="0" string="Group By">
+                <group>
                     <filter string="Project" name="group_project"
                             context="{'group_by': 'project_id'}"/>
                     <filter string="Transaction Type" name="group_type"
