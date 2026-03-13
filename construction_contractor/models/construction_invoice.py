@@ -117,6 +117,20 @@ class ConstructionInvoice(models.Model):
         store=False,
     )
 
+    # Prepayments / payments on account (registered while invoice is draft)
+    prepayment_ids = fields.One2many(
+        'construction.invoice.prepayment',
+        'invoice_id',
+        string='Payments on Account',
+    )
+    amount_prepaid = fields.Monetary(
+        string='Prepaid Amount',
+        compute='_compute_payment_amounts',
+        currency_field='currency_id',
+        store=False,
+        help='Total confirmed payments on account made while invoice was in draft state',
+    )
+
     state = fields.Selection([
         ('draft', 'Draft'),
         ('posted', 'Recorded'),
@@ -132,15 +146,23 @@ class ConstructionInvoice(models.Model):
     # -------------------------------------------------------------------------
     # Computed
     # -------------------------------------------------------------------------
-    @api.depends('account_move_id', 'account_move_id.amount_residual', 'amount_total')
+    @api.depends(
+        'account_move_id', 'account_move_id.amount_residual', 'amount_total',
+        'prepayment_ids.amount', 'prepayment_ids.account_payment_id.state',
+    )
     def _compute_payment_amounts(self):
         for rec in self:
+            posted_prepayments = rec.prepayment_ids.filtered(
+                lambda p: p.account_payment_id and p.account_payment_id.state == 'posted'
+            )
+            rec.amount_prepaid = sum(posted_prepayments.mapped('amount'))
+
             if rec.account_move_id:
                 rec.amount_residual = rec.account_move_id.amount_residual
                 rec.amount_paid = rec.amount_total - rec.account_move_id.amount_residual
             else:
-                rec.amount_residual = rec.amount_total
-                rec.amount_paid = 0.0
+                rec.amount_residual = max(rec.amount_total - rec.amount_prepaid, 0.0)
+                rec.amount_paid = rec.amount_prepaid
 
     # -------------------------------------------------------------------------
     # ORM
@@ -164,6 +186,22 @@ class ConstructionInvoice(models.Model):
     # -------------------------------------------------------------------------
     # Actions
     # -------------------------------------------------------------------------
+    def action_pay_on_account(self):
+        """Open the Pay on Account wizard for a draft invoice."""
+        self.ensure_one()
+        if self.state != 'draft':
+            raise ValidationError(
+                _('Payments on account can only be registered for draft invoices.')
+            )
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Pay on Account'),
+            'res_model': 'construction.invoice.prepayment.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {'default_invoice_id': self.id},
+        }
+
     def action_create_vendor_bill(self):
         """
         Create the corresponding native vendor bill (account.move).
@@ -213,7 +251,44 @@ class ConstructionInvoice(models.Model):
         move = self.env['account.move'].create(move_vals)
         self.account_move_id = move
         self.state = 'posted'
+
+        # Post the bill and auto-reconcile any outstanding prepayments
+        if move.state == 'draft':
+            move.action_post()
+
+        posted_prepayments = self.prepayment_ids.filtered(
+            lambda p: p.account_payment_id and p.account_payment_id.state == 'posted'
+        )
+        if posted_prepayments:
+            self._reconcile_prepayments_with_bill(move, posted_prepayments)
+
         return True
+
+    def _reconcile_prepayments_with_bill(self, move, prepayments):
+        """
+        Reconcile posted prepayment lines with the vendor bill's payable line.
+        Finds matching payable/credit lines by account and reconciles them so
+        the bill reflects the already-paid amount.
+        """
+        # Get the payable line on the vendor bill
+        payable_lines = move.line_ids.filtered(
+            lambda l: l.account_id.account_type == 'liability_payable' and not l.reconciled
+        )
+        if not payable_lines:
+            return
+
+        payable_account = payable_lines[:1].account_id
+
+        # Gather unreconciled credit lines from each prepayment payment
+        credit_lines = self.env['account.move.line']
+        for prepayment in prepayments:
+            payment_lines = prepayment.account_payment_id.line_ids.filtered(
+                lambda l: l.account_id == payable_account and not l.reconciled
+            )
+            credit_lines |= payment_lines
+
+        if credit_lines:
+            (payable_lines[:1] | credit_lines).reconcile()
 
     def action_open_vendor_bill(self):
         self.ensure_one()

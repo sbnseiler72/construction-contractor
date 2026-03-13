@@ -38,6 +38,9 @@
                        decoration-info="state == 'draft'"
                        decoration-success="state == 'posted'"
                        decoration-danger="state == 'cancelled'"/>
+                <button name="action_pay_on_account" string="Pay on Account"
+                        type="object" class="btn-secondary"
+                        invisible="state != 'draft'"/>
                 <button name="action_register_payment" string="Pay"
                         type="object" class="btn-secondary"
                         invisible="state != 'posted' or payment_state == 'paid'"/>
@@ -57,6 +60,9 @@
                     <button name="action_create_vendor_bill" string="Create Vendor Bill"
                             type="object" class="btn-primary"
                             invisible="state != 'draft' or account_move_id != False"/>
+                    <button name="action_pay_on_account" string="Pay on Account"
+                            type="object" class="btn-secondary"
+                            invisible="state != 'draft'"/>
                     <button name="action_register_payment" string="Register Payment"
                             type="object" class="btn-primary"
                             invisible="state != 'posted' or payment_state == 'paid'"/>
@@ -84,6 +90,14 @@
                         <field name="amount_residual" readonly="1" nolabel="1"/>
                     </div>
 
+                    <!-- Prepayment on account banner (draft only) -->
+                    <div class="alert alert-info" role="alert"
+                         invisible="state != 'draft' or amount_prepaid == 0">
+                        Payments on account recorded:
+                        <field name="amount_prepaid" readonly="1" nolabel="1"/>
+                        — these will be automatically reconciled when the vendor bill is created.
+                    </div>
+
                     <div class="oe_title">
                         <label for="name"/>
                         <h1><field name="name" readonly="1"/></h1>
@@ -105,6 +119,8 @@
                         </group>
                         <group string="Amounts">
                             <field name="amount_total"/>
+                            <field name="amount_prepaid" readonly="1"
+                                   invisible="amount_prepaid == 0"/>
                             <field name="amount_paid" readonly="1"/>
                             <field name="amount_residual" readonly="1"/>
                             <field name="payment_state" readonly="1"/>
@@ -124,6 +140,25 @@
                     <group string="Notes">
                         <field name="notes" nolabel="1" placeholder="Additional remarks..."/>
                     </group>
+
+                    <!-- Payments on Account (visible when prepayments exist) -->
+                    <field name="prepayment_ids" string="Payments on Account"
+                           readonly="1"
+                           invisible="not prepayment_ids">
+                        <list string="Payments on Account">
+                            <field name="payment_date"/>
+                            <field name="amount" sum="Total"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="payment_source" widget="badge"
+                                   decoration-info="payment_source == 'payroll_card'"
+                                   decoration-success="payment_source in ('employer_cash', 'employer_check')"/>
+                            <field name="memo"/>
+                            <field name="state" widget="badge"
+                                   decoration-success="state == 'posted'"
+                                   decoration-warning="state == 'draft'"
+                                   decoration-danger="state == 'cancel'"/>
+                        </list>
+                    </field>
                 </sheet>
                 <chatter/>
             </form>

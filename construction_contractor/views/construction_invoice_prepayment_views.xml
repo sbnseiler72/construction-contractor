@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ===================================================================
+         Pay on Account Wizard: Form View
+    =================================================================== -->
+    <record id="view_construction_invoice_prepayment_wizard_form" model="ir.ui.view">
+        <field name="name">construction.invoice.prepayment.wizard.form</field>
+        <field name="model">construction.invoice.prepayment.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Pay on Account">
+                <sheet>
+                    <div class="oe_title">
+                        <h2>Pay on Account</h2>
+                        <p class="text-muted">
+                            Record a payment made before the invoice is formalised.
+                            An accounting entry will be created immediately and
+                            reconciled automatically when the vendor bill is generated.
+                        </p>
+                    </div>
+                    <group>
+                        <group string="Invoice">
+                            <field name="invoice_id" readonly="1"/>
+                            <field name="project_id" readonly="1"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group string="Payment Details">
+                            <field name="payment_source"/>
+                            <field name="amount"/>
+                            <field name="payment_date" widget="jalali_date"/>
+                            <field name="memo" placeholder="e.g. Advance payment – INV/2024/00001"/>
+                        </group>
+                    </group>
+                    <group string="Journal">
+                        <field name="journal_id" readonly="1"
+                               help="Auto-selected based on payment source configured on the project"/>
+                    </group>
+                    <div class="alert alert-warning" role="alert"
+                         invisible="journal_id != False">
+                        <strong>Warning:</strong> No journal configured for the selected
+                        payment source on this project. Please set the Payroll Card Journal
+                        or Employer Journal on the project before registering a payment.
+                    </div>
+                </sheet>
+                <footer>
+                    <button name="action_pay_on_account" string="Pay on Account"
+                            type="object" class="btn-primary"
+                            invisible="journal_id == False"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
