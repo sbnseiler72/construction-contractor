@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ===================================================================
+         Expense Type: List View
+    =================================================================== -->
+    <record id="view_construction_expense_type_list" model="ir.ui.view">
+        <field name="name">construction.expense.type.list</field>
+        <field name="model">construction.expense.type</field>
+        <field name="arch" type="xml">
+            <list string="Expense Types" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="key"/>
+                <field name="label"/>
+                <field name="active" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ===================================================================
+         Expense Type: Form View
+    =================================================================== -->
+    <record id="view_construction_expense_type_form" model="ir.ui.view">
+        <field name="name">construction.expense.type.form</field>
+        <field name="model">construction.expense.type</field>
+        <field name="arch" type="xml">
+            <form string="Expense Type">
+                <sheet>
+                    <group>
+                        <field name="sequence"/>
+                        <field name="key" placeholder="e.g. labor"/>
+                        <field name="label" placeholder="e.g. دستمزد کارگران"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ===================================================================
+         Expense Type: Search View
+    =================================================================== -->
+    <record id="view_construction_expense_type_search" model="ir.ui.view">
+        <field name="name">construction.expense.type.search</field>
+        <field name="model">construction.expense.type</field>
+        <field name="arch" type="xml">
+            <search string="Search Expense Types">
+                <field name="key"/>
+                <field name="label"/>
+                <filter string="Archived" name="archived" domain="[('active','=',False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_construction_expense_type" model="ir.actions.act_window">
+        <field name="name">Expense Types</field>
+        <field name="res_model">construction.expense.type</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_construction_expense_type_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Add your first expense type</p>
+            <p>Expense types are used to categorize project expenses by cost category.</p>
+        </field>
+    </record>
+</odoo>

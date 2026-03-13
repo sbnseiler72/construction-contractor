@@ -19,14 +19,11 @@ class ConstructionFinancialBalance(models.Model):
         ('expense', 'Expense'),
         ('invoice_payment', 'Invoice Payment'),
     ], string='Transaction Type', readonly=True)
-    expense_type = fields.Selection([
-        ('labor', 'Labor / Worker Wages'),
-        ('materials', 'Materials & Supplies'),
-        ('equipment', 'Equipment Rental'),
-        ('subcontractor', 'Sub-contractor Payment'),
-        ('transport', 'Transport / Fuel'),
-        ('other', 'Other Operational Cost'),
-    ], string='Expense Type', readonly=True)
+    expense_type_id = fields.Many2one(
+        'construction.expense.type',
+        string='Expense Type',
+        readonly=True,
+    )
     description = fields.Char(string='Description', readonly=True)
     partner_id = fields.Many2one(
         'res.partner',
@@ -69,7 +66,7 @@ class ConstructionFinancialBalance(models.Model):
                     e.date AS date,
                     e.project_id AS project_id,
                     'expense' AS transaction_type,
-                    e.expense_type AS expense_type,
+                    e.expense_type_id AS expense_type_id,
                     e.description AS description,
                     e.partner_id AS partner_id,
                     e.payment_source AS payment_source,
@@ -92,7 +89,7 @@ class ConstructionFinancialBalance(models.Model):
                     i.invoice_date AS date,
                     i.project_id AS project_id,
                     'invoice_payment' AS transaction_type,
-                    NULL AS expense_type,
+                    NULL AS expense_type_id,
                     COALESCE(i.description, i.invoice_number) AS description,
                     i.partner_id AS partner_id,
                     i.payment_source AS payment_source,

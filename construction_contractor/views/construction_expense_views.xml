@@ -13,7 +13,7 @@
                 <field name="project_id"/>
                 <field name="date" widget="jalali_date"/>
                 <field name="project_phase_id" optional="show"/>
-                <field name="expense_type"/>
+                <field name="expense_type_id"/>
                 <field name="description"/>
                 <field name="partner_id"/>
                 <field name="payment_source"/>
@@ -58,7 +58,7 @@
                             <field name="project_id"/>
                             <field name="date" widget="jalali_date"/>
                             <field name="project_phase_id"/>
-                            <field name="expense_type"/>
+                            <field name="expense_type_id"/>
                             <field name="description"/>
                             <field name="partner_id"/>
                             <field name="amount"/>
@@ -116,7 +116,7 @@
                     <filter string="Project Phase" name="group_phase"
                             context="{'group_by': 'project_phase_id'}"/>
                     <filter string="Expense Type" name="group_type"
-                            context="{'group_by': 'expense_type'}"/>
+                            context="{'group_by': 'expense_type_id'}"/>
                     <filter string="Payment Source" name="group_payment"
                             context="{'group_by': 'payment_source'}"/>
                     <filter string="Month" name="group_month"
@@ -133,7 +133,7 @@
         <field name="arch" type="xml">
             <pivot string="Expense Analysis">
                 <field name="project_id" type="row"/>
-                <field name="expense_type" type="row"/>
+                <field name="expense_type_id" type="row"/>
                 <field name="date" interval="month" type="col"/>
                 <field name="amount" type="measure"/>
             </pivot>

@@ -104,4 +104,11 @@
               action="action_construction_project_phase"
               groups="construction_contractor.group_construction_accountant"
               sequence="10"/>
+
+    <menuitem id="menu_construction_expense_types"
+              name="Expense Types"
+              parent="menu_construction_configuration"
+              action="action_construction_expense_type"
+              groups="construction_contractor.group_construction_accountant"
+              sequence="20"/>
 </odoo>
