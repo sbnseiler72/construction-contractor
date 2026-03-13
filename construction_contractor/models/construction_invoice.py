@@ -325,6 +325,16 @@ class ConstructionInvoice(models.Model):
                     _('Cannot cancel: the linked vendor bill is already posted. '
                       'Please cancel or reset it in accounting first.')
                 )
+            active_prepayments = rec.prepayment_ids.filtered(
+                lambda p: p.account_payment_id
+                and p.account_payment_id.state == 'posted'
+            )
+            if active_prepayments:
+                raise ValidationError(
+                    _('Cannot cancel invoice %s: it has %d active prepayment(s) on account. '
+                      'Please cancel those prepayments first.')
+                    % (rec.name, len(active_prepayments))
+                )
             rec.state = 'cancelled'
 
     def action_reset_draft(self):

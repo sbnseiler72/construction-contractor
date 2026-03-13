@@ -17,6 +17,13 @@ class ConstructionInvoicePrepayment(models.Model):
     _order = 'payment_date desc, id desc'
     _inherit = ['mail.thread']
 
+    name = fields.Char(
+        string='Reference',
+        required=True,
+        copy=False,
+        readonly=True,
+        default=lambda self: _('New'),
+    )
     invoice_id = fields.Many2one(
         'construction.invoice',
         string='Invoice',
@@ -64,6 +71,63 @@ class ConstructionInvoicePrepayment(models.Model):
         related='invoice_id.company_id',
         store=True,
     )
+
+    # -------------------------------------------------------------------------
+    # ORM
+    # -------------------------------------------------------------------------
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get('name', _('New')) == _('New'):
+                vals['name'] = (
+                    self.env['ir.sequence'].next_by_code('construction.invoice.prepayment')
+                    or _('New')
+                )
+        return super().create(vals_list)
+
+    # -------------------------------------------------------------------------
+    # Constraints
+    # -------------------------------------------------------------------------
+    @api.constrains('amount', 'invoice_id')
+    def _check_amount_does_not_exceed_invoice(self):
+        for rec in self:
+            if rec.amount <= 0:
+                raise ValidationError(_('Prepayment amount must be greater than zero.'))
+            other_active = rec.invoice_id.prepayment_ids.filtered(
+                lambda p: p.id != rec.id
+                and p.account_payment_id
+                and p.account_payment_id.state == 'posted'
+            )
+            total = sum(other_active.mapped('amount')) + rec.amount
+            if total > rec.invoice_id.amount_total:
+                raise ValidationError(
+                    _('Total prepayments (%s) would exceed the invoice total (%s). '
+                      'Please enter a smaller amount.')
+                    % (total, rec.invoice_id.amount_total)
+                )
+
+    # -------------------------------------------------------------------------
+    # Actions
+    # -------------------------------------------------------------------------
+    def action_cancel(self):
+        """Cancel this prepayment and reverse the linked accounting payment."""
+        self.ensure_one()
+        if self.account_payment_id and self.account_payment_id.state == 'posted':
+            # Check the payment is not already reconciled against a bill
+            payable_lines = self.account_payment_id.line_ids.filtered(
+                lambda l: l.account_id.account_type == 'liability_payable'
+            )
+            if any(l.reconciled for l in payable_lines):
+                raise ValidationError(
+                    _('Cannot cancel prepayment %s: it has already been reconciled '
+                      'with a vendor bill. Please unreconcile it in accounting first.')
+                    % self.name
+                )
+            self.account_payment_id.action_cancel()
+        self.invoice_id.message_post(
+            body=_('Prepayment %s of %s cancelled.')
+            % (self.name, self.amount)
+        )
 
 
 class ConstructionInvoicePrepaymentWizard(models.TransientModel):
