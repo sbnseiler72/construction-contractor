@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-11 16:44+0000\n"
-"PO-Revision-Date: 2026-03-11 16:44+0000\n"
+"POT-Creation-Date: 2026-03-13 11:32+0000\n"
+"PO-Revision-Date: 2026-03-13 11:32+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -42,6 +42,11 @@ msgstr "<strong>مانده بدهی</strong>"
 
 #. module: construction_contractor
 #: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+msgid "<strong>Payroll Card Balance (Deposits − Card Payments)</strong>"
+msgstr "<strong>مانده کارت تنخواه (واریزها − پرداخت‌های کارت)</strong>"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
 msgid "<strong>Start Date</strong>"
 msgstr "<strong>تاریخ شروع</strong>"
 
@@ -53,7 +58,7 @@ msgstr "<strong>وضعیت</strong>"
 #. module: construction_contractor
 #: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
 msgid "<strong>Total Card Deposits</strong>"
-msgstr "<strong>جمع واریزهای کارت حقوق</strong>"
+msgstr "<strong>جمع واریزهای کارت تنخواه</strong>"
 
 #. module: construction_contractor
 #: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
@@ -71,10 +76,18 @@ msgid "<strong>Total Paid on Invoices</strong>"
 msgstr "<strong>جمع پرداخت‌شده بابت صورت‌حساب‌ها</strong>"
 
 #. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_payment_wizard_form
+msgid ""
+"<strong>Warning:</strong> No journal configured for the selected payment source on this project.\n"
+"                        Please set the Payroll Card Journal or Employer Journal on the project before registering payment."
+msgstr "<strong>هشدار:</strong> هیچ دفتری برای منبع پرداخت انتخابی در این پروژه تنظیم نشده است.\n"
+"                        لطفاً پیش از ثبت پرداخت، دفتر کارت تنخواه یا دفتر کارفرما را روی پروژه تنظیم کنید."
+
+#. module: construction_contractor
 #. odoo-python
 #: code:addons/construction_contractor/models/construction_project.py:0
 msgid "A payroll card journal already exists for this project."
-msgstr "دفتر کارت حقوق برای این پروژه از قبل ثبت شده است."
+msgstr "دفتر کارت تنخواه برای این پروژه از قبل ثبت شده است."
 
 #. module: construction_contractor
 #. odoo-python
@@ -82,8 +95,7 @@ msgstr "دفتر کارت حقوق برای این پروژه از قبل ثبت
 msgid ""
 "A receipt reference or file attachment is required before confirming a card "
 "transaction."
-msgstr ""
-"پیش از تأیید تراکنش کارت، ارائه شماره رسید یا فایل پیوست الزامی است."
+msgstr "پیش از تأیید تراکنش کارت، ارائه شماره رسید یا فایل پیوست الزامی است."
 
 #. module: construction_contractor
 #. odoo-python
@@ -91,14 +103,23 @@ msgstr ""
 msgid ""
 "A receipt reference or file attachment is required before confirming an "
 "expense."
-msgstr ""
-"پیش از تأیید هزینه، ارائه شماره رسید یا فایل پیوست الزامی است."
+msgstr "پیش از تأیید هزینه، ارائه شماره رسید یا فایل پیوست الزامی است."
 
 #. module: construction_contractor
 #. odoo-python
 #: code:addons/construction_contractor/models/construction_invoice.py:0
 msgid "A vendor bill already exists for this invoice."
 msgstr "فاکتور خرید برای این صورت‌حساب از قبل ثبت شده است."
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_form
+msgid "Account Balances"
+msgstr "مانده حساب‌ها"
+
+#. module: construction_contractor
+#: model:ir.model.fields,help:construction_contractor.field_construction_invoice__payment_source
+msgid "Account from which this invoice was (or will be) paid"
+msgstr "حسابی که این صورت‌حساب از آن پرداخت شده یا خواهد شد"
 
 #. module: construction_contractor
 #: model:res.groups,name:construction_contractor.group_construction_accountant
@@ -119,6 +140,7 @@ msgid "Activate"
 msgstr "فعال‌سازی"
 
 #. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project_phase__active
 #: model:ir.model.fields.selection,name:construction_contractor.selection__construction_project__state__active
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_search
 msgid "Active"
@@ -157,6 +179,11 @@ msgid "Activity Type Icon"
 msgstr "آیکون نوع فعالیت"
 
 #. module: construction_contractor
+#: model_terms:ir.actions.act_window,help:construction_contractor.action_construction_project_phase
+msgid "Add your first project phase"
+msgstr "اولین فاز پروژه خود را اضافه کنید"
+
+#. module: construction_contractor
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_form
 msgid "Additional notes..."
 msgstr "یادداشت‌های تکمیلی..."
@@ -179,6 +206,7 @@ msgstr "همه پروژه‌ها"
 #. module: construction_contractor
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__amount
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__amount
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_financial_balance__amount
 msgid "Amount"
 msgstr "مبلغ"
 
@@ -188,9 +216,25 @@ msgid "Amount Paid"
 msgstr "مبلغ پرداخت‌شده"
 
 #. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice_payment_wizard__amount
+msgid "Amount to Pay"
+msgstr "مبلغ قابل پرداخت"
+
+#. module: construction_contractor
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_form
 msgid "Amounts"
 msgstr "مبالغ"
+
+#. module: construction_contractor
+#. odoo-python
+#: code:addons/construction_contractor/models/construction_project.py:0
+msgid "An employer journal already exists for this project."
+msgstr "دفتر کارفرما برای این پروژه از قبل ثبت شده است."
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_phase_search
+msgid "Archived"
+msgstr "بایگانی‌شده"
 
 #. module: construction_contractor
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__message_attachment_count
@@ -201,6 +245,16 @@ msgid "Attachment Count"
 msgstr "تعداد پیوست‌ها"
 
 #. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_payment_wizard_form
+msgid "Auto-selected based on payment source configured on the project"
+msgstr "انتخاب خودکار بر اساس منبع پرداخت تنظیم‌شده در پروژه"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_form
+msgid "Balance"
+msgstr "مانده"
+
+#. module: construction_contractor
 #: model:res.groups,comment:construction_contractor.group_construction_manager
 msgid "Can create and manage projects, record expenses, and view reports."
 msgstr "امکان ایجاد و مدیریت پروژه، ثبت هزینه و مشاهده گزارش‌ها."
@@ -209,6 +263,7 @@ msgstr "امکان ایجاد و مدیریت پروژه، ثبت هزینه و 
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_card_transaction_form
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_form
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_form
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_payment_wizard_form
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_form
 msgid "Cancel"
 msgstr "لغو"
@@ -228,7 +283,8 @@ msgid ""
 "Cannot cancel: the linked vendor bill is already posted. Please cancel or "
 "reset it in accounting first."
 msgstr ""
-"لغو امکان‌پذیر نیست: فاکتور خرید مرتبط قبلاً ثبت شده است. لطفاً ابتدا آن را در حسابداری لغو یا بازنشانی کنید."
+"لغو امکان‌پذیر نیست: فاکتور خرید مرتبط قبلاً ثبت شده است. لطفاً ابتدا آن را "
+"در حسابداری لغو یا بازنشانی کنید."
 
 #. module: construction_contractor
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_project__card_transaction_count
@@ -264,10 +320,16 @@ msgstr "کد:"
 #. module: construction_contractor
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__company_id
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__company_id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_financial_balance__company_id
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__company_id
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_project__company_id
 msgid "Company"
 msgstr "شرکت"
+
+#. module: construction_contractor
+#: model:ir.ui.menu,name:construction_contractor.menu_construction_configuration
+msgid "Configuration"
+msgstr "پیکربندی"
 
 #. module: construction_contractor
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_card_transaction_form
@@ -284,7 +346,6 @@ msgid "Confirmed"
 msgstr "تأییدشده"
 
 #. module: construction_contractor
-#: model:ir.module.category,name:construction_contractor.module_category_construction
 #: model:ir.ui.menu,name:construction_contractor.menu_construction_root
 msgid "Construction"
 msgstr "پیمانکاری ساخت‌وساز"
@@ -293,6 +354,11 @@ msgstr "پیمانکاری ساخت‌وساز"
 #: model:ir.model,name:construction_contractor.model_construction_project
 msgid "Construction Contractor Project"
 msgstr "پروژه پیمانکاری ساخت‌وساز"
+
+#. module: construction_contractor
+#: model:ir.model,name:construction_contractor.model_construction_invoice_payment_wizard
+msgid "Construction Invoice Payment Wizard"
+msgstr "راهنمای پرداخت صورت‌حساب ساختمانی"
 
 #. module: construction_contractor
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_form
@@ -308,6 +374,11 @@ msgstr "هزینه پروژه ساخت‌وساز"
 #: model:ir.model,name:construction_contractor.model_construction_invoice
 msgid "Construction Project Invoice"
 msgstr "صورت‌حساب پروژه ساخت‌وساز"
+
+#. module: construction_contractor
+#: model:ir.model,name:construction_contractor.model_construction_project_phase
+msgid "Construction Project Phase"
+msgstr "فاز پروژه ساختمانی"
 
 #. module: construction_contractor
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_list
@@ -327,8 +398,13 @@ msgstr "مبلغ قرارداد"
 
 #. module: construction_contractor
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_form
+msgid "Create Employer Journal"
+msgstr "ایجاد دفتر کارفرما"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_form
 msgid "Create Payroll Card Journal"
-msgstr "ایجاد دفتر کارت حقوق"
+msgstr "ایجاد دفتر کارت تنخواه"
 
 #. module: construction_contractor
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_form
@@ -344,7 +420,9 @@ msgstr "اولین پروژه ساخت‌وساز خود را ایجاد کنی�
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__create_uid
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__create_uid
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__create_uid
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice_payment_wizard__create_uid
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_project__create_uid
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project_phase__create_uid
 msgid "Created by"
 msgstr "ایجادشده توسط"
 
@@ -352,19 +430,24 @@ msgstr "ایجادشده توسط"
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__create_date
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__create_date
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__create_date
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice_payment_wizard__create_date
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_project__create_date
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project_phase__create_date
 msgid "Created on"
 msgstr "تاریخ ایجاد"
 
 #. module: construction_contractor
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__currency_id
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__currency_id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_financial_balance__currency_id
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__currency_id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice_payment_wizard__currency_id
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_project__currency_id
 msgid "Currency"
 msgstr "واحد پول"
 
 #. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_financial_balance__date
 #: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
 msgid "Date"
 msgstr "تاریخ"
@@ -372,7 +455,7 @@ msgstr "تاریخ"
 #. module: construction_contractor
 #: model:ir.model.fields,help:construction_contractor.field_construction_project__payroll_journal_id
 msgid "Dedicated cash/bank journal acting as the project payroll card"
-msgstr "دفتر نقدی/بانکی اختصاصی که به‌عنوان کارت حقوق پروژه عمل می‌کند"
+msgstr "دفتر نقدی/بانکی اختصاصی که به‌عنوان کارت تنخواه پروژه عمل می‌کند"
 
 #. module: construction_contractor
 #: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
@@ -392,6 +475,7 @@ msgstr "واریزها"
 #. module: construction_contractor
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__description
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__description
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_financial_balance__description
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_project__description
 #: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_form
@@ -412,8 +496,11 @@ msgstr "شرح کار یا خدمات مشمول این صورت‌حساب"
 #. module: construction_contractor
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__display_name
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__display_name
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_financial_balance__display_name
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__display_name
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice_payment_wizard__display_name
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_project__display_name
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project_phase__display_name
 msgid "Display Name"
 msgstr "نام نمایشی"
 
@@ -430,34 +517,55 @@ msgstr "پیش‌نویس"
 
 #. module: construction_contractor
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_project__employer_id
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_form
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_search
 msgid "Employer"
 msgstr "کارفرما"
 
 #. module: construction_contractor
+#. odoo-python
+#: code:addons/construction_contractor/models/construction_project.py:0
+msgid "Employer - %s"
+msgstr "کارفرما - %s"
+
+#. module: construction_contractor
 #: model:ir.model.fields.selection,name:construction_contractor.selection__construction_expense__payment_source__employer_cash
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_invoice__payment_source__employer_cash
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_invoice_payment_wizard__payment_source__employer_cash
 msgid "Employer Account - Cash"
 msgstr "حساب کارفرما - نقدی"
 
 #. module: construction_contractor
 #: model:ir.model.fields.selection,name:construction_contractor.selection__construction_expense__payment_source__employer_check
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_invoice__payment_source__employer_check
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_invoice_payment_wizard__payment_source__employer_check
 msgid "Employer Account - Check"
 msgstr "حساب کارفرما - چک"
 
 #. module: construction_contractor
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_financial_balance__payment_source__employer_cash
 #: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_search
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_financial_balance_search
 msgid "Employer Cash"
 msgstr "نقدی کارفرما"
 
 #. module: construction_contractor
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_financial_balance__payment_source__employer_check
 #: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_search
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_financial_balance_search
 msgid "Employer Check"
 msgstr "چک کارفرما"
 
 #. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__employer_journal_id
+msgid "Employer Journal"
+msgstr "دفتر کارفرما"
+
+#. module: construction_contractor
 #: model:ir.model.fields.selection,name:construction_contractor.selection__construction_expense__expense_type__equipment
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_financial_balance__expense_type__equipment
 msgid "Equipment Rental"
 msgstr "اجاره ماشین‌آلات"
 
@@ -467,6 +575,7 @@ msgid "Expected End Date"
 msgstr "تاریخ پایان پیش‌بینی‌شده"
 
 #. module: construction_contractor
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_financial_balance__transaction_type__expense
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_form
 msgid "Expense"
 msgstr "هزینه"
@@ -494,8 +603,10 @@ msgstr "جزئیات هزینه"
 
 #. module: construction_contractor
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__expense_type
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_financial_balance__expense_type
 #: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_search
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_financial_balance_search
 msgid "Expense Type"
 msgstr "نوع هزینه"
 
@@ -510,10 +621,17 @@ msgstr "مبلغ هزینه باید بزرگ‌تر از صفر باشد."
 #: code:addons/construction_contractor/models/construction_project.py:0
 #: model:ir.actions.act_window,name:construction_contractor.action_construction_expense
 #: model:ir.ui.menu,name:construction_contractor.menu_construction_expenses
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_list
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_financial_balance_search
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_form
 msgid "Expenses"
 msgstr "هزینه‌ها"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+msgid "Expenses by Project Phase"
+msgstr "هزینه‌ها بر اساس فاز پروژه"
 
 #. module: construction_contractor
 #: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
@@ -524,6 +642,27 @@ msgstr "هزینه‌ها بر اساس نوع"
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_form
 msgid "Financial"
 msgstr "مالی"
+
+#. module: construction_contractor
+#. odoo-python
+#: code:addons/construction_contractor/models/construction_project.py:0
+#: model:ir.actions.act_window,name:construction_contractor.action_construction_financial_balance
+#: model:ir.model,name:construction_contractor.model_construction_financial_balance
+#: model:ir.ui.menu,name:construction_contractor.menu_construction_financial_balance
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_financial_balance_list
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_financial_balance_search
+msgid "Financial Balance"
+msgstr "تراز مالی"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_financial_balance_pivot
+msgid "Financial Balance Analysis"
+msgstr "تحلیل تراز مالی"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__financial_balance_count
+msgid "Financial Balance Count"
+msgstr "تعداد ترازهای مالی"
 
 #. module: construction_contractor
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_form
@@ -572,8 +711,11 @@ msgstr "دارای پیام"
 #. module: construction_contractor
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__id
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_financial_balance__id
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice_payment_wizard__id
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_project__id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project_phase__id
 msgid "ID"
 msgstr "شناسه"
 
@@ -614,7 +756,14 @@ msgid "If checked, some messages have a delivery error."
 msgstr "در صورت فعال بودن، برخی پیام‌ها دارای خطای ارسال هستند."
 
 #. module: construction_contractor
+#: model:ir.model.fields,help:construction_contractor.field_construction_invoice_payment_wizard__memo
+msgid "Internal reference note for this payment"
+msgstr "یادداشت مرجع داخلی برای این پرداخت"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice_payment_wizard__invoice_id
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_form
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_payment_wizard_form
 msgid "Invoice"
 msgstr "صورت‌حساب"
 
@@ -655,6 +804,17 @@ msgid "Invoice Number"
 msgstr "شماره صورت‌حساب"
 
 #. module: construction_contractor
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_financial_balance__transaction_type__invoice_payment
+msgid "Invoice Payment"
+msgstr "پرداخت صورت‌حساب"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_financial_balance_search
+msgid "Invoice Payments"
+msgstr "پرداخت‌های صورت‌حساب"
+
+#. module: construction_contractor
 #: model:ir.ui.menu,name:construction_contractor.menu_construction_report_invoice
 #: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
 msgid "Invoice Status"
@@ -690,12 +850,33 @@ msgid "Is Follower"
 msgstr "دنبال‌کننده است"
 
 #. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_payment_wizard_form
+msgid "Journal"
+msgstr "دفتر"
+
+#. module: construction_contractor
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__account_move_id
 msgid "Journal Entry"
 msgstr "سند حسابداری"
 
 #. module: construction_contractor
+#: model:ir.model.fields,help:construction_contractor.field_construction_project__employer_journal_id
+msgid "Journal used when the employer pays invoices or expenses directly"
+msgstr "دفتری که هنگام پرداخت مستقیم صورت‌حساب‌ها یا هزینه‌ها توسط کارفرما استفاده می‌شود"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project_phase__key
+msgid "Key"
+msgstr "کلید"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project_phase__label
+msgid "Label"
+msgstr "برچسب"
+
+#. module: construction_contractor
 #: model:ir.model.fields.selection,name:construction_contractor.selection__construction_expense__expense_type__labor
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_financial_balance__expense_type__labor
 msgid "Labor / Worker Wages"
 msgstr "دستمزد کارگری"
 
@@ -703,7 +884,9 @@ msgstr "دستمزد کارگری"
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__write_uid
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__write_uid
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__write_uid
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice_payment_wizard__write_uid
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_project__write_uid
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project_phase__write_uid
 msgid "Last Updated by"
 msgstr "آخرین ویرایش توسط"
 
@@ -711,14 +894,16 @@ msgstr "آخرین ویرایش توسط"
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__write_date
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__write_date
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__write_date
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice_payment_wizard__write_date
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_project__write_date
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project_phase__write_date
 msgid "Last Updated on"
 msgstr "تاریخ آخرین ویرایش"
 
 #. module: construction_contractor
 #: model_terms:ir.actions.act_window,help:construction_contractor.action_construction_project
 msgid "Manage contractor projects with payroll cards, expenses, and invoices."
-msgstr "مدیریت پروژه‌های پیمانکاری با کارت حقوق، هزینه‌ها و صورت‌حساب‌ها."
+msgstr "مدیریت پروژه‌های پیمانکاری با کارت تنخواه، هزینه‌ها و صورت‌حساب‌ها."
 
 #. module: construction_contractor
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_search
@@ -727,8 +912,14 @@ msgstr "مدیر"
 
 #. module: construction_contractor
 #: model:ir.model.fields.selection,name:construction_contractor.selection__construction_expense__expense_type__materials
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_financial_balance__expense_type__materials
 msgid "Materials & Supplies"
 msgstr "مصالح و لوازم"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice_payment_wizard__memo
+msgid "Memo / Reference"
+msgstr "یادداشت / مرجع"
 
 #. module: construction_contractor
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__message_has_error
@@ -749,6 +940,7 @@ msgstr "پیام‌ها"
 #. module: construction_contractor
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_card_transaction_search
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_search
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_financial_balance_search
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_search
 msgid "Month"
 msgstr "ماه"
@@ -811,6 +1003,11 @@ msgid "No expense account found. Please configure a chart of accounts."
 msgstr "حساب هزینه‌ای یافت نشد. لطفاً نمودار حساب‌ها را پیکربندی کنید."
 
 #. module: construction_contractor
+#: model_terms:ir.actions.act_window,help:construction_contractor.action_construction_financial_balance
+msgid "No financial transactions found."
+msgstr "هیچ تراکنش مالییافت نشد."
+
+#. module: construction_contractor
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_search
 msgid "Not Paid"
 msgstr "پرداخت‌نشده"
@@ -866,6 +1063,7 @@ msgstr "بازکردن فاکتور خرید"
 
 #. module: construction_contractor
 #: model:ir.model.fields.selection,name:construction_contractor.selection__construction_expense__expense_type__other
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_financial_balance__expense_type__other
 msgid "Other Operational Cost"
 msgstr "سایر هزینه‌های عملیاتی"
 
@@ -906,9 +1104,28 @@ msgid "Payment"
 msgstr "پرداخت"
 
 #. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice_payment_wizard__payment_date
+msgid "Payment Date"
+msgstr "تاریخ پرداخت"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_payment_wizard_form
+msgid "Payment Details"
+msgstr "جزئیات پرداخت"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice_payment_wizard__journal_id
+msgid "Payment Journal"
+msgstr "دفتر پرداخت"
+
+#. module: construction_contractor
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__payment_source
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_financial_balance__payment_source
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__payment_source
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice_payment_wizard__payment_source
 #: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_search
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_financial_balance_search
 msgid "Payment Source"
 msgstr "منبع پرداخت"
 
@@ -925,33 +1142,43 @@ msgstr "وضعیت پرداخت"
 
 #. module: construction_contractor
 #: model:ir.model.fields.selection,name:construction_contractor.selection__construction_expense__payment_source__payroll_card
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_financial_balance__payment_source__payroll_card
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_invoice__payment_source__payroll_card
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_invoice_payment_wizard__payment_source__payroll_card
 #: model:ir.ui.menu,name:construction_contractor.menu_construction_card_transactions
 #: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_search
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_financial_balance_search
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_form
 msgid "Payroll Card"
-msgstr "کارت حقوق"
+msgstr "کارت تنخواه"
 
 #. module: construction_contractor
 #. odoo-python
 #: code:addons/construction_contractor/models/construction_project.py:0
 msgid "Payroll Card - %s"
-msgstr "کارت حقوق - %s"
+msgstr "کارت تنخواه - %s"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__payroll_card_balance
+msgid "Payroll Card Balance"
+msgstr "مانده کارت تنخواه"
 
 #. module: construction_contractor
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_project__payroll_journal_id
 msgid "Payroll Card Journal"
-msgstr "دفتر کارت حقوق"
+msgstr "دفتر کارت تنخواه"
 
 #. module: construction_contractor
 #: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
 msgid "Payroll Card Ledger"
-msgstr "دفتر معین کارت حقوق"
+msgstr "دفتر معین کارت تنخواه"
 
 #. module: construction_contractor
 #: model:ir.model,name:construction_contractor.model_construction_card_transaction
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_card_transaction_form
 msgid "Payroll Card Transaction"
-msgstr "تراکنش کارت حقوق"
+msgstr "تراکنش کارت تنخواه"
 
 #. module: construction_contractor
 #. odoo-python
@@ -959,7 +1186,7 @@ msgstr "تراکنش کارت حقوق"
 #: model:ir.actions.act_window,name:construction_contractor.action_construction_card_transaction
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_card_transaction_list
 msgid "Payroll Card Transactions"
-msgstr "تراکنش‌های کارت حقوق"
+msgstr "تراکنش‌های کارت تنخواه"
 
 #. module: construction_contractor
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__performed_by
@@ -974,11 +1201,20 @@ msgid "Please create the vendor bill first."
 msgstr "لطفاً ابتدا فاکتور خرید را ایجاد کنید."
 
 #. module: construction_contractor
+#. odoo-python
+#: code:addons/construction_contractor/models/construction_invoice_payment.py:0
+msgid "Please create the vendor bill for this invoice first."
+msgstr "لطفاً ابتدا فاکتور خرید مربوط به این صورت‌حساب را ایجاد کنید."
+
+#. module: construction_contractor
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__project_id
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__project_id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_financial_balance__project_id
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__project_id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice_payment_wizard__project_id
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_card_transaction_search
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_search
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_financial_balance_search
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_search
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_search
 msgid "Project"
@@ -1014,9 +1250,35 @@ msgid "Project Name"
 msgstr "نام پروژه"
 
 #. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__project_phase_id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_financial_balance__project_phase_id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__project_phase_id
+#: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_search
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_financial_balance_search
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_search
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_phase_form
+msgid "Project Phase"
+msgstr "فاز پروژه"
+
+#. module: construction_contractor
+#: model:ir.actions.act_window,name:construction_contractor.action_construction_project_phase
+#: model:ir.ui.menu,name:construction_contractor.menu_construction_project_phases
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_phase_list
+msgid "Project Phases"
+msgstr "فازهای پروژه"
+
+#. module: construction_contractor
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_form
 msgid "Project description, scope, or notes..."
 msgstr "شرح پروژه، حوزه کار یا یادداشت‌ها..."
+
+#. module: construction_contractor
+#: model_terms:ir.actions.act_window,help:construction_contractor.action_construction_project_phase
+msgid ""
+"Project phases are used to categorize expenses and invoices by construction "
+"stage."
+msgstr "فازهای پروژه برای دسته‌بندی هزینه‌ها و صورت‌حساب‌ها بر اساس مرحله ساختمانی استفاده می‌شود."
 
 #. module: construction_contractor
 #: model:ir.actions.act_window,name:construction_contractor.action_construction_project
@@ -1049,6 +1311,11 @@ msgstr "فایل پیوست رسید"
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__receipt_filename
 msgid "Receipt Filename"
 msgstr "نام فایل رسید"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_financial_balance__receipt_ref
+msgid "Receipt Ref"
+msgstr "مرجع رسید"
 
 #. module: construction_contractor
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__receipt_ref
@@ -1090,15 +1357,30 @@ msgstr "ثبت‌شده توسط"
 #. module: construction_contractor
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__name
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__name
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_financial_balance__name
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_invoice__name
 #: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
 msgid "Reference"
 msgstr "مرجع"
 
 #. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_payment_wizard_form
+msgid "Register Invoice Payment"
+msgstr "ثبت پرداخت صورت‌حساب"
+
+#. module: construction_contractor
+#. odoo-python
+#: code:addons/construction_contractor/models/construction_invoice.py:0
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_form
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_payment_wizard_form
 msgid "Register Payment"
 msgstr "ثبت پرداخت"
+
+#. module: construction_contractor
+#: model:ir.model.fields,help:construction_contractor.field_construction_project__payroll_card_balance
+msgid ""
+"Remaining balance on the payroll card: Deposits minus all card payments"
+msgstr "مانده کارت تنخواه: واریزها منهای تمام پرداخت‌های کارت"
 
 #. module: construction_contractor
 #: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
@@ -1155,9 +1437,34 @@ msgid "Search Invoices"
 msgstr "جستجوی صورت‌حساب‌ها"
 
 #. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_phase_search
+msgid "Search Project Phases"
+msgstr "جستجوی فازهای پروژه"
+
+#. module: construction_contractor
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_search
 msgid "Search Projects"
 msgstr "جستجوی پروژه‌ها"
+
+#. module: construction_contractor
+#: model:ir.model.fields,help:construction_contractor.field_construction_invoice_payment_wizard__payment_source
+msgid "Select the account from which this invoice will be paid."
+msgstr "حسابی را انتخاب کنید که این صورت‌حساب از آن پرداخت خواهد شد."
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project_phase__sequence
+msgid "Sequence"
+msgstr "ترتیب"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_financial_balance__source_id
+msgid "Source ID"
+msgstr "شناسه منبع"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_financial_balance__source_model
+msgid "Source Model"
+msgstr "مدل منبع"
 
 #. module: construction_contractor
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_project__date_start
@@ -1196,8 +1503,23 @@ msgstr ""
 
 #. module: construction_contractor
 #: model:ir.model.fields.selection,name:construction_contractor.selection__construction_expense__expense_type__subcontractor
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_financial_balance__expense_type__subcontractor
 msgid "Sub-contractor Payment"
 msgstr "پرداخت به پیمانکار فرعی"
+
+#. module: construction_contractor
+#: model:ir.model.fields,help:construction_contractor.field_construction_project__total_paid_by_employer
+msgid ""
+"Sum of confirmed employer expenses plus invoice payments made by the "
+"employer"
+msgstr "جمع هزینه‌های تأییدشده کارفرما به علاوه پرداخت‌های صورت‌حساب توسط کارفرما"
+
+#. module: construction_contractor
+#: model:ir.model.fields,help:construction_contractor.field_construction_project__total_paid_from_card
+msgid ""
+"Sum of confirmed payroll-card expenses plus invoice payments made from the "
+"payroll card"
+msgstr "جمع هزینه‌های تأییدشده کارت تنخواه به علاوه پرداخت‌های صورت‌حساب از طریق کارت تنخواه"
 
 #. module: construction_contractor
 #: model:ir.model.fields,help:construction_contractor.field_construction_project__employer_id
@@ -1211,13 +1533,20 @@ msgid ""
 "The project \"%s\" does not have a payroll card journal configured. Please "
 "create the payroll card journal first."
 msgstr ""
-"پروژه \"%s\" فاقد دفتر کارت حقوق است. لطفاً ابتدا دفتر کارت حقوق را ایجاد کنید."
+"پروژه \"%s\" فاقد دفتر کارت تنخواه است. لطفاً ابتدا دفتر کارت تنخواه را ایجاد "
+"کنید."
 
 #. module: construction_contractor
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_search
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_financial_balance_search
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_search
 msgid "This Month"
 msgstr "این ماه"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_financial_balance_search
+msgid "This Year"
+msgstr "امسال"
 
 #. module: construction_contractor
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_form
@@ -1230,9 +1559,32 @@ msgid "This invoice is partially paid. Outstanding balance:"
 msgstr "این صورت‌حساب به‌طور جزئی پرداخت شده است. مانده بدهی:"
 
 #. module: construction_contractor
+#. odoo-python
+#: code:addons/construction_contractor/models/construction_invoice_payment.py:0
+msgid ""
+"This project does not have a Payroll Card Journal configured. Please create "
+"one from the project form first."
+msgstr "این پروژه فاقد دفتر کارت تنخواه است. لطفاً ابتدا آن را از فرم پروژه ایجاد کنید."
+
+#. module: construction_contractor
+#. odoo-python
+#: code:addons/construction_contractor/models/construction_invoice_payment.py:0
+msgid ""
+"This project does not have an Employer Journal configured. Please set one on"
+" the project form first."
+msgstr "این پروژه فاقد دفتر کارفرما است. لطفاً ابتدا آن را روی فرم پروژه تنظیم کنید."
+
+#. module: construction_contractor
+#: model_terms:ir.actions.act_window,help:construction_contractor.action_construction_financial_balance
+msgid ""
+"This view shows all confirmed expenses and invoice payments across projects."
+msgstr "این نما تمام هزینه‌ها و پرداخت‌های تأییدشده صورت‌حساب در همه پروژه‌ها را نشان می‌دهد."
+
+#. module: construction_contractor
 #: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_card_transaction_list
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_list
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_financial_balance_list
 msgid "Total"
 msgstr "جمع"
 
@@ -1273,6 +1625,16 @@ msgid "Total Paid"
 msgstr "جمع پرداخت‌شده"
 
 #. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__total_paid_by_employer
+msgid "Total Paid by Employer"
+msgstr "جمع پرداختی کارفرما"
+
+#. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_project__total_paid_from_card
+msgid "Total Paid from Payroll Card"
+msgstr "جمع پرداخت از کارت تنخواه"
+
+#. module: construction_contractor
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_project__total_paid_invoices
 msgid "Total Paid on Invoices"
 msgstr "جمع پرداخت‌شده بابت صورت‌حساب‌ها"
@@ -1293,6 +1655,12 @@ msgid "Transaction Details"
 msgstr "جزئیات تراکنش"
 
 #. module: construction_contractor
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_financial_balance__transaction_type
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_financial_balance_search
+msgid "Transaction Type"
+msgstr "نوع تراکنش"
+
+#. module: construction_contractor
 #. odoo-python
 #: code:addons/construction_contractor/models/construction_card_transaction.py:0
 msgid "Transaction amount must be greater than zero."
@@ -1305,6 +1673,7 @@ msgstr "تراکنش‌ها"
 
 #. module: construction_contractor
 #: model:ir.model.fields.selection,name:construction_contractor.selection__construction_expense__expense_type__transport
+#: model:ir.model.fields.selection,name:construction_contractor.selection__construction_financial_balance__expense_type__transport
 msgid "Transport / Fuel"
 msgstr "حمل‌ونقل / سوخت"
 
@@ -1325,6 +1694,7 @@ msgstr "نوع فعالیت استثنایی ثبت‌شده."
 
 #. module: construction_contractor
 #: model_terms:ir.ui.view,arch_db:construction_contractor.report_construction_project_summary_template
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_financial_balance_search
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_search
 msgid "Vendor"
 msgstr "فروشنده"
@@ -1336,6 +1706,7 @@ msgstr "فروشنده / پیمانکار"
 
 #. module: construction_contractor
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_expense__partner_id
+#: model:ir.model.fields,field_description:construction_contractor.field_construction_financial_balance__partner_id
 msgid "Vendor / Payee"
 msgstr "فروشنده / دریافت‌کننده"
 
@@ -1355,6 +1726,11 @@ msgstr "شماره / مرجع فاکتور فروشنده"
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_form
 msgid "Vendor invoice ref"
 msgstr "مرجع فاکتور فروشنده"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_financial_balance_list
+msgid "View"
+msgstr "مشاهده"
 
 #. module: construction_contractor
 #: model:ir.model.fields,field_description:construction_contractor.field_construction_card_transaction__website_message_ids
@@ -1388,9 +1764,19 @@ msgid "e.g. DEP-2024-001"
 msgstr "مثلاً DEP-2024-001"
 
 #. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_phase_form
+msgid "e.g. Foundation Work — اجرای فونداسیون"
+msgstr "مثلاً Foundation Work — اجرای فونداسیون"
+
+#. module: construction_contractor
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_form
 msgid "e.g. INV-VND-0042"
 msgstr "مثلاً INV-VND-0042"
+
+#. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_invoice_payment_wizard_form
+msgid "e.g. INV-VND-0042 payment"
+msgstr "مثلاً پرداخت INV-VND-0042"
 
 #. module: construction_contractor
 #: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_expense_form
@@ -1398,8 +1784,332 @@ msgid "e.g. REC-2024-001"
 msgstr "مثلاً REC-2024-001"
 
 #. module: construction_contractor
+#: model_terms:ir.ui.view,arch_db:construction_contractor.view_construction_project_phase_form
+msgid "e.g. foundation_work"
+msgstr "مثلاً foundation_work"
+
+#. module: construction_contractor
 #. odoo-python
 #: code:addons/construction_contractor/models/construction_project.py:0
 msgid "project_id"
 msgstr "project_id"
 
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_rebar_installation
+msgid "آرماتوربندی"
+msgstr "آرماتوربندی"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_soil_test
+msgid "آزمایش مکانیک خاک"
+msgstr "آزمایش مکانیک خاک"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_shear_wall
+msgid "اجرای دیوار برشی"
+msgstr "اجرای دیوار برشی"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_exterior_walls
+msgid "اجرای دیوارهای خارجی"
+msgstr "اجرای دیوارهای خارجی"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_partition_walls
+msgid "اجرای دیوارهای داخلی"
+msgstr "اجرای دیوارهای داخلی"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_column_construction
+msgid "اجرای ستون"
+msgstr "اجرای ستون"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_false_ceiling
+msgid "اجرای سقف کاذب"
+msgstr "اجرای سقف کاذب"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_facade_installation
+msgid "اجرای نما"
+msgstr "اجرای نما"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_permits_approval
+msgid "اخذ مجوز و پروانه ساخت"
+msgstr "اخذ مجوز و پروانه ساخت"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_site_selection
+msgid "انتخاب زمین"
+msgstr "انتخاب زمین"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_temporary_utilities
+msgid "ایجاد تأسیسات موقت کارگاه"
+msgstr "ایجاد تأسیسات موقت کارگاه"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_quality_inspection
+msgid "بازرسی کیفیت"
+msgstr "بازرسی کیفیت"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_blinding_concrete
+msgid "بتن مگر"
+msgstr "بتن مگر"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_cost_estimation
+msgid "برآورد هزینه"
+msgstr "برآورد هزینه"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_budget_planning
+msgid "برنامه‌ریزی بودجه"
+msgstr "برنامه‌ریزی بودجه"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_demolition
+msgid "تخریب ساختمان موجود"
+msgstr "تخریب ساختمان موجود"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_welding
+msgid "جوشکاری"
+msgstr "جوشکاری"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_masonry_walls
+msgid "دیوارچینی"
+msgstr "دیوارچینی"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_defect_rectification
+msgid "رفع نواقص"
+msgstr "رفع نواقص"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_exterior_painting
+msgid "رنگ‌آمیزی نما"
+msgstr "رنگ‌آمیزی نما"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_driveway_construction
+msgid "ساخت مسیر خودرو"
+msgstr "ساخت مسیر خودرو"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_parking_construction
+msgid "ساخت پارکینگ"
+msgstr "ساخت پارکینگ"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_stone_flooring
+msgid "سنگ‌فرش"
+msgstr "سنگ‌فرش"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_electrical_wiring
+msgid "سیم‌کشی برق"
+msgstr "سیم‌کشی برق"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_mep_design
+msgid "طراحی تأسیسات مکانیکی و برقی"
+msgstr "طراحی تأسیسات مکانیکی و برقی"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_structural_design
+msgid "طراحی سازه"
+msgstr "طراحی سازه"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_architectural_design
+msgid "طراحی معماری"
+msgstr "طراحی معماری"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_thermal_insulation
+msgid "عایق حرارتی"
+msgstr "عایق حرارتی"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_sound_insulation
+msgid "عایق صوتی"
+msgstr "عایق صوتی"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_roof_waterproofing
+msgid "عایق‌کاری بام"
+msgstr "عایق‌کاری بام"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_foundation_waterproofing
+msgid "عایق‌کاری فونداسیون"
+msgstr "عایق‌کاری فونداسیون"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_earthwork
+msgid "عملیات خاکی"
+msgstr "عملیات خاکی"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_plumbing
+msgid "لوله‌کشی آب"
+msgstr "لوله‌کشی آب"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_sewer_piping
+msgid "لوله‌کشی فاضلاب"
+msgstr "لوله‌کشی فاضلاب"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_gas_piping
+msgid "لوله‌کشی گاز"
+msgstr "لوله‌کشی گاز"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_landscaping
+msgid "محوطه‌سازی"
+msgstr "محوطه‌سازی"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_feasibility_study
+msgid "مطالعه امکان‌سنجی"
+msgstr "مطالعه امکان‌سنجی"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_interior_joinery
+msgid "نجاری داخلی"
+msgstr "نجاری داخلی"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_elevator_installation
+msgid "نصب آسانسور"
+msgstr "نصب آسانسور"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_steel_structure
+msgid "نصب اسکلت فلزی"
+msgstr "نصب اسکلت فلزی"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_electrical_panel
+msgid "نصب تابلو برق"
+msgstr "نصب تابلو برق"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_sanitary_fixtures
+msgid "نصب تجهیزات بهداشتی"
+msgstr "نصب تجهیزات بهداشتی"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_fence_installation
+msgid "نصب حصار"
+msgstr "نصب حصار"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_door_installation
+msgid "نصب درب"
+msgstr "نصب درب"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_wall_covering
+msgid "نصب دیوارپوش"
+msgstr "نصب دیوارپوش"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_lighting_installation
+msgid "نصب روشنایی"
+msgstr "نصب روشنایی"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_ceramic_installation
+msgid "نصب سرامیک"
+msgstr "نصب سرامیک"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_fire_fighting
+msgid "نصب سیستم اطفاء حریق"
+msgstr "نصب سیستم اطفاء حریق"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_hvac
+msgid "نصب سیستم گرمایش و سرمایش"
+msgstr "نصب سیستم گرمایش و سرمایش"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_handrail_installation
+msgid "نصب نرده"
+msgstr "نصب نرده"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_parquet_installation
+msgid "نصب پارکت"
+msgstr "نصب پارکت"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_window_installation
+msgid "نصب پنجره"
+msgstr "نصب پنجره"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_cabinet_installation
+msgid "نصب کابینت"
+msgstr "نصب کابینت"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_tile_installation
+msgid "نصب کاشی"
+msgstr "نصب کاشی"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_site_cleaning
+msgid "نظافت کارگاه"
+msgstr "نظافت کارگاه"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_painting
+msgid "نقاشی"
+msgstr "نقاشی"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_land_survey
+msgid "نقشه‌برداری زمین"
+msgstr "نقشه‌برداری زمین"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_site_clearing
+msgid "پاکسازی زمین"
+msgstr "پاکسازی زمین"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_foundation_layout
+msgid "پیاده‌سازی فونداسیون"
+msgstr "پیاده‌سازی فونداسیون"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_site_layout
+msgid "پیاده‌سازی نقشه در زمین"
+msgstr "پیاده‌سازی نقشه در زمین"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_floor_screeding
+msgid "کف‌سازی"
+msgstr "کف‌سازی"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_pavement_installation
+msgid "کف‌سازی محوطه"
+msgstr "کف‌سازی محوطه"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_excavation
+msgid "گودبرداری"
+msgstr "گودبرداری"
+
+#. module: construction_contractor
+#: model:construction.project.phase,label:construction_contractor.phase_plastering
+msgid "گچ و خاک"
+msgstr "گچ و خاک"
