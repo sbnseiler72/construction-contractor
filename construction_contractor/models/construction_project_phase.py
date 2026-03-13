@@ -5,6 +5,7 @@ from odoo import models, fields
 class ConstructionProjectPhase(models.Model):
     _name = 'construction.project.phase'
     _description = 'Construction Project Phase'
+    _rec_name = 'label'
     _order = 'sequence, id'
 
     key = fields.Char(string='Key', required=True)
