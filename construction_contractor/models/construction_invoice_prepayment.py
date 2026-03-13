@@ -93,6 +93,9 @@ class ConstructionInvoicePrepayment(models.Model):
         for rec in self:
             if rec.amount <= 0:
                 raise ValidationError(_('Prepayment amount must be greater than zero.'))
+            # Skip the cap check when the invoice total is not yet known (draft with no amount)
+            if not rec.invoice_id.amount_total:
+                continue
             other_active = rec.invoice_id.prepayment_ids.filtered(
                 lambda p: p.id != rec.id
                 and p.account_payment_id
@@ -194,8 +197,8 @@ class ConstructionInvoicePrepaymentWizard(models.TransientModel):
         invoice_id = self.env.context.get('default_invoice_id')
         if invoice_id:
             invoice = self.env['construction.invoice'].browse(invoice_id)
-            remaining = invoice.amount_total - invoice.amount_prepaid
-            res['amount'] = max(remaining, 0.0)
+            if invoice.amount_total:
+                res['amount'] = max(invoice.amount_total - invoice.amount_prepaid, 0.0)
             res['memo'] = invoice.invoice_number or invoice.name
         return res
 
@@ -236,12 +239,14 @@ class ConstructionInvoicePrepaymentWizard(models.TransientModel):
         if self.amount <= 0:
             raise ValidationError(_('Payment amount must be greater than zero.'))
 
-        remaining = invoice.amount_total - invoice.amount_prepaid
-        if self.amount > remaining + 0.001:
-            raise ValidationError(
-                _('Payment amount (%(paid)s) exceeds the remaining balance (%(balance)s).',
-                  paid=self.amount, balance=remaining)
-            )
+        # Only check the cap when the invoice total is already known
+        if invoice.amount_total:
+            remaining = invoice.amount_total - invoice.amount_prepaid
+            if self.amount > remaining + 0.001:
+                raise ValidationError(
+                    _('Payment amount (%(paid)s) exceeds the remaining balance (%(balance)s).',
+                      paid=self.amount, balance=remaining)
+                )
 
         # Create the accounting payment (outbound = paying a supplier)
         payment = self.env['account.payment'].create({
