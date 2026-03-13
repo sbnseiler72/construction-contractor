@@ -38,12 +38,6 @@
             <field name="sequence">60</field>
         </record>
 
-        <record id="expense_type_survey" model="construction.expense.type">
-            <field name="key">survey</field>
-            <field name="label">نقشه‌برداری و آزمایش خاک</field>
-            <field name="sequence">70</field>
-        </record>
-
         <record id="expense_type_design" model="construction.expense.type">
             <field name="key">design</field>
             <field name="label">هزینه‌های طراحی و نقشه‌کشی</field>
@@ -66,54 +60,6 @@
             <field name="key">scaffolding</field>
             <field name="label">داربست‌بندی</field>
             <field name="sequence">110</field>
-        </record>
-
-        <record id="expense_type_concrete" model="construction.expense.type">
-            <field name="key">concrete</field>
-            <field name="label">بتن‌ریزی و قالب‌بندی</field>
-            <field name="sequence">120</field>
-        </record>
-
-        <record id="expense_type_steel" model="construction.expense.type">
-            <field name="key">steel</field>
-            <field name="label">آرماتوربندی و سازه فولادی</field>
-            <field name="sequence">130</field>
-        </record>
-
-        <record id="expense_type_waterproofing" model="construction.expense.type">
-            <field name="key">waterproofing</field>
-            <field name="label">عایق‌کاری و آب‌بندی</field>
-            <field name="sequence">140</field>
-        </record>
-
-        <record id="expense_type_electrical" model="construction.expense.type">
-            <field name="key">electrical</field>
-            <field name="label">برق‌کشی و تاسیسات برقی</field>
-            <field name="sequence">150</field>
-        </record>
-
-        <record id="expense_type_plumbing" model="construction.expense.type">
-            <field name="key">plumbing</field>
-            <field name="label">لوله‌کشی و تاسیسات آبی</field>
-            <field name="sequence">160</field>
-        </record>
-
-        <record id="expense_type_hvac" model="construction.expense.type">
-            <field name="key">hvac</field>
-            <field name="label">تهویه مطبوع و گرمایش و سرمایش</field>
-            <field name="sequence">170</field>
-        </record>
-
-        <record id="expense_type_finishing" model="construction.expense.type">
-            <field name="key">finishing</field>
-            <field name="label">نازک‌کاری و کارهای تکمیلی</field>
-            <field name="sequence">180</field>
-        </record>
-
-        <record id="expense_type_landscaping" model="construction.expense.type">
-            <field name="key">landscaping</field>
-            <field name="label">محوطه‌سازی و فضای سبز</field>
-            <field name="sequence">190</field>
         </record>
 
         <record id="expense_type_insurance" model="construction.expense.type">
