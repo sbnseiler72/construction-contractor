@@ -149,6 +149,7 @@ class ConstructionProject(models.Model):
     expense_count = fields.Integer(compute='_compute_counts')
     card_transaction_count = fields.Integer(compute='_compute_counts')
     invoice_count = fields.Integer(compute='_compute_counts')
+    financial_balance_count = fields.Integer(compute='_compute_counts')
 
     # -------------------------------------------------------------------------
     # Compute methods
@@ -213,6 +214,9 @@ class ConstructionProject(models.Model):
             project.invoice_count = self.env['construction.invoice'].search_count([
                 ('project_id', '=', project.id),
             ])
+            project.financial_balance_count = self.env['construction.financial.balance'].search_count([
+                ('project_id', '=', project.id),
+            ])
 
     # -------------------------------------------------------------------------
     # ORM overrides
@@ -255,6 +259,15 @@ class ConstructionProject(models.Model):
             'view_mode': 'list,form',
             'domain': [('project_id', '=', self.id)],
             'context': {'default_project_id': self.id},
+        }
+
+    def action_view_financial_balance(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Financial Balance'),
+            'res_model': 'construction.financial.balance',
+            'view_mode': 'list,pivot',
+            'domain': [('project_id', '=', self.id)],
         }
 
     def action_create_payroll_journal(self):

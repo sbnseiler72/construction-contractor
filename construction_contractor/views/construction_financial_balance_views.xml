@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ===================================================================
+         Financial Balance: List View
+    =================================================================== -->
+    <record id="view_construction_financial_balance_list" model="ir.ui.view">
+        <field name="name">construction.financial.balance.list</field>
+        <field name="model">construction.financial.balance</field>
+        <field name="arch" type="xml">
+            <list string="Financial Balance" create="false" edit="false" delete="false"
+                  decoration-warning="transaction_type == 'expense'"
+                  decoration-info="transaction_type == 'invoice_payment'">
+                <field name="date"/>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="transaction_type"/>
+                <field name="expense_type" optional="show"/>
+                <field name="description"/>
+                <field name="partner_id"/>
+                <field name="payment_source"/>
+                <field name="amount" sum="Total"/>
+                <field name="receipt_ref" optional="hide"/>
+                <field name="currency_id" column_invisible="1"/>
+                <button name="action_open_source_record" type="object"
+                        string="View" icon="fa-external-link"
+                        class="btn-link"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ===================================================================
+         Financial Balance: Search View
+    =================================================================== -->
+    <record id="view_construction_financial_balance_search" model="ir.ui.view">
+        <field name="name">construction.financial.balance.search</field>
+        <field name="model">construction.financial.balance</field>
+        <field name="arch" type="xml">
+            <search string="Financial Balance">
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="partner_id"/>
+                <field name="description"/>
+                <field name="receipt_ref"/>
+                <separator/>
+                <filter string="Expenses" name="expenses"
+                        domain="[('transaction_type','=','expense')]"/>
+                <filter string="Invoice Payments" name="invoice_payments"
+                        domain="[('transaction_type','=','invoice_payment')]"/>
+                <separator/>
+                <filter string="Payroll Card" name="payroll_card"
+                        domain="[('payment_source','=','payroll_card')]"/>
+                <filter string="Employer Cash" name="employer_cash"
+                        domain="[('payment_source','=','employer_cash')]"/>
+                <filter string="Employer Check" name="employer_check"
+                        domain="[('payment_source','=','employer_check')]"/>
+                <separator/>
+                <filter string="This Month" name="this_month"
+                        domain="[('date','&gt;=', (context_today()).strftime('%Y-%m-01'))]"/>
+                <filter string="This Year" name="this_year"
+                        domain="[('date','&gt;=', (context_today()).strftime('%Y-01-01'))]"/>
+                <separator/>
+                <group>
+                    <filter string="Project" name="group_project"
+                            context="{'group_by': 'project_id'}"/>
+                    <filter string="Transaction Type" name="group_type"
+                            context="{'group_by': 'transaction_type'}"/>
+                    <filter string="Payment Source" name="group_payment"
+                            context="{'group_by': 'payment_source'}"/>
+                    <filter string="Expense Type" name="group_expense_type"
+                            context="{'group_by': 'expense_type'}"/>
+                    <filter string="Month" name="group_month"
+                            context="{'group_by': 'date:month'}"/>
+                    <filter string="Vendor" name="group_partner"
+                            context="{'group_by': 'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ===================================================================
+         Financial Balance: Pivot View
+    =================================================================== -->
+    <record id="view_construction_financial_balance_pivot" model="ir.ui.view">
+        <field name="name">construction.financial.balance.pivot</field>
+        <field name="model">construction.financial.balance</field>
+        <field name="arch" type="xml">
+            <pivot string="Financial Balance Analysis">
+                <field name="project_id" type="row"/>
+                <field name="transaction_type" type="col"/>
+                <field name="amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- ===================================================================
+         Financial Balance: Action
+    =================================================================== -->
+    <record id="action_construction_financial_balance" model="ir.actions.act_window">
+        <field name="name">Financial Balance</field>
+        <field name="res_model">construction.financial.balance</field>
+        <field name="view_mode">list,pivot</field>
+        <field name="search_view_id" ref="view_construction_financial_balance_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No financial transactions found.
+            </p>
+            <p>This view shows all confirmed expenses and invoice payments across projects.</p>
+        </field>
+    </record>
+</odoo>

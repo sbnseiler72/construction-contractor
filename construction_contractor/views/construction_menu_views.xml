@@ -63,6 +63,13 @@
               groups="construction_contractor.group_construction_manager"
               sequence="40"/>
 
+    <menuitem id="menu_construction_financial_balance"
+              name="Financial Balance"
+              parent="menu_construction_reports"
+              action="action_construction_financial_balance"
+              groups="construction_contractor.group_construction_manager"
+              sequence="5"/>
+
     <menuitem id="menu_construction_report_project"
               name="Project Financial Summary"
               parent="menu_construction_reports"
