@@ -255,7 +255,7 @@ class ConstructionInvoicePrepaymentWizard(models.TransientModel):
             'partner_id': invoice.partner_id.id,
             'amount': self.amount,
             'date': self.payment_date,
-            'ref': self.memo or invoice.name,
+            'memo': self.memo or invoice.name,
             'journal_id': self.journal_id.id,
             'company_id': invoice.company_id.id,
         })
