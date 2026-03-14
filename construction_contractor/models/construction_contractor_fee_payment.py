@@ -3,9 +3,9 @@ from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 
 
-class ConstructionCardTransaction(models.Model):
-    _name = 'construction.card.transaction'
-    _description = 'Payroll Card Transaction'
+class ConstructionContractorFeePayment(models.Model):
+    _name = 'construction.contractor.fee.payment'
+    _description = 'Contractor Fee Payment'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'date desc, id desc'
 
@@ -23,13 +23,8 @@ class ConstructionCardTransaction(models.Model):
         ondelete='restrict',
         tracking=True,
     )
-    transaction_type = fields.Selection([
-        ('deposit', 'Deposit to Card'),
-        ('withdrawal', 'Cash Withdrawal / Expense'),
-    ], string='Type', required=True, default='deposit', tracking=True)
-
     date = fields.Date(
-        string='Transaction Date',
+        string='Payment Date',
         required=True,
         default=fields.Date.today,
         tracking=True,
@@ -40,18 +35,22 @@ class ConstructionCardTransaction(models.Model):
         currency_field='currency_id',
         tracking=True,
     )
-    currency_id = fields.Many2one(
-        'res.currency',
-        related='project_id.currency_id',
-        store=True,
-    )
-    description = fields.Char(string='Description', required=True)
+    description = fields.Char(string='Description')
 
-    # Receipt fields — both file upload and reference number required
+    journal_id = fields.Many2one(
+        'account.journal',
+        string='Journal',
+        required=True,
+        domain=[('type', 'in', ['cash', 'bank'])],
+        tracking=True,
+        help='Journal used to record this contractor fee payment',
+    )
+
+    # Receipt
     receipt_ref = fields.Char(
         string='Receipt Reference',
         tracking=True,
-        help='Receipt or voucher number',
+        help='Receipt or voucher number for this payment',
     )
     receipt_file = fields.Binary(
         string='Receipt Attachment',
@@ -59,19 +58,17 @@ class ConstructionCardTransaction(models.Model):
     )
     receipt_filename = fields.Char(string='Receipt Filename')
 
-    # Who performed this transaction
-    performed_by = fields.Many2one(
-        'res.users',
-        string='Performed By',
-        default=lambda self: self.env.user,
-        tracking=True,
-    )
     state = fields.Selection([
         ('draft', 'Draft'),
         ('confirmed', 'Confirmed'),
         ('cancelled', 'Cancelled'),
-    ], string='State', default='draft', tracking=True)
+    ], string='State', default='draft', tracking=True, required=True)
 
+    currency_id = fields.Many2one(
+        'res.currency',
+        related='project_id.currency_id',
+        store=True,
+    )
     company_id = fields.Many2one(
         'res.company',
         related='project_id.company_id',
@@ -79,14 +76,22 @@ class ConstructionCardTransaction(models.Model):
     )
 
     # -------------------------------------------------------------------------
-    # ORM overrides
+    # ORM
     # -------------------------------------------------------------------------
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
             if vals.get('name', _('New')) == _('New'):
-                vals['name'] = self.env['ir.sequence'].next_by_code('construction.card.transaction') or _('New')
+                vals['name'] = self.env['ir.sequence'].next_by_code('construction.contractor.fee.payment') or _('New')
         return super().create(vals_list)
+
+    # -------------------------------------------------------------------------
+    # Onchange
+    # -------------------------------------------------------------------------
+    @api.onchange('project_id')
+    def _onchange_project_id_journal(self):
+        if self.project_id and self.project_id.contractor_fee_journal_id:
+            self.journal_id = self.project_id.contractor_fee_journal_id
 
     # -------------------------------------------------------------------------
     # Constraints
@@ -95,22 +100,35 @@ class ConstructionCardTransaction(models.Model):
     def _check_amount(self):
         for rec in self:
             if rec.amount <= 0:
-                raise ValidationError(_('Transaction amount must be greater than zero.'))
+                raise ValidationError(_('Payment amount must be greater than zero.'))
 
     # -------------------------------------------------------------------------
     # State transitions
     # -------------------------------------------------------------------------
     def action_confirm(self):
         for rec in self:
-            if rec.project_id.state in ('closed', 'cancelled'):
+            if rec.project_id.state == 'cancelled':
                 raise ValidationError(
-                    _('Cannot confirm card transaction "%s": the project is %s.')
-                    % (rec.name, dict(rec.project_id._fields['state'].selection)[rec.project_id.state])
+                    _('Cannot confirm fee payment "%s": the project is cancelled.')
+                    % rec.name
                 )
             if not rec.receipt_ref and not rec.receipt_file:
                 raise ValidationError(
-                    _('A receipt reference or file attachment is required before confirming a card transaction.')
+                    _('A receipt reference or file attachment is required before confirming a fee payment.')
                 )
+            project = rec.project_id
+            if project.total_contractor_fee > 0:
+                already_paid = sum(
+                    project.contractor_fee_payment_ids.filtered(
+                        lambda p: p.id != rec.id and p.state == 'confirmed'
+                    ).mapped('amount')
+                )
+                if already_paid + rec.amount > project.total_contractor_fee:
+                    raise ValidationError(
+                        _('Cannot confirm fee payment "%s": total confirmed payments (%s) would exceed '
+                          'the contractor fee (%s). Please reduce the amount.')
+                        % (rec.name, already_paid + rec.amount, project.total_contractor_fee)
+                    )
             rec.state = 'confirmed'
 
     def action_cancel(self):

@@ -88,6 +88,15 @@ class ConstructionProject(models.Model):
         help='Journal used when the employer pays invoices or expenses directly',
     )
 
+    # Contractor fee journal: used when paying the contractor their percentage fee
+    contractor_fee_journal_id = fields.Many2one(
+        'account.journal',
+        string='Contractor Fee Journal',
+        domain=[('type', 'in', ['cash', 'bank'])],
+        tracking=True,
+        help='Default journal used when recording contractor fee payments',
+    )
+
     # -------------------------------------------------------------------------
     # Computed financial summaries
     # -------------------------------------------------------------------------
@@ -145,16 +154,79 @@ class ConstructionProject(models.Model):
         help='Remaining balance on the payroll card: Deposits minus all card payments',
     )
 
+    # -------------------------------------------------------------------------
+    # Contractor Fee
+    # -------------------------------------------------------------------------
+    contractor_percentage = fields.Float(
+        string='Contractor Percentage (%)',
+        default=0.0,
+        tracking=True,
+        help='Percentage of eligible costs that goes to the contractor (e.g. 10 for 10%).',
+    )
+    contractor_fee_base = fields.Monetary(
+        string='Contractor Fee Base',
+        compute='_compute_financials',
+        currency_field='currency_id',
+        store=False,
+        help='Sum of eligible confirmed expenses and paid invoice amounts included in the contractor fee.',
+    )
+    total_contractor_fee = fields.Monetary(
+        string='Total Contractor Fee',
+        compute='_compute_financials',
+        currency_field='currency_id',
+        store=False,
+        help='Contractor percentage applied to the eligible cost base.',
+    )
+    contractor_fee_paid = fields.Monetary(
+        string='Contractor Fee Paid',
+        compute='_compute_financials',
+        currency_field='currency_id',
+        store=False,
+        help='Total confirmed payments made to the contractor for their fee.',
+    )
+    contractor_fee_balance = fields.Monetary(
+        string='Contractor Fee Balance',
+        compute='_compute_financials',
+        currency_field='currency_id',
+        store=False,
+        help='Remaining contractor fee still owed: Total Fee − Fee Paid.',
+    )
+    contractor_fee_payment_ids = fields.One2many(
+        'construction.contractor.fee.payment',
+        'project_id',
+        string='Contractor Fee Payments',
+    )
+
     # Related record counts for smart buttons
     expense_count = fields.Integer(compute='_compute_counts')
     card_transaction_count = fields.Integer(compute='_compute_counts')
     invoice_count = fields.Integer(compute='_compute_counts')
     financial_balance_count = fields.Integer(compute='_compute_counts')
+    contractor_fee_payment_count = fields.Integer(compute='_compute_counts')
+
+    # -------------------------------------------------------------------------
+    # Constraints
+    # -------------------------------------------------------------------------
+    @api.constrains('date_start', 'date_end')
+    def _check_dates(self):
+        for rec in self:
+            if rec.date_start and rec.date_end and rec.date_end < rec.date_start:
+                raise ValidationError(
+                    _('Expected End Date cannot be earlier than Start Date.')
+                )
+
+    @api.constrains('contractor_percentage')
+    def _check_contractor_percentage(self):
+        for rec in self:
+            if not (0.0 <= rec.contractor_percentage <= 100.0):
+                raise ValidationError(
+                    _('Contractor Percentage must be between 0 and 100.')
+                )
 
     # -------------------------------------------------------------------------
     # Compute methods
     # -------------------------------------------------------------------------
-    @api.depends('company_id')
+    @api.depends()
     def _compute_financials(self):
         for project in self:
             expenses = self.env['construction.expense'].search([
@@ -203,6 +275,22 @@ class ConstructionProject(models.Model):
                 project.total_card_deposits - project.total_paid_from_card
             )
 
+            # Contractor fee calculations
+            eligible_expenses = expenses.filtered(lambda e: e.include_in_contractor_fee)
+            eligible_invoices = invoices.filtered(lambda i: i.include_in_contractor_fee)
+            project.contractor_fee_base = (
+                sum(eligible_expenses.mapped('amount'))
+                + sum(eligible_invoices.mapped('amount_paid'))
+            )
+            project.total_contractor_fee = project.contractor_fee_base * project.contractor_percentage / 100.0
+
+            fee_payments = self.env['construction.contractor.fee.payment'].search([
+                ('project_id', '=', project.id),
+                ('state', '=', 'confirmed'),
+            ])
+            project.contractor_fee_paid = sum(fee_payments.mapped('amount'))
+            project.contractor_fee_balance = project.total_contractor_fee - project.contractor_fee_paid
+
     def _compute_counts(self):
         for project in self:
             project.expense_count = self.env['construction.expense'].search_count([
@@ -215,6 +303,9 @@ class ConstructionProject(models.Model):
                 ('project_id', '=', project.id),
             ])
             project.financial_balance_count = self.env['construction.financial.balance'].search_count([
+                ('project_id', '=', project.id),
+            ])
+            project.contractor_fee_payment_count = self.env['construction.contractor.fee.payment'].search_count([
                 ('project_id', '=', project.id),
             ])
 
@@ -270,6 +361,16 @@ class ConstructionProject(models.Model):
             'domain': [('project_id', '=', self.id)],
         }
 
+    def action_view_contractor_fee_payments(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Contractor Fee Payments'),
+            'res_model': 'construction.contractor.fee.payment',
+            'view_mode': 'list,form',
+            'domain': [('project_id', '=', self.id)],
+            'context': {'default_project_id': self.id},
+        }
+
     def action_create_payroll_journal(self):
         """Create a dedicated cash journal for this project's payroll card."""
         self.ensure_one()
@@ -298,13 +399,75 @@ class ConstructionProject(models.Model):
         self.employer_journal_id = journal
         return True
 
+    def action_create_contractor_fee_journal(self):
+        """Create a dedicated cash journal for this project's contractor fee payments."""
+        self.ensure_one()
+        if self.contractor_fee_journal_id:
+            raise ValidationError(_('A contractor fee journal already exists for this project.'))
+        journal = self.env['account.journal'].create({
+            'name': _('Contractor Fee - %s') % self.name,
+            'code': ('CF%s' % self.code)[:5],
+            'type': 'cash',
+            'company_id': self.company_id.id,
+        })
+        self.contractor_fee_journal_id = journal
+        return True
+
     def action_set_active(self):
+        for rec in self:
+            if not rec.contracted_amount or rec.contracted_amount <= 0:
+                raise ValidationError(
+                    _('Please enter the Contracted Amount before activating the project.')
+                )
         self.write({'state': 'active'})
 
     def action_set_closed(self):
+        for rec in self:
+            outstanding = self.env['construction.invoice'].search_count([
+                ('project_id', '=', rec.id),
+                ('state', '=', 'posted'),
+                ('payment_state', 'not in', ['paid', 'reversed']),
+            ])
+            if outstanding:
+                raise ValidationError(
+                    _('Cannot close project "%s": there are %d unpaid invoice(s) outstanding. '
+                      'Please settle or cancel them first.')
+                    % (rec.name, outstanding)
+                )
         self.write({'state': 'closed'})
 
     def action_set_cancelled(self):
+        for rec in self:
+            confirmed_expenses = self.env['construction.expense'].search_count([
+                ('project_id', '=', rec.id),
+                ('state', '=', 'confirmed'),
+            ])
+            if confirmed_expenses:
+                raise ValidationError(
+                    _('Cannot cancel project "%s": there are %d confirmed expense(s). '
+                      'Please cancel them first.')
+                    % (rec.name, confirmed_expenses)
+                )
+            posted_invoices = self.env['construction.invoice'].search_count([
+                ('project_id', '=', rec.id),
+                ('state', '=', 'posted'),
+            ])
+            if posted_invoices:
+                raise ValidationError(
+                    _('Cannot cancel project "%s": there are %d posted invoice(s). '
+                      'Please cancel them first.')
+                    % (rec.name, posted_invoices)
+                )
+            confirmed_fee_payments = self.env['construction.contractor.fee.payment'].search_count([
+                ('project_id', '=', rec.id),
+                ('state', '=', 'confirmed'),
+            ])
+            if confirmed_fee_payments:
+                raise ValidationError(
+                    _('Cannot cancel project "%s": there are %d confirmed fee payment(s). '
+                      'Please cancel them first.')
+                    % (rec.name, confirmed_fee_payments)
+                )
         self.write({'state': 'cancelled'})
 
     def action_set_draft(self):

@@ -117,4 +117,14 @@
         </record>
 
     </data>
+
+    <!-- Expense types excluded from contractor fee by default (noupdate=0 so upgrades apply) -->
+    <data noupdate="0">
+        <record id="expense_type_insurance" model="construction.expense.type">
+            <field name="include_in_contractor_fee" eval="False"/>
+        </record>
+        <record id="expense_type_permit" model="construction.expense.type">
+            <field name="include_in_contractor_fee" eval="False"/>
+        </record>
+    </data>
 </odoo>

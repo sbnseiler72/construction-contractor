@@ -91,6 +91,13 @@ class ConstructionExpense(models.Model):
     )
     notes = fields.Text(string='Notes')
 
+    include_in_contractor_fee = fields.Boolean(
+        string='Include in Contractor Fee',
+        default=True,
+        tracking=True,
+        help='Uncheck to exclude this expense from the contractor percentage calculation.',
+    )
+
     state = fields.Selection([
         ('draft', 'Draft'),
         ('confirmed', 'Confirmed'),
@@ -106,6 +113,11 @@ class ConstructionExpense(models.Model):
     # -------------------------------------------------------------------------
     # ORM
     # -------------------------------------------------------------------------
+    @api.onchange('expense_type_id')
+    def _onchange_expense_type_contractor_fee(self):
+        if self.expense_type_id:
+            self.include_in_contractor_fee = self.expense_type_id.include_in_contractor_fee
+
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
@@ -137,6 +149,11 @@ class ConstructionExpense(models.Model):
     # -------------------------------------------------------------------------
     def action_confirm(self):
         for rec in self:
+            if rec.project_id.state in ('closed', 'cancelled'):
+                raise ValidationError(
+                    _('Cannot confirm expense "%s": the project is %s.')
+                    % (rec.name, dict(rec.project_id._fields['state'].selection)[rec.project_id.state])
+                )
             if not rec.receipt_ref and not rec.receipt_file:
                 raise ValidationError(
                     _('A receipt reference or file attachment is required before confirming an expense.')

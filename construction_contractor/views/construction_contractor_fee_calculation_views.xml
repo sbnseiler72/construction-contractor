@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ===================================================================
+         Contractor Fee Calculation: List View
+    =================================================================== -->
+    <record id="view_contractor_fee_calculation_list" model="ir.ui.view">
+        <field name="name">construction.contractor.fee.calculation.list</field>
+        <field name="model">construction.contractor.fee.calculation</field>
+        <field name="arch" type="xml">
+            <list string="Contractor Fee Calculation" create="false" edit="false" delete="false"
+                  decoration-warning="transaction_type == 'expense'"
+                  decoration-info="transaction_type == 'invoice_payment'">
+                <field name="date" widget="jalali_date"/>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="transaction_type" widget="badge"
+                       decoration-warning="transaction_type == 'expense'"
+                       decoration-info="transaction_type == 'invoice_payment'"/>
+                <field name="expense_type_id" optional="show"/>
+                <field name="project_phase_id" optional="show"/>
+                <field name="description"/>
+                <field name="partner_id" optional="show"/>
+                <field name="payment_source" optional="show"/>
+                <field name="amount" sum="Total Amount"/>
+                <field name="contractor_percentage" string="%" optional="show"/>
+                <field name="fee_amount" sum="Total Fee" class="fw-bold"/>
+                <field name="currency_id" column_invisible="1"/>
+                <button name="action_open_source_record" type="object"
+                        string="View" icon="fa-external-link" class="btn-link"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ===================================================================
+         Contractor Fee Calculation: Pivot View
+    =================================================================== -->
+    <record id="view_contractor_fee_calculation_pivot" model="ir.ui.view">
+        <field name="name">construction.contractor.fee.calculation.pivot</field>
+        <field name="model">construction.contractor.fee.calculation</field>
+        <field name="arch" type="xml">
+            <pivot string="Contractor Fee Analysis">
+                <field name="project_id" type="row"/>
+                <field name="transaction_type" type="col"/>
+                <field name="amount" type="measure"/>
+                <field name="fee_amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- ===================================================================
+         Contractor Fee Calculation: Search View
+    =================================================================== -->
+    <record id="view_contractor_fee_calculation_search" model="ir.ui.view">
+        <field name="name">construction.contractor.fee.calculation.search</field>
+        <field name="model">construction.contractor.fee.calculation</field>
+        <field name="arch" type="xml">
+            <search string="Contractor Fee Calculation">
+                <field name="name" string="Reference"/>
+                <field name="project_id"/>
+                <field name="partner_id"/>
+                <field name="description"/>
+                <separator/>
+                <filter string="Expenses" name="expenses"
+                        domain="[('transaction_type','=','expense')]"/>
+                <filter string="Invoice Payments" name="invoice_payments"
+                        domain="[('transaction_type','=','invoice_payment')]"/>
+                <separator/>
+                <filter string="Payroll Card" name="payroll_card"
+                        domain="[('payment_source','=','payroll_card')]"/>
+                <filter string="Employer Cash" name="employer_cash"
+                        domain="[('payment_source','=','employer_cash')]"/>
+                <filter string="Employer Check" name="employer_check"
+                        domain="[('payment_source','=','employer_check')]"/>
+                <separator/>
+                <filter string="This Month" name="this_month"
+                        domain="[('date','&gt;=', (context_today()).strftime('%Y-%m-01'))]"/>
+                <filter string="This Year" name="this_year"
+                        domain="[('date','&gt;=', (context_today()).strftime('%Y-01-01'))]"/>
+                <separator/>
+                <group>
+                    <filter string="Project" name="group_project"
+                            context="{'group_by': 'project_id'}"/>
+                    <filter string="Type" name="group_type"
+                            context="{'group_by': 'transaction_type'}"/>
+                    <filter string="Expense Type" name="group_expense_type"
+                            context="{'group_by': 'expense_type_id'}"/>
+                    <filter string="Project Phase" name="group_phase"
+                            context="{'group_by': 'project_phase_id'}"/>
+                    <filter string="Payment Source" name="group_payment"
+                            context="{'group_by': 'payment_source'}"/>
+                    <filter string="Month" name="group_month"
+                            context="{'group_by': 'date:month'}"/>
+                    <filter string="Vendor" name="group_partner"
+                            context="{'group_by': 'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_contractor_fee_calculation" model="ir.actions.act_window">
+        <field name="name">Fee Calculation</field>
+        <field name="res_model">construction.contractor.fee.calculation</field>
+        <field name="view_mode">list,pivot</field>
+        <field name="search_view_id" ref="view_contractor_fee_calculation_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No eligible transactions found</p>
+            <p>
+                This view shows all confirmed expenses and paid invoice amounts
+                included in the contractor fee calculation, with the resulting
+                fee per line.
+            </p>
+        </field>
+    </record>
+</odoo>

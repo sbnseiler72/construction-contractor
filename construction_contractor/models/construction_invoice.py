@@ -81,6 +81,13 @@ class ConstructionInvoice(models.Model):
 
     notes = fields.Text(string='Notes / Remarks')
 
+    include_in_contractor_fee = fields.Boolean(
+        string='Include in Contractor Fee',
+        default=True,
+        tracking=True,
+        help='Uncheck to exclude this invoice from the contractor percentage calculation (e.g. insurance, government fees).',
+    )
+
     # Payment source — set when payment is registered via the payment wizard
     payment_source = fields.Selection([
         ('payroll_card', 'Payroll Card'),
@@ -221,6 +228,11 @@ class ConstructionInvoice(models.Model):
         Invoice lines can be expanded in a future phase.
         """
         self.ensure_one()
+        if self.project_id.state in ('closed', 'cancelled'):
+            raise ValidationError(
+                _('Cannot create a vendor bill for invoice "%s": the project is %s.')
+                % (self.name, dict(self.project_id._fields['state'].selection)[self.project_id.state])
+            )
         if self.account_move_id:
             raise ValidationError(_('A vendor bill already exists for this invoice.'))
         if not self.amount_total or self.amount_total <= 0:
@@ -350,6 +362,13 @@ class ConstructionInvoice(models.Model):
             rec.state = 'cancelled'
 
     def action_reset_draft(self):
+        for rec in self:
+            if rec.account_move_id and rec.account_move_id.payment_state not in ('not_paid', False):
+                raise ValidationError(
+                    _('Cannot reset invoice "%s" to draft: the linked vendor bill has registered payments. '
+                      'Please reverse those payments in accounting first.')
+                    % rec.name
+                )
         self.write({'state': 'draft'})
 
     # -------------------------------------------------------------------------

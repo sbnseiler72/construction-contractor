@@ -45,5 +45,14 @@
             <field name="padding">5</field>
             <field name="company_id" eval="False"/>
         </record>
+
+        <!-- Contractor fee payment sequence -->
+        <record id="seq_construction_contractor_fee_payment" model="ir.sequence">
+            <field name="name">Construction Contractor Fee Payment</field>
+            <field name="code">construction.contractor.fee.payment</field>
+            <field name="prefix">CFEE/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
     </data>
 </odoo>

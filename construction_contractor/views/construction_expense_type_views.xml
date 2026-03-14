@@ -11,6 +11,7 @@
                 <field name="sequence" widget="handle"/>
                 <field name="key"/>
                 <field name="label"/>
+                <field name="include_in_contractor_fee" optional="show"/>
                 <field name="active" optional="hide"/>
             </list>
         </field>
@@ -29,6 +30,7 @@
                         <field name="sequence"/>
                         <field name="key" placeholder="e.g. labor"/>
                         <field name="label" placeholder="e.g. دستمزد کارگران"/>
+                        <field name="include_in_contractor_fee"/>
                         <field name="active"/>
                     </group>
                 </sheet>
