@@ -151,6 +151,7 @@
                             <field name="memo" readonly="1"/>
                             <field name="state" widget="badge" readonly="1"
                                    decoration-success="state == 'posted'"
+                                   decoration-info="state == 'in_process'"
                                    decoration-warning="state == 'draft'"
                                    decoration-danger="state == 'cancel'"/>
                             <button name="action_cancel" string="Cancel" type="object"

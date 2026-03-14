@@ -99,7 +99,7 @@ class ConstructionInvoicePrepayment(models.Model):
             other_active = rec.invoice_id.prepayment_ids.filtered(
                 lambda p: p.id != rec.id
                 and p.account_payment_id
-                and p.account_payment_id.state == 'posted'
+                and p.account_payment_id.state in ('posted', 'in_process')
             )
             total = sum(other_active.mapped('amount')) + rec.amount
             if total > rec.invoice_id.amount_total:
@@ -115,7 +115,7 @@ class ConstructionInvoicePrepayment(models.Model):
     def action_cancel(self):
         """Cancel this prepayment and reverse the linked accounting payment."""
         self.ensure_one()
-        if self.account_payment_id and self.account_payment_id.state == 'posted':
+        if self.account_payment_id and self.account_payment_id.state in ('posted', 'in_process'):
             # Check the payment is not already reconciled against a bill
             payable_lines = self.account_payment_id.line_ids.filtered(
                 lambda l: l.account_id.account_type == 'liability_payable'

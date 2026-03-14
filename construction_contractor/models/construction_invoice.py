@@ -153,7 +153,7 @@ class ConstructionInvoice(models.Model):
     def _compute_payment_amounts(self):
         for rec in self:
             posted_prepayments = rec.prepayment_ids.filtered(
-                lambda p: p.account_payment_id and p.account_payment_id.state == 'posted'
+                lambda p: p.account_payment_id and p.account_payment_id.state in ('posted', 'in_process')
             )
             rec.amount_prepaid = sum(posted_prepayments.mapped('amount'))
 
@@ -273,7 +273,7 @@ class ConstructionInvoice(models.Model):
             move.action_post()
 
         posted_prepayments = self.prepayment_ids.filtered(
-            lambda p: p.account_payment_id and p.account_payment_id.state == 'posted'
+            lambda p: p.account_payment_id and p.account_payment_id.state in ('posted', 'in_process')
         )
         if posted_prepayments:
             self._reconcile_prepayments_with_bill(move, posted_prepayments)
@@ -338,7 +338,7 @@ class ConstructionInvoice(models.Model):
         for rec in self:
             active_prepayments = rec.prepayment_ids.filtered(
                 lambda p: p.account_payment_id
-                and p.account_payment_id.state == 'posted'
+                and p.account_payment_id.state in ('posted', 'in_process')
             )
             if active_prepayments:
                 raise ValidationError(
