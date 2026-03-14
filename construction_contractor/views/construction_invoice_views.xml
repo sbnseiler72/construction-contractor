@@ -156,7 +156,7 @@
                                    decoration-danger="state == 'cancel'"/>
                             <button name="action_cancel" string="Cancel" type="object"
                                     icon="fa-times" title="Cancel this prepayment"
-                                    invisible="state not in ('draft', 'posted')"/>
+                                    invisible="state not in ('draft', 'posted', 'in_process')"/>
                         </list>
                     </field>
                 </sheet>

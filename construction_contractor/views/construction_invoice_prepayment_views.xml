@@ -28,6 +28,7 @@
                             <field name="amount"/>
                             <field name="payment_date" widget="jalali_date" options="{'zIndex': '2000'}"/>
                             <field name="memo" placeholder="e.g. Advance payment – INV/2024/00001"/>
+                            <field name="post_payment" widget="radio"/>
                         </group>
                     </group>
                     <group string="Journal">

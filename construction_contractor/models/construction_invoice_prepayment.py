@@ -180,6 +180,12 @@ class ConstructionInvoicePrepaymentWizard(models.TransientModel):
         string='Memo / Reference',
         help='Internal reference note for this prepayment',
     )
+    post_payment = fields.Selection([
+        ('draft', 'Save as Draft'),
+        ('posted', 'Post Immediately'),
+    ], string='Payment Status', required=True, default='posted',
+        help='Post Immediately records the payment in accounting right away. '
+             'Save as Draft lets you review before posting.')
     journal_id = fields.Many2one(
         'account.journal',
         string='Payment Journal',
@@ -259,7 +265,8 @@ class ConstructionInvoicePrepaymentWizard(models.TransientModel):
             'journal_id': self.journal_id.id,
             'company_id': invoice.company_id.id,
         })
-        payment.action_post()
+        if self.post_payment == 'posted':
+            payment.action_post()
 
         # Record the prepayment linked to the invoice
         self.env['construction.invoice.prepayment'].create({
