@@ -182,6 +182,7 @@ export class JalaliDateField extends Component {
         placeholder: { type: String,  optional: true },
         minDate:     { type: String,  optional: true },
         maxDate:     { type: String,  optional: true },
+        zIndex:     { type: String,  optional: true },
         highlightHolidays: { type: Boolean, optional: true },
     };
 
@@ -189,6 +190,7 @@ export class JalaliDateField extends Component {
         placeholder: "YYYY/MM/DD",
         minDate: "",
         maxDate: "",
+        zIndex: "1000",
         highlightHolidays: true,
     };
 
@@ -245,6 +247,7 @@ export class JalaliDateField extends Component {
             dayRendering: this.props.highlightHolidays
                 ? (o) => ({ isHollyDay: o.month === 1 && o.day <= 4 })
                 : undefined,
+            zIndex: this.props.zIndex
         });
 
         el.addEventListener("change", this._onPickerChange);
@@ -330,6 +333,7 @@ export const jalaliDateField = {
     supportedTypes: ["date"],
     extractProps: ({ attrs, options }) => ({
         placeholder: attrs.placeholder || "YYYY/MM/DD",
+        zIndex: options.zIndex || "1000",
         minDate: (options && options.min_date) || "",
         maxDate: (options && options.max_date) || "",
         highlightHolidays: options && options.highlight_holidays !== undefined

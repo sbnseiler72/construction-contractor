@@ -26,7 +26,7 @@
                         <group string="Payment Details">
                             <field name="payment_source"/>
                             <field name="amount"/>
-                            <field name="payment_date" widget="jalali_date"/>
+                            <field name="payment_date" widget="jalali_date" options="{'zIndex': '2000'}"/>
                             <field name="memo" placeholder="e.g. Advance payment – INV/2024/00001"/>
                         </group>
                     </group>
