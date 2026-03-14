@@ -149,6 +149,11 @@ class ConstructionExpense(models.Model):
     # -------------------------------------------------------------------------
     def action_confirm(self):
         for rec in self:
+            if rec.project_id.state in ('closed', 'cancelled'):
+                raise ValidationError(
+                    _('Cannot confirm expense "%s": the project is %s.')
+                    % (rec.name, dict(rec.project_id._fields['state'].selection)[rec.project_id.state])
+                )
             if not rec.receipt_ref and not rec.receipt_file:
                 raise ValidationError(
                     _('A receipt reference or file attachment is required before confirming an expense.')

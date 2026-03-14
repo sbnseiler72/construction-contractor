@@ -14,13 +14,7 @@
                 <field name="name"/>
                 <field name="project_id"/>
                 <field name="project_phase_id" optional="show"/>
-                <field name="invoice_date"/>
-<!--                 <field-->
-<!--                    name="invoice_date"-->
-<!--                    widget="jalali_date"-->
-<!--                    placeholder="Year/Month/Day"-->
-<!--                    options="{'highlight_holidays': false}"-->
-<!--                />-->
+                <field name="invoice_date" widget="jalali_date"/>
                 <field name="partner_id"/>
                 <field name="invoice_number"/>
                 <field name="amount_total" sum="Total Invoiced"/>

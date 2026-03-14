@@ -107,10 +107,28 @@ class ConstructionContractorFeePayment(models.Model):
     # -------------------------------------------------------------------------
     def action_confirm(self):
         for rec in self:
+            if rec.project_id.state == 'cancelled':
+                raise ValidationError(
+                    _('Cannot confirm fee payment "%s": the project is cancelled.')
+                    % rec.name
+                )
             if not rec.receipt_ref and not rec.receipt_file:
                 raise ValidationError(
                     _('A receipt reference or file attachment is required before confirming a fee payment.')
                 )
+            project = rec.project_id
+            if project.total_contractor_fee > 0:
+                already_paid = sum(
+                    project.contractor_fee_payment_ids.filtered(
+                        lambda p: p.id != rec.id and p.state == 'confirmed'
+                    ).mapped('amount')
+                )
+                if already_paid + rec.amount > project.total_contractor_fee:
+                    raise ValidationError(
+                        _('Cannot confirm fee payment "%s": total confirmed payments (%s) would exceed '
+                          'the contractor fee (%s). Please reduce the amount.')
+                        % (rec.name, already_paid + rec.amount, project.total_contractor_fee)
+                    )
             rec.state = 'confirmed'
 
     def action_cancel(self):

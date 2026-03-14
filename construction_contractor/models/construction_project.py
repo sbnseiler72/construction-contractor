@@ -205,9 +205,28 @@ class ConstructionProject(models.Model):
     contractor_fee_payment_count = fields.Integer(compute='_compute_counts')
 
     # -------------------------------------------------------------------------
+    # Constraints
+    # -------------------------------------------------------------------------
+    @api.constrains('date_start', 'date_end')
+    def _check_dates(self):
+        for rec in self:
+            if rec.date_start and rec.date_end and rec.date_end < rec.date_start:
+                raise ValidationError(
+                    _('Expected End Date cannot be earlier than Start Date.')
+                )
+
+    @api.constrains('contractor_percentage')
+    def _check_contractor_percentage(self):
+        for rec in self:
+            if not (0.0 <= rec.contractor_percentage <= 100.0):
+                raise ValidationError(
+                    _('Contractor Percentage must be between 0 and 100.')
+                )
+
+    # -------------------------------------------------------------------------
     # Compute methods
     # -------------------------------------------------------------------------
-    @api.depends('company_id')
+    @api.depends()
     def _compute_financials(self):
         for project in self:
             expenses = self.env['construction.expense'].search([
@@ -395,12 +414,60 @@ class ConstructionProject(models.Model):
         return True
 
     def action_set_active(self):
+        for rec in self:
+            if not rec.contracted_amount or rec.contracted_amount <= 0:
+                raise ValidationError(
+                    _('Please enter the Contracted Amount before activating the project.')
+                )
         self.write({'state': 'active'})
 
     def action_set_closed(self):
+        for rec in self:
+            outstanding = self.env['construction.invoice'].search_count([
+                ('project_id', '=', rec.id),
+                ('state', '=', 'posted'),
+                ('payment_state', 'not in', ['paid', 'reversed']),
+            ])
+            if outstanding:
+                raise ValidationError(
+                    _('Cannot close project "%s": there are %d unpaid invoice(s) outstanding. '
+                      'Please settle or cancel them first.')
+                    % (rec.name, outstanding)
+                )
         self.write({'state': 'closed'})
 
     def action_set_cancelled(self):
+        for rec in self:
+            confirmed_expenses = self.env['construction.expense'].search_count([
+                ('project_id', '=', rec.id),
+                ('state', '=', 'confirmed'),
+            ])
+            if confirmed_expenses:
+                raise ValidationError(
+                    _('Cannot cancel project "%s": there are %d confirmed expense(s). '
+                      'Please cancel them first.')
+                    % (rec.name, confirmed_expenses)
+                )
+            posted_invoices = self.env['construction.invoice'].search_count([
+                ('project_id', '=', rec.id),
+                ('state', '=', 'posted'),
+            ])
+            if posted_invoices:
+                raise ValidationError(
+                    _('Cannot cancel project "%s": there are %d posted invoice(s). '
+                      'Please cancel them first.')
+                    % (rec.name, posted_invoices)
+                )
+            confirmed_fee_payments = self.env['construction.contractor.fee.payment'].search_count([
+                ('project_id', '=', rec.id),
+                ('state', '=', 'confirmed'),
+            ])
+            if confirmed_fee_payments:
+                raise ValidationError(
+                    _('Cannot cancel project "%s": there are %d confirmed fee payment(s). '
+                      'Please cancel them first.')
+                    % (rec.name, confirmed_fee_payments)
+                )
         self.write({'state': 'cancelled'})
 
     def action_set_draft(self):

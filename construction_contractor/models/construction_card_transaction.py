@@ -72,13 +72,6 @@ class ConstructionCardTransaction(models.Model):
         ('cancelled', 'Cancelled'),
     ], string='State', default='draft', tracking=True)
 
-    # Link to Odoo accounting journal entry (auto-created on confirm)
-    account_move_id = fields.Many2one(
-        'account.move',
-        string='Journal Entry',
-        readonly=True,
-        copy=False,
-    )
     company_id = fields.Many2one(
         'res.company',
         related='project_id.company_id',
@@ -109,6 +102,11 @@ class ConstructionCardTransaction(models.Model):
     # -------------------------------------------------------------------------
     def action_confirm(self):
         for rec in self:
+            if rec.project_id.state in ('closed', 'cancelled'):
+                raise ValidationError(
+                    _('Cannot confirm card transaction "%s": the project is %s.')
+                    % (rec.name, dict(rec.project_id._fields['state'].selection)[rec.project_id.state])
+                )
             if not rec.receipt_ref and not rec.receipt_file:
                 raise ValidationError(
                     _('A receipt reference or file attachment is required before confirming a card transaction.')
@@ -116,10 +114,7 @@ class ConstructionCardTransaction(models.Model):
             rec.state = 'confirmed'
 
     def action_cancel(self):
-        for rec in self:
-            if rec.account_move_id:
-                rec.account_move_id.button_cancel()
-            rec.state = 'cancelled'
+        self.write({'state': 'cancelled'})
 
     def action_reset_draft(self):
         self.write({'state': 'draft'})
