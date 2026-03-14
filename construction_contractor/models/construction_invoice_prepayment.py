@@ -99,7 +99,7 @@ class ConstructionInvoicePrepayment(models.Model):
             other_active = rec.invoice_id.prepayment_ids.filtered(
                 lambda p: p.id != rec.id
                 and p.account_payment_id
-                and p.account_payment_id.state in ('posted', 'in_process')
+                and p.account_payment_id.state in ('in_process', 'paid')
             )
             total = sum(other_active.mapped('amount')) + rec.amount
             if total > rec.invoice_id.amount_total:
@@ -115,7 +115,7 @@ class ConstructionInvoicePrepayment(models.Model):
     def action_cancel(self):
         """Cancel this prepayment and reverse the linked accounting payment."""
         self.ensure_one()
-        if self.account_payment_id and self.account_payment_id.state in ('posted', 'in_process'):
+        if self.account_payment_id and self.account_payment_id.state in ('in_process', 'paid'):
             # Check the payment is not already reconciled against a bill
             payable_lines = self.account_payment_id.line_ids.filtered(
                 lambda l: l.account_id.account_type == 'liability_payable'
@@ -267,12 +267,6 @@ class ConstructionInvoicePrepaymentWizard(models.TransientModel):
         })
         if self.post_payment == 'posted':
             payment.action_post()
-            # In Odoo 17+, action_post() leaves outbound payments in 'in_process'.
-            # is_move_sent=True signals the payment has been dispatched and
-            # advances the computed state to 'posted'.  Must use write() so the
-            # ORM flushes to DB and triggers _compute_state to rerun.
-            if payment.state == 'in_process' and 'is_move_sent' in payment._fields:
-                payment.write({'is_move_sent': True})
 
         # Record the prepayment linked to the invoice
         self.env['construction.invoice.prepayment'].create({
