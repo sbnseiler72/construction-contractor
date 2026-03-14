@@ -34,6 +34,7 @@
         'views/construction_expense_views.xml',
         'views/construction_card_transaction_views.xml',
         'views/construction_invoice_payment_views.xml',
+        'views/construction_invoice_prepayment_views.xml',
         'views/construction_invoice_views.xml',
         'views/construction_financial_balance_views.xml',
         'report/construction_report_templates.xml',
