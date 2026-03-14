@@ -81,6 +81,13 @@ class ConstructionInvoice(models.Model):
 
     notes = fields.Text(string='Notes / Remarks')
 
+    include_in_contractor_fee = fields.Boolean(
+        string='Include in Contractor Fee',
+        default=True,
+        tracking=True,
+        help='Uncheck to exclude this invoice from the contractor percentage calculation (e.g. insurance, government fees).',
+    )
+
     # Payment source — set when payment is registered via the payment wizard
     payment_source = fields.Selection([
         ('payroll_card', 'Payroll Card'),

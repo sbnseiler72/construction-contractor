@@ -91,6 +91,13 @@ class ConstructionExpense(models.Model):
     )
     notes = fields.Text(string='Notes')
 
+    include_in_contractor_fee = fields.Boolean(
+        string='Include in Contractor Fee',
+        default=True,
+        tracking=True,
+        help='Uncheck to exclude this expense from the contractor percentage calculation.',
+    )
+
     state = fields.Selection([
         ('draft', 'Draft'),
         ('confirmed', 'Confirmed'),
@@ -106,6 +113,11 @@ class ConstructionExpense(models.Model):
     # -------------------------------------------------------------------------
     # ORM
     # -------------------------------------------------------------------------
+    @api.onchange('expense_type_id')
+    def _onchange_expense_type_contractor_fee(self):
+        if self.expense_type_id:
+            self.include_in_contractor_fee = self.expense_type_id.include_in_contractor_fee
+
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:

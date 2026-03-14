@@ -12,6 +12,11 @@ class ConstructionExpenseType(models.Model):
     label = fields.Char(string='Label', required=True, translate=True)
     sequence = fields.Integer(default=10)
     active = fields.Boolean(default=True)
+    include_in_contractor_fee = fields.Boolean(
+        string='Include in Contractor Fee',
+        default=True,
+        help='If unchecked, expenses of this type are excluded from the contractor percentage calculation.',
+    )
 
     _sql_constraints = [
         ('key_unique', 'unique(key)', 'Expense type key must be unique.'),

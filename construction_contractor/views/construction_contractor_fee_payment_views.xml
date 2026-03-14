@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ===================================================================
+         Contractor Fee Payment: List View
+    =================================================================== -->
+    <record id="view_contractor_fee_payment_list" model="ir.ui.view">
+        <field name="name">construction.contractor.fee.payment.list</field>
+        <field name="model">construction.contractor.fee.payment</field>
+        <field name="arch" type="xml">
+            <list string="Contractor Fee Payments"
+                  decoration-success="state == 'confirmed'"
+                  decoration-muted="state == 'cancelled'">
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="date" widget="jalali_date"/>
+                <field name="description"/>
+                <field name="amount" sum="Total"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-success="state == 'confirmed'"
+                       decoration-danger="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ===================================================================
+         Contractor Fee Payment: Form View
+    =================================================================== -->
+    <record id="view_contractor_fee_payment_form" model="ir.ui.view">
+        <field name="name">construction.contractor.fee.payment.form</field>
+        <field name="model">construction.contractor.fee.payment</field>
+        <field name="arch" type="xml">
+            <form string="Contractor Fee Payment">
+                <header>
+                    <button name="action_confirm" string="Confirm"
+                            type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_cancel" string="Cancel"
+                            type="object"
+                            invisible="state != 'draft'"/>
+                    <button name="action_reset_draft" string="Reset to Draft"
+                            type="object"
+                            invisible="state not in ('confirmed', 'cancelled')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Payment Details">
+                            <field name="project_id"/>
+                            <field name="date" widget="jalali_date"/>
+                            <field name="amount"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="description" placeholder="Description of this fee payment..."/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action (used by smart button from project) -->
+    <record id="action_contractor_fee_payment" model="ir.actions.act_window">
+        <field name="name">Contractor Fee Payments</field>
+        <field name="res_model">construction.contractor.fee.payment</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No contractor fee payments yet</p>
+            <p>Record payments made to the contractor for their percentage of the project.</p>
+        </field>
+    </record>
+</odoo>

@@ -121,6 +121,7 @@
                             <field name="amount_paid" readonly="1"/>
                             <field name="amount_residual" readonly="1"/>
                             <field name="payment_state" readonly="1"/>
+                            <field name="include_in_contractor_fee"/>
                         </group>
                     </group>
                     <group string="Description">

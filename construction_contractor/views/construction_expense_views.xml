@@ -67,6 +67,7 @@
                         <group string="Payment">
                             <field name="payment_source"/>
                             <field name="recorded_by"/>
+                            <field name="include_in_contractor_fee"/>
                         </group>
                     </group>
                     <group string="Receipt">

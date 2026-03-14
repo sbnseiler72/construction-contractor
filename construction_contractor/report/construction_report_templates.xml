@@ -131,6 +131,7 @@
                                 <tr>
                                     <th>Expense Type</th>
                                     <th class="text-end">Total Amount</th>
+                                    <th>In Contractor Fee</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -141,11 +142,20 @@
                                         ('expense_type_id','=',etype.id),
                                     ])"/>
                                     <t t-if="etype_expenses">
-                                        <tr>
-                                            <td t-esc="etype.label"/>
+                                        <tr t-att-class="'' if etype.include_in_contractor_fee else 'table-light text-muted'">
+                                            <td>
+                                                <t t-esc="etype.label"/>
+                                                <t t-if="not etype.include_in_contractor_fee">
+                                                    <small class="ms-1 text-muted">(excl.)</small>
+                                                </t>
+                                            </td>
                                             <td class="text-end">
                                                 <t t-esc="sum(etype_expenses.mapped('amount'))"
                                                    t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <t t-if="etype.include_in_contractor_fee">✓</t>
+                                                <t t-else="">—</t>
                                             </td>
                                         </tr>
                                     </t>
@@ -210,13 +220,19 @@
                                     <th class="text-end">Paid</th>
                                     <th class="text-end">Outstanding</th>
                                     <th>Status</th>
+                                    <th>In Contractor Fee</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <t t-foreach="invoices" t-as="inv">
-                                    <tr>
+                                    <tr t-att-class="'' if inv.include_in_contractor_fee else 'table-light text-muted'">
                                         <td t-esc="inv.invoice_date"/>
-                                        <td t-esc="inv.invoice_number or inv.name"/>
+                                        <td>
+                                            <t t-esc="inv.invoice_number or inv.name"/>
+                                            <t t-if="not inv.include_in_contractor_fee">
+                                                <small class="ms-1 text-muted">(excl.)</small>
+                                            </t>
+                                        </td>
                                         <td t-esc="inv.partner_id.name"/>
                                         <td t-esc="inv.project_phase_id.label or ''"/>
                                         <td class="text-end">
@@ -232,6 +248,10 @@
                                                t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
                                         </td>
                                         <td t-esc="inv.payment_state"/>
+                                        <td class="text-center">
+                                            <t t-if="inv.include_in_contractor_fee">✓</t>
+                                            <t t-else="">—</t>
+                                        </td>
                                     </tr>
                                 </t>
                             </tbody>
@@ -317,6 +337,86 @@
                                 </tr>
                             </tbody>
                         </table>
+
+                        <!-- Contractor Fee Summary -->
+                        <t t-if="project.contractor_percentage">
+                            <h4 class="mt-4">Contractor Fee Summary</h4>
+                            <table class="table table-bordered table-sm">
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Contractor Percentage</strong></td>
+                                        <td class="text-end">
+                                            <t t-esc="'%.2f%%' % project.contractor_percentage"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Eligible Cost Base
+                                            <small class="text-muted ms-1">(confirmed expenses + paid invoices marked for inclusion)</small>
+                                        </td>
+                                        <td class="text-end">
+                                            <t t-esc="project.contractor_fee_base"
+                                               t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr class="table-warning">
+                                        <td><strong>Total Contractor Fee</strong>
+                                            <small class="text-muted ms-1">(<t t-esc="'%.2f%%' % project.contractor_percentage"/> of base)</small>
+                                        </td>
+                                        <td class="text-end fw-bold">
+                                            <t t-esc="project.total_contractor_fee"
+                                               t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Fee Payments Made to Contractor</td>
+                                        <td class="text-end">
+                                            <t t-esc="project.contractor_fee_paid"
+                                               t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr t-att-class="'table-danger' if project.contractor_fee_balance > 0 else 'table-success'">
+                                        <td><strong>Fee Balance Owed to Contractor</strong></td>
+                                        <td class="text-end fw-bold">
+                                            <t t-esc="project.contractor_fee_balance"
+                                               t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <!-- Contractor Fee Payment Detail -->
+                            <t t-set="fee_payments" t-value="project.env['construction.contractor.fee.payment'].search([
+                                ('project_id','=',project.id),
+                                ('state','=','confirmed'),
+                            ], order='date asc')"/>
+                            <t t-if="fee_payments">
+                                <h5 class="mt-3">Contractor Fee Payments Detail</h5>
+                                <table class="table table-bordered table-sm">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Reference</th>
+                                            <th>Date</th>
+                                            <th>Description</th>
+                                            <th class="text-end">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="fee_payments" t-as="fp">
+                                            <tr>
+                                                <td t-esc="fp.name"/>
+                                                <td t-esc="fp.date"/>
+                                                <td t-esc="fp.description or ''"/>
+                                                <td class="text-end">
+                                                    <t t-esc="fp.amount"
+                                                       t-options="{'widget': 'monetary', 'display_currency': project.currency_id}"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </t>
+                        </t>
 
                         <div class="text-muted mt-4">
                             <small>Report generated on
