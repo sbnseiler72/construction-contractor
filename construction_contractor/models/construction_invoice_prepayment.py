@@ -267,6 +267,11 @@ class ConstructionInvoicePrepaymentWizard(models.TransientModel):
         })
         if self.post_payment == 'posted':
             payment.action_post()
+            # In Odoo 17+, action_post() leaves outbound payments in 'in_process'.
+            # Setting is_move_sent=True tells the framework the payment has been
+            # dispatched and advances the state to 'posted'.
+            if payment.state == 'in_process' and hasattr(payment, 'is_move_sent'):
+                payment.is_move_sent = True
 
         # Record the prepayment linked to the invoice
         self.env['construction.invoice.prepayment'].create({
