@@ -27,6 +27,98 @@
         </field>
     </record>
 
+
+    <!-- ===================================================================
+         Card Transaction: Kanban View
+    =================================================================== -->
+    <record id="view_construction_card_transaction_kanban" model="ir.ui.view">
+        <field name="name">construction.card.transaction.kanban</field>
+        <field name="model">construction.card.transaction</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="date"/>
+                <field name="transaction_type"/>
+                <field name="description"/>
+                <field name="amount"/>
+                <field name="receipt_file"/>
+                <field name="receipt_ref"/>
+                <field name="state"/>
+
+                <templates>
+                    <t t-name="card">
+
+                        <div class="oe_kanban_card p-2">
+
+                            <t t-if="record.receipt_file.raw_value">
+                                <div style="position:relative">
+
+                                    <a t-att-href="'/web/image/construction.card.transaction/' + record.id.raw_value + '/receipt_file'"
+                                       target="_blank">
+
+                                        <img t-att-src="'/web/image/construction.card.transaction/' + record.id.raw_value + '/receipt_file'"
+                                             style="width:100%; height:160px; object-fit:cover; border-radius:6px;"/>
+
+                                        <span class="fa fa-search-plus"
+                                              style="position:absolute; bottom:8px; right:8px;
+                                                     background:rgba(0,0,0,0.6);
+                                                     color:white;
+                                                     padding:6px;
+                                                     border-radius:50%;"/>
+                                    </a>
+
+                                </div>
+                            </t>
+
+                            <!-- Title -->
+                            <strong>
+                                <field name="name"/>
+                            </strong>
+
+                            <strong>
+                                <field name="date" widget="jalali_date"/>
+                            </strong>
+
+                            <!-- Project -->
+                            <div class="text-muted">
+                                <field name="project_id"/>
+                            </div>
+
+                            <!-- Description -->
+                            <div>
+                                <field name="description"/>
+                            </div>
+
+                            <!-- Amount -->
+                            <div class="mt-2">
+                                <strong>
+                                    <field name="amount"/>
+                                </strong>
+                            </div>
+
+                            <!-- Receipt Ref -->
+                            <div class="text-muted">
+                                <field name="receipt_ref"/>
+                            </div>
+
+                            <!-- Status -->
+                            <div class="mt-2">
+                                <field name="state" widget="badge"
+                                       decoration-info="state == 'draft'"
+                                       decoration-success="state == 'confirmed'"
+                                       decoration-danger="state == 'cancelled'"/>
+                            </div>
+
+                        </div>
+
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
     <!-- ===================================================================
          Card Transaction: Form View
     =================================================================== -->
@@ -66,13 +158,25 @@
                             <field name="performed_by"/>
                         </group>
                     </group>
-                    <group string="Receipt">
-                        <field name="receipt_ref" placeholder="e.g. DEP-2024-001"
-                               required="state == 'confirmed'"/>
-                        <field name="receipt_file" filename="receipt_filename"
-                               widget="binary"/>
-                        <field name="receipt_filename" invisible="1"/>
-                    </group>
+                   <group string="Receipt">
+    <field name="receipt_ref"
+           placeholder="e.g. DEP-2024-001"/>
+
+    <!-- Upload -->
+    <field name="receipt_file"
+           filename="receipt_filename"
+           widget="binary"/>
+
+    <!-- Image Preview -->
+    <div class="mt16" invisible="not receipt_file">
+        <field name="receipt_file"
+               widget="image"
+               readonly="1"
+               class="img img-fluid"/>
+    </div>
+
+    <field name="receipt_filename" invisible="1"/>
+</group>
                 </sheet>
                  <chatter/>
             </form>
@@ -116,7 +220,7 @@
     <record id="action_construction_card_transaction" model="ir.actions.act_window">
         <field name="name">Payroll Card Transactions</field>
         <field name="res_model">construction.card.transaction</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">kanban,list,form</field>
         <field name="search_view_id" ref="view_construction_card_transaction_search"/>
     </record>
 </odoo>
