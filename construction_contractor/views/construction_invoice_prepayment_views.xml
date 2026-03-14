@@ -1,6 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- ===================================================================
+         Prepayment: Form View (read-only detail opened from invoice lines)
+    =================================================================== -->
+    <record id="view_construction_invoice_prepayment_form" model="ir.ui.view">
+        <field name="name">construction.invoice.prepayment.form</field>
+        <field name="model">construction.invoice.prepayment</field>
+        <field name="arch" type="xml">
+            <form string="Payment on Account" create="false" edit="false" delete="false">
+                <header>
+                    <button name="action_cancel" string="Cancel Payment"
+                            type="object" class="btn-danger"
+                            invisible="state not in ('draft', 'posted', 'in_process')"
+                            confirm="Are you sure you want to cancel this prepayment?"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,in_process,posted,cancel"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Invoice">
+                            <field name="invoice_id" readonly="1"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group string="Payment Details">
+                            <field name="payment_date" readonly="1"
+                                   widget="jalali_date"/>
+                            <field name="amount" readonly="1"/>
+                            <field name="payment_source" readonly="1"/>
+                            <field name="memo" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Accounting">
+                        <field name="account_payment_id" readonly="1"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ===================================================================
          Pay on Account Wizard: Form View
     =================================================================== -->
     <record id="view_construction_invoice_prepayment_wizard_form" model="ir.ui.view">
