@@ -28,6 +28,161 @@
     </record>
 
     <!-- ===================================================================
+         Expense: Kanban View
+    =================================================================== -->
+    <record id="view_construction_expense_kanban" model="ir.ui.view">
+        <field name="name">construction.expense.kanban</field>
+        <field name="model">construction.expense</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="date"/>
+                <field name="expense_type_id"/>
+                <field name="description"/>
+                <field name="amount"/>
+                <field name="currency_id"/>
+                <field name="payment_source"/>
+                <field name="partner_id"/>
+                <field name="project_phase_id"/>
+                <field name="receipt_file"/>
+                <field name="receipt_ref"/>
+                <field name="recorded_by"/>
+                <field name="state"/>
+
+                <templates>
+                    <t t-name="card">
+                        <div class="o_kanban_card">
+
+                            <!-- Colored accent bar by payment source -->
+                            <div t-att-class="'p-1 ' + (record.payment_source.raw_value === 'payroll_card' ? 'bg-info' : record.payment_source.raw_value === 'employer_cash' ? 'bg-success' : 'bg-warning')"
+                                 style="border-radius:4px 4px 0 0; height:6px;"/>
+
+                            <div class="p-2">
+
+                                <!-- Header: icon + name + state badge -->
+                                <div class="d-flex justify-content-between align-items-start mb-1">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i t-att-class="'fa fa-fw ' + (record.payment_source.raw_value === 'payroll_card' ? 'fa-credit-card text-info' : record.payment_source.raw_value === 'employer_cash' ? 'fa-money text-success' : 'fa-bank text-warning')"/>
+                                        <strong class="text-truncate" style="max-width:140px;">
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+                                    <field name="state" widget="badge"
+                                           decoration-info="state == 'draft'"
+                                           decoration-success="state == 'confirmed'"
+                                           decoration-danger="state == 'cancelled'"/>
+                                </div>
+
+                                <!-- Payment source badge -->
+                                <div class="mb-2">
+                                    <span t-att-class="'badge rounded-pill ' + (record.payment_source.raw_value === 'payroll_card' ? 'text-bg-info' : record.payment_source.raw_value === 'employer_cash' ? 'text-bg-success' : 'text-bg-warning')">
+                                        <t t-esc="record.payment_source.value"/>
+                                    </span>
+                                </div>
+
+                                <!-- Date -->
+                                <div class="d-flex align-items-center gap-2 text-muted small mb-1">
+                                    <i class="fa fa-calendar fa-fw"/>
+                                    <field name="date" widget="jalali_date"/>
+                                </div>
+
+                                <!-- Project -->
+                                <div class="d-flex align-items-center gap-2 text-muted small mb-1">
+                                    <i class="fa fa-building fa-fw"/>
+                                    <field name="project_id"/>
+                                </div>
+
+                                <!-- Phase (if set) -->
+                                <div t-if="record.project_phase_id.raw_value"
+                                     class="d-flex align-items-center gap-2 text-muted small mb-1">
+                                    <i class="fa fa-sitemap fa-fw"/>
+                                    <field name="project_phase_id"/>
+                                </div>
+
+                                <!-- Expense type -->
+                                <div class="d-flex align-items-center gap-2 text-muted small mb-1">
+                                    <i class="fa fa-tag fa-fw"/>
+                                    <field name="expense_type_id"/>
+                                </div>
+
+                                <!-- Description -->
+                                <div class="d-flex align-items-center gap-2 small mb-2">
+                                    <i class="fa fa-align-left fa-fw text-muted"/>
+                                    <span class="fst-italic text-muted">
+                                        <field name="description"/>
+                                    </span>
+                                </div>
+
+                                <!-- Amount — prominent -->
+                                <div class="d-flex align-items-center gap-2 my-2 py-2"
+                                     style="border-top:1px solid #e9ecef; border-bottom:1px solid #e9ecef;">
+                                    <i class="fa fa-minus-circle fa-fw text-danger"/>
+                                    <span class="fw-bold fs-5 text-danger">
+                                        <field name="amount"/>
+                                    </span>
+                                </div>
+
+                                <!-- Footer: recorded_by + receipt ref -->
+                                <div class="d-flex justify-content-between align-items-center mt-2 small text-muted">
+                                    <div class="d-flex align-items-center gap-1">
+                                        <i class="fa fa-user fa-fw"/>
+                                        <field name="recorded_by"/>
+                                    </div>
+                                    <div t-if="record.receipt_ref.raw_value" class="d-flex align-items-center gap-1">
+                                        <i class="fa fa-hashtag fa-fw"/>
+                                        <field name="receipt_ref"/>
+                                    </div>
+                                </div>
+
+                                <!-- Receipt image (if present) — click opens modal -->
+                                <t t-if="record.receipt_file.raw_value">
+                                    <div class="mt-2 position-relative rounded overflow-hidden"
+                                         style="cursor:pointer;"
+                                         t-att-data-bs-target="'#expenseReceiptModal_' + record.id.raw_value"
+                                         data-bs-toggle="modal">
+                                        <img t-att-src="'/web/image/construction.expense/' + record.id.raw_value + '/receipt_file'"
+                                             style="width:100%; height:140px; object-fit:cover; display:block;"/>
+                                        <div style="position:absolute; inset:0;
+                                                    background:linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 60%);"/>
+                                        <span class="fa fa-search-plus position-absolute"
+                                              style="bottom:8px; right:8px;
+                                                     background:rgba(0,0,0,0.6);
+                                                     color:white; padding:6px;
+                                                     border-radius:50%; font-size:14px;"/>
+                                    </div>
+
+                                    <!-- Bootstrap 5 modal for full-size preview -->
+                                    <div t-att-id="'expenseReceiptModal_' + record.id.raw_value"
+                                         class="modal fade" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header py-2">
+                                                    <h5 class="modal-title">
+                                                        <i class="fa fa-file-image-o me-2"/>
+                                                        <field name="name"/> — Receipt
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"/>
+                                                </div>
+                                                <div class="modal-body p-1 text-center">
+                                                    <img t-att-src="'/web/image/construction.expense/' + record.id.raw_value + '/receipt_file'"
+                                                         class="img-fluid rounded"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- ===================================================================
          Expense: Form View
     =================================================================== -->
     <record id="view_construction_expense_form" model="ir.ui.view">
@@ -49,10 +204,36 @@
                            statusbar_visible="draft,confirmed"/>
                 </header>
                 <sheet>
+                    <!-- Title -->
                     <div class="oe_title">
                         <label for="name"/>
                         <h1><field name="name" readonly="1"/></h1>
                     </div>
+
+                    <!-- Draft receipt hint -->
+                    <div class="alert alert-info d-flex align-items-center gap-2 mb-3"
+                         role="alert"
+                         invisible="state != 'draft'">
+                        <i class="fa fa-info-circle fa-lg"/>
+                        <span>A receipt reference number or file attachment is required before confirming this expense.</span>
+                    </div>
+
+                    <!-- Confirmed banner -->
+                    <div class="alert alert-success d-flex align-items-center gap-2 mb-3"
+                         role="alert"
+                         invisible="state != 'confirmed'">
+                        <i class="fa fa-check-circle fa-lg"/>
+                        <span><strong>Expense Confirmed.</strong> This expense has been recorded and approved.</span>
+                    </div>
+
+                    <!-- Cancelled banner -->
+                    <div class="alert alert-danger d-flex align-items-center gap-2 mb-3"
+                         role="alert"
+                         invisible="state != 'cancelled'">
+                        <i class="fa fa-ban fa-lg"/>
+                        <span><strong>Cancelled.</strong> This expense has been cancelled.</span>
+                    </div>
+
                     <group>
                         <group string="Expense Details">
                             <field name="project_id"/>
@@ -70,12 +251,21 @@
                             <field name="include_in_contractor_fee"/>
                         </group>
                     </group>
+
                     <group string="Receipt">
                         <field name="receipt_ref" placeholder="e.g. REC-2024-001"/>
                         <field name="receipt_file" filename="receipt_filename"
                                widget="binary"/>
                         <field name="receipt_filename" invisible="1"/>
+                        <div class="mt-2" invisible="not receipt_file" colspan="2">
+                            <field name="receipt_file"
+                                   widget="image"
+                                   readonly="1"
+                                   class="img img-fluid rounded"
+                                   style="max-height:400px;"/>
+                        </div>
                     </group>
+
                     <group string="Notes">
                         <field name="notes" nolabel="1" placeholder="Additional notes..."/>
                     </group>
@@ -145,7 +335,7 @@
     <record id="action_construction_expense" model="ir.actions.act_window">
         <field name="name">Expenses</field>
         <field name="res_model">construction.expense</field>
-        <field name="view_mode">list,form,pivot</field>
+        <field name="view_mode">kanban,list,form,pivot</field>
         <field name="search_view_id" ref="view_construction_expense_search"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">Record your first expense</p>

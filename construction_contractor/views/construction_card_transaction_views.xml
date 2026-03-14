@@ -43,76 +43,124 @@
                 <field name="transaction_type"/>
                 <field name="description"/>
                 <field name="amount"/>
+                <field name="currency_id"/>
                 <field name="receipt_file"/>
                 <field name="receipt_ref"/>
+                <field name="performed_by"/>
                 <field name="state"/>
 
                 <templates>
                     <t t-name="card">
+                        <div class="o_kanban_card">
 
-                        <div class="oe_kanban_card p-2">
+                            <!-- Colored accent bar by transaction type -->
+                            <div t-att-class="'p-1 ' + (record.transaction_type.raw_value === 'deposit' ? 'bg-success' : 'bg-danger')"
+                                 style="border-radius:4px 4px 0 0; height:6px;"/>
 
-                            <t t-if="record.receipt_file.raw_value">
-                                <div style="position:relative">
+                            <div class="p-2">
 
-                                    <a t-att-href="'/web/image/construction.card.transaction/' + record.id.raw_value + '/receipt_file'"
-                                       target="_blank">
-
-                                        <img t-att-src="'/web/image/construction.card.transaction/' + record.id.raw_value + '/receipt_file'"
-                                             style="width:100%; height:160px; object-fit:cover; border-radius:6px;"/>
-
-                                        <span class="fa fa-search-plus"
-                                              style="position:absolute; bottom:8px; right:8px;
-                                                     background:rgba(0,0,0,0.6);
-                                                     color:white;
-                                                     padding:6px;
-                                                     border-radius:50%;"/>
-                                    </a>
-
+                                <!-- Header: icon + name + state badge -->
+                                <div class="d-flex justify-content-between align-items-start mb-1">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i t-att-class="'fa fa-fw ' + (record.transaction_type.raw_value === 'deposit' ? 'fa-arrow-down text-success' : 'fa-arrow-up text-danger')"/>
+                                        <strong class="text-truncate" style="max-width:140px;">
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+                                    <field name="state" widget="badge"
+                                           decoration-info="state == 'draft'"
+                                           decoration-success="state == 'confirmed'"
+                                           decoration-danger="state == 'cancelled'"/>
                                 </div>
-                            </t>
 
-                            <!-- Title -->
-                            <strong>
-                                <field name="name"/>
-                            </strong>
+                                <!-- Transaction type badge -->
+                                <div class="mb-2">
+                                    <span t-att-class="'badge rounded-pill ' + (record.transaction_type.raw_value === 'deposit' ? 'text-bg-success' : 'text-bg-danger')">
+                                        <t t-esc="record.transaction_type.value"/>
+                                    </span>
+                                </div>
 
-                            <strong>
-                                <field name="date" widget="jalali_date"/>
-                            </strong>
+                                <!-- Date -->
+                                <div class="d-flex align-items-center gap-2 text-muted small mb-1">
+                                    <i class="fa fa-calendar fa-fw"/>
+                                    <field name="date" widget="jalali_date"/>
+                                </div>
 
-                            <!-- Project -->
-                            <div class="text-muted">
-                                <field name="project_id"/>
+                                <!-- Project -->
+                                <div class="d-flex align-items-center gap-2 text-muted small mb-1">
+                                    <i class="fa fa-building fa-fw"/>
+                                    <field name="project_id"/>
+                                </div>
+
+                                <!-- Description -->
+                                <div class="d-flex align-items-center gap-2 small mb-2">
+                                    <i class="fa fa-align-left fa-fw text-muted"/>
+                                    <span class="fst-italic text-muted">
+                                        <field name="description"/>
+                                    </span>
+                                </div>
+
+                                <!-- Amount — prominent + color-coded -->
+                                <div class="d-flex align-items-center gap-2 my-2 py-2"
+                                     style="border-top:1px solid #e9ecef; border-bottom:1px solid #e9ecef;">
+                                    <i t-att-class="'fa fa-fw ' + (record.transaction_type.raw_value === 'deposit' ? 'fa-plus-circle text-success' : 'fa-minus-circle text-danger')"/>
+                                    <span t-att-class="'fw-bold fs-5 ' + (record.transaction_type.raw_value === 'deposit' ? 'text-success' : 'text-danger')">
+                                        <field name="amount"/>
+                                    </span>
+                                </div>
+
+                                <!-- Footer: performed_by + receipt ref -->
+                                <div class="d-flex justify-content-between align-items-center mt-2 small text-muted">
+                                    <div class="d-flex align-items-center gap-1">
+                                        <i class="fa fa-user fa-fw"/>
+                                        <field name="performed_by"/>
+                                    </div>
+                                    <div t-if="record.receipt_ref.raw_value" class="d-flex align-items-center gap-1">
+                                        <i class="fa fa-hashtag fa-fw"/>
+                                        <field name="receipt_ref"/>
+                                    </div>
+                                </div>
+
+                                <!-- Receipt image (if present) — click opens modal -->
+                                <t t-if="record.receipt_file.raw_value">
+                                    <div class="mt-2 position-relative rounded overflow-hidden"
+                                         style="cursor:pointer;"
+                                         t-att-data-bs-target="'#receiptModal_' + record.id.raw_value"
+                                         data-bs-toggle="modal">
+                                        <img t-att-src="'/web/image/construction.card.transaction/' + record.id.raw_value + '/receipt_file'"
+                                             style="width:100%; height:140px; object-fit:cover; display:block;"/>
+                                        <div style="position:absolute; inset:0;
+                                                    background:linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 60%);"/>
+                                        <span class="fa fa-search-plus position-absolute"
+                                              style="bottom:8px; right:8px;
+                                                     background:rgba(0,0,0,0.6);
+                                                     color:white; padding:6px;
+                                                     border-radius:50%; font-size:14px;"/>
+                                    </div>
+
+                                    <!-- Bootstrap 5 modal for full-size preview -->
+                                    <div t-att-id="'receiptModal_' + record.id.raw_value"
+                                         class="modal fade" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header py-2">
+                                                    <h5 class="modal-title">
+                                                        <i class="fa fa-file-image-o me-2"/>
+                                                        <field name="name"/> — Receipt
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"/>
+                                                </div>
+                                                <div class="modal-body p-1 text-center">
+                                                    <img t-att-src="'/web/image/construction.card.transaction/' + record.id.raw_value + '/receipt_file'"
+                                                         class="img-fluid rounded"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+
                             </div>
-
-                            <!-- Description -->
-                            <div>
-                                <field name="description"/>
-                            </div>
-
-                            <!-- Amount -->
-                            <div class="mt-2">
-                                <strong>
-                                    <field name="amount"/>
-                                </strong>
-                            </div>
-
-                            <!-- Receipt Ref -->
-                            <div class="text-muted">
-                                <field name="receipt_ref"/>
-                            </div>
-
-                            <!-- Status -->
-                            <div class="mt-2">
-                                <field name="state" widget="badge"
-                                       decoration-info="state == 'draft'"
-                                       decoration-success="state == 'confirmed'"
-                                       decoration-danger="state == 'cancelled'"/>
-                            </div>
-
                         </div>
-
                     </t>
                 </templates>
             </kanban>
@@ -141,10 +189,36 @@
                            statusbar_visible="draft,confirmed"/>
                 </header>
                 <sheet>
+                    <!-- Title -->
                     <div class="oe_title">
                         <label for="name"/>
                         <h1><field name="name" readonly="1"/></h1>
                     </div>
+
+                    <!-- Confirmed deposit banner -->
+                    <div class="alert alert-success d-flex align-items-center gap-2 mb-3"
+                         role="alert"
+                         invisible="not (state == 'confirmed' and transaction_type == 'deposit')">
+                        <i class="fa fa-check-circle fa-lg"/>
+                        <span><strong>Deposit Confirmed.</strong> Funds have been deposited to the payroll card.</span>
+                    </div>
+
+                    <!-- Confirmed withdrawal banner -->
+                    <div class="alert alert-warning d-flex align-items-center gap-2 mb-3"
+                         role="alert"
+                         invisible="not (state == 'confirmed' and transaction_type == 'withdrawal')">
+                        <i class="fa fa-exclamation-triangle fa-lg"/>
+                        <span><strong>Withdrawal Confirmed.</strong> Cash has been withdrawn from the payroll card.</span>
+                    </div>
+
+                    <!-- Draft receipt hint -->
+                    <div class="alert alert-info d-flex align-items-center gap-2 mb-3"
+                         role="alert"
+                         invisible="state != 'draft'">
+                        <i class="fa fa-info-circle fa-lg"/>
+                        <span>A receipt reference number or file attachment is required before confirming this transaction.</span>
+                    </div>
+
                     <group>
                         <group string="Transaction Details">
                             <field name="project_id"/>
@@ -154,31 +228,29 @@
                             <field name="currency_id" invisible="1"/>
                             <field name="description"/>
                         </group>
-                        <group string="Performed By">
+                        <group string="Tracking">
                             <field name="performed_by"/>
+                            <field name="company_id" invisible="1"/>
                         </group>
                     </group>
-                   <group string="Receipt">
-    <field name="receipt_ref"
-           placeholder="e.g. DEP-2024-001"/>
 
-    <!-- Upload -->
-    <field name="receipt_file"
-           filename="receipt_filename"
-           widget="binary"/>
-
-    <!-- Image Preview -->
-    <div class="mt16" invisible="not receipt_file">
-        <field name="receipt_file"
-               widget="image"
-               readonly="1"
-               class="img img-fluid"/>
-    </div>
-
-    <field name="receipt_filename" invisible="1"/>
-</group>
+                    <group string="Receipt">
+                        <field name="receipt_ref"
+                               placeholder="e.g. DEP-2024-001"/>
+                        <field name="receipt_file"
+                               filename="receipt_filename"
+                               widget="binary"/>
+                        <field name="receipt_filename" invisible="1"/>
+                        <div class="mt-2" invisible="not receipt_file" colspan="2">
+                            <field name="receipt_file"
+                                   widget="image"
+                                   readonly="1"
+                                   class="img img-fluid rounded"
+                                   style="max-height:400px;"/>
+                        </div>
+                    </group>
                 </sheet>
-                 <chatter/>
+                <chatter/>
             </form>
         </field>
     </record>
