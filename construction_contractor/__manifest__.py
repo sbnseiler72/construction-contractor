@@ -37,6 +37,7 @@
         'views/construction_invoice_prepayment_views.xml',
         'views/construction_invoice_views.xml',
         'views/construction_contractor_fee_payment_views.xml',
+        'views/construction_contractor_fee_calculation_views.xml',
         'views/construction_financial_balance_views.xml',
         'report/construction_report_templates.xml',
         'report/construction_reports.xml',

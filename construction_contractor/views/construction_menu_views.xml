@@ -56,6 +56,13 @@
               groups="construction_contractor.group_construction_manager"
               sequence="10"/>
 
+    <menuitem id="menu_construction_contractor_fee_calculation"
+              name="Fee Calculation"
+              parent="menu_construction_contractor_fee"
+              action="action_contractor_fee_calculation"
+              groups="construction_contractor.group_construction_manager"
+              sequence="20"/>
+
     <!-- Invoices -->
     <menuitem id="menu_construction_invoices_parent"
               name="Invoices"

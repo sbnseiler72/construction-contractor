@@ -9,3 +9,4 @@ from . import construction_invoice_prepayment
 from . import construction_invoice_payment
 from . import construction_financial_balance
 from . import construction_contractor_fee_payment
+from . import construction_contractor_fee_calculation
