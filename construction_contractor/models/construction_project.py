@@ -380,6 +380,20 @@ class ConstructionProject(models.Model):
         self.employer_journal_id = journal
         return True
 
+    def action_create_contractor_fee_journal(self):
+        """Create a dedicated cash journal for this project's contractor fee payments."""
+        self.ensure_one()
+        if self.contractor_fee_journal_id:
+            raise ValidationError(_('A contractor fee journal already exists for this project.'))
+        journal = self.env['account.journal'].create({
+            'name': _('Contractor Fee - %s') % self.name,
+            'code': ('CF%s' % self.code)[:5],
+            'type': 'cash',
+            'company_id': self.company_id.id,
+        })
+        self.contractor_fee_journal_id = journal
+        return True
+
     def action_set_active(self):
         self.write({'state': 'active'})
 

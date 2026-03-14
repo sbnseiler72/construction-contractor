@@ -109,6 +109,11 @@
                                     invisible="employer_journal_id != False"/>
                             <field name="contractor_fee_journal_id"
                                    invisible="contractor_percentage == 0"/>
+                            <button name="action_create_contractor_fee_journal"
+                                    string="Create Contractor Fee Journal"
+                                    type="object"
+                                    class="btn-secondary"
+                                    invisible="contractor_percentage == 0 or contractor_fee_journal_id != False"/>
                         </group>
                     </group>
 
