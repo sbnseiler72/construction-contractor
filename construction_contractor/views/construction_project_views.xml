@@ -153,33 +153,6 @@
                         </group>
                     </group>
 
-                    <!-- Contractor Fee Payments inline list -->
-                    <field name="contractor_fee_payment_ids"
-                           string="Contractor Fee Payments"
-                           invisible="contractor_percentage == 0">
-                        <list string="Fee Payments"
-                              decoration-success="state == 'confirmed'"
-                              decoration-muted="state == 'cancelled'">
-                            <field name="name" readonly="1"/>
-                            <field name="date" widget="jalali_date"/>
-                            <field name="description"/>
-                            <field name="journal_id"/>
-                            <field name="receipt_ref"/>
-                            <field name="amount" sum="Total"/>
-                            <field name="currency_id" invisible="1"/>
-                            <field name="state" widget="badge"
-                                   decoration-info="state == 'draft'"
-                                   decoration-success="state == 'confirmed'"
-                                   decoration-danger="state == 'cancelled'"/>
-                            <button name="action_confirm" string="Confirm" type="object"
-                                    icon="fa-check" title="Confirm payment"
-                                    invisible="state != 'draft'"/>
-                            <button name="action_cancel" string="Cancel" type="object"
-                                    icon="fa-times" title="Cancel payment"
-                                    invisible="state != 'draft'"/>
-                        </list>
-                    </field>
-
                     <group string="Description">
                         <field name="description" nolabel="1" placeholder="Project description, scope, or notes..."/>
                     </group>
