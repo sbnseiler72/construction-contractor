@@ -42,6 +42,20 @@
               groups="construction_contractor.group_construction_manager"
               sequence="20"/>
 
+    <!-- Contractor Fee -->
+    <menuitem id="menu_construction_contractor_fee"
+              name="Contractor Fee"
+              parent="menu_construction_root"
+              groups="construction_contractor.group_construction_manager"
+              sequence="35"/>
+
+    <menuitem id="menu_construction_contractor_fee_payments"
+              name="Fee Payments"
+              parent="menu_construction_contractor_fee"
+              action="action_contractor_fee_payment_all"
+              groups="construction_contractor.group_construction_manager"
+              sequence="10"/>
+
     <!-- Invoices -->
     <menuitem id="menu_construction_invoices_parent"
               name="Invoices"

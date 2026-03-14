@@ -107,6 +107,8 @@
                                     type="object"
                                     class="btn-secondary"
                                     invisible="employer_journal_id != False"/>
+                            <field name="contractor_fee_journal_id"
+                                   invisible="contractor_percentage == 0"/>
                         </group>
                     </group>
 
@@ -150,12 +152,14 @@
                     <field name="contractor_fee_payment_ids"
                            string="Contractor Fee Payments"
                            invisible="contractor_percentage == 0">
-                        <list string="Fee Payments" editable="bottom"
+                        <list string="Fee Payments"
                               decoration-success="state == 'confirmed'"
                               decoration-muted="state == 'cancelled'">
                             <field name="name" readonly="1"/>
                             <field name="date" widget="jalali_date"/>
                             <field name="description"/>
+                            <field name="journal_id"/>
+                            <field name="receipt_ref"/>
                             <field name="amount" sum="Total"/>
                             <field name="currency_id" invisible="1"/>
                             <field name="state" widget="badge"

@@ -88,6 +88,15 @@ class ConstructionProject(models.Model):
         help='Journal used when the employer pays invoices or expenses directly',
     )
 
+    # Contractor fee journal: used when paying the contractor their percentage fee
+    contractor_fee_journal_id = fields.Many2one(
+        'account.journal',
+        string='Contractor Fee Journal',
+        domain=[('type', 'in', ['cash', 'bank'])],
+        tracking=True,
+        help='Default journal used when recording contractor fee payments',
+    )
+
     # -------------------------------------------------------------------------
     # Computed financial summaries
     # -------------------------------------------------------------------------
