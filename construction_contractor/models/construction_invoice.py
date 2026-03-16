@@ -310,7 +310,7 @@ class ConstructionInvoice(models.Model):
         # Gather unreconciled credit lines from each prepayment payment
         credit_lines = self.env['account.move.line']
         for prepayment in prepayments:
-            payment_lines = prepayment.account_payment_id.line_ids.filtered(
+            payment_lines = prepayment.account_payment_id.move_id.line_ids.filtered(
                 lambda l: l.account_id == payable_account and not l.reconciled
             )
             credit_lines |= payment_lines
