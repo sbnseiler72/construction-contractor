@@ -66,6 +66,11 @@ class ConstructionInvoicePrepayment(models.Model):
         string='Payment State',
         store=True,
     )
+    receipt_file = fields.Binary(
+        string='Receipt File',
+        attachment=True,
+    )
+    receipt_filename = fields.Char(string='Receipt Filename')
     company_id = fields.Many2one(
         'res.company',
         related='invoice_id.company_id',
@@ -112,6 +117,17 @@ class ConstructionInvoicePrepayment(models.Model):
     # -------------------------------------------------------------------------
     # Actions
     # -------------------------------------------------------------------------
+    def action_view_receipt(self):
+        """Open the receipt file in a new browser tab."""
+        self.ensure_one()
+        if not self.receipt_file:
+            return
+        return {
+            'type': 'ir.actions.act_url',
+            'url': '/web/image/construction.invoice.prepayment/%d/receipt_file' % self.id,
+            'target': 'new',
+        }
+
     def action_cancel(self):
         """Cancel this prepayment and reverse the linked accounting payment."""
         self.ensure_one()
@@ -185,6 +201,11 @@ class ConstructionInvoicePrepaymentWizard(models.TransientModel):
         string='Memo / Reference',
         help='Internal reference note for this prepayment',
     )
+    receipt_file = fields.Binary(
+        string='Receipt File',
+        attachment=True,
+    )
+    receipt_filename = fields.Char(string='Receipt Filename')
     post_payment = fields.Selection([
         ('draft', 'Save as Draft'),
         ('posted', 'Post Immediately'),
@@ -281,6 +302,8 @@ class ConstructionInvoicePrepaymentWizard(models.TransientModel):
             'payment_source': self.payment_source,
             'memo': self.memo or invoice.name,
             'account_payment_id': payment.id,
+            'receipt_file': self.receipt_file,
+            'receipt_filename': self.receipt_filename,
         })
 
         # Store payment source on the invoice if not already recorded

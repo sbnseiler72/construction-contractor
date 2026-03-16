@@ -144,11 +144,15 @@
                                    decoration-info="payment_source == 'payroll_card'"
                                    decoration-success="payment_source in ('employer_cash', 'employer_check')"/>
                             <field name="memo" readonly="1"/>
+                            <field name="receipt_file" invisible="1"/>
                             <field name="state" widget="badge" readonly="1"
                                    decoration-success="state == 'posted'"
                                    decoration-info="state == 'in_process'"
                                    decoration-warning="state == 'draft'"
                                    decoration-danger="state == 'cancel'"/>
+                            <button name="action_view_receipt" type="object"
+                                    icon="fa-search" title="View Receipt"
+                                    invisible="not receipt_file"/>
                             <button name="action_cancel" string="Cancel" type="object"
                                     icon="fa-times" title="Cancel this prepayment"
                                     invisible="state not in ('draft', 'posted', 'in_process')"/>
