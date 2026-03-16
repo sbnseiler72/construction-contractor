@@ -7,12 +7,13 @@
         <field name="name">construction.invoice.prepayment.form</field>
         <field name="model">construction.invoice.prepayment</field>
         <field name="arch" type="xml">
-            <form string="Payment on Account" create="false" edit="false" delete="false">
+            <form string="Payment" create="false" edit="false" delete="false">
                 <header>
                     <button name="action_cancel" string="Cancel Payment"
                             type="object" class="btn-danger"
                             invisible="state not in ('draft', 'posted', 'in_process')"
-                            confirm="Are you sure you want to cancel this prepayment?"/>
+                            confirm="Are you sure you want to cancel this payment?"/>
+                    <field name="payment_type" widget="badge"/>
                     <field name="state" widget="statusbar"
                            statusbar_visible="draft,in_process,posted,cancel"/>
                 </header>
@@ -27,6 +28,7 @@
                             <field name="currency_id" invisible="1"/>
                         </group>
                         <group string="Payment Details">
+                            <field name="payment_type" readonly="1"/>
                             <field name="payment_date" readonly="1"
                                    widget="jalali_date"/>
                             <field name="amount" readonly="1"/>

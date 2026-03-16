@@ -88,24 +88,7 @@ class ConstructionInvoice(models.Model):
         help='Uncheck to exclude this invoice from the contractor percentage calculation (e.g. insurance, government fees).',
     )
 
-    # Receipt for the final payment (uploaded in Register Payment wizard)
-    payment_receipt_file = fields.Binary(
-        string='Payment Receipt',
-        attachment=True,
-    )
-    payment_receipt_filename = fields.Char(string='Payment Receipt Filename')
-
-    def action_view_payment_receipt(self):
-        self.ensure_one()
-        if not self.payment_receipt_file:
-            return
-        return {
-            'type': 'ir.actions.act_url',
-            'url': '/web/image/construction.invoice/%d/payment_receipt_file' % self.id,
-            'target': 'new',
-        }
-
-    # Payment source — set when payment is registered via the payment wizard
+    # Payment source — set when a payment is registered via either payment wizard
     payment_source = fields.Selection([
         ('payroll_card', 'Payroll Card'),
         ('employer_cash', 'Employer Account - Cash'),
@@ -172,12 +155,16 @@ class ConstructionInvoice(models.Model):
     # -------------------------------------------------------------------------
     @api.depends(
         'account_move_id', 'account_move_id.amount_residual', 'amount_total',
-        'prepayment_ids.amount', 'prepayment_ids.account_payment_id.state',
+        'prepayment_ids.amount', 'prepayment_ids.payment_type',
+        'prepayment_ids.account_payment_id.state',
     )
     def _compute_payment_amounts(self):
         for rec in self:
+            # amount_prepaid only counts on-account payments (pre-bill)
             posted_prepayments = rec.prepayment_ids.filtered(
-                lambda p: p.account_payment_id and p.account_payment_id.state in ('in_process', 'paid')
+                lambda p: p.payment_type == 'on_account'
+                and p.account_payment_id
+                and p.account_payment_id.state in ('in_process', 'paid')
             )
             rec.amount_prepaid = sum(posted_prepayments.mapped('amount'))
 
@@ -371,8 +358,8 @@ class ConstructionInvoice(models.Model):
             )
             if active_prepayments:
                 raise ValidationError(
-                    _('Cannot cancel invoice %s: it has %d active prepayment(s) on account. '
-                      'Please cancel those prepayments first.')
+                    _('Cannot cancel invoice %s: it has %d active payment(s). '
+                      'Please cancel those payments first.')
                     % (rec.name, len(active_prepayments))
                 )
             rec._cancel_vendor_bill()

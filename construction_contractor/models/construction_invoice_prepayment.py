@@ -3,17 +3,21 @@ from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 
 
-class ConstructionInvoicePrepayment(models.Model):
+class ConstructionInvoicePayment(models.Model):
     """
-    Persistent record of a payment on account made against a draft
-    construction invoice. Each record is backed by an account.payment so
-    that the payment appears in the accounting ledger immediately.
+    Unified payment line for a construction invoice.
 
-    When the invoice is later formalised (vendor bill created), the linked
-    account.payment entries are auto-reconciled against the new bill.
+    Covers two cases:
+      - on_account: payment made before the vendor bill is created (draft invoice).
+        The linked account.payment is auto-reconciled when the bill is generated.
+      - final: payment made against the posted vendor bill.
+        The linked account.payment is reconciled with the bill immediately on creation.
+
+    Both types are created by their respective wizards and displayed together
+    in the invoice form's Payments tab.
     """
     _name = 'construction.invoice.prepayment'
-    _description = 'Construction Invoice Prepayment (Payment on Account)'
+    _description = 'Construction Invoice Payment'
     _order = 'payment_date desc, id desc'
     _inherit = ['mail.thread']
 
@@ -30,6 +34,12 @@ class ConstructionInvoicePrepayment(models.Model):
         required=True,
         ondelete='cascade',
         readonly=True,
+    )
+    payment_type = fields.Selection([
+        ('on_account', 'Pay on Account'),
+        ('final', 'Final Payment'),
+    ], string='Payment Type', required=True, default='on_account',
+        readonly=True, tracking=True,
     )
     payment_date = fields.Date(
         string='Payment Date',
@@ -93,23 +103,24 @@ class ConstructionInvoicePrepayment(models.Model):
     # -------------------------------------------------------------------------
     # Constraints
     # -------------------------------------------------------------------------
-    @api.constrains('amount', 'invoice_id')
+    @api.constrains('amount', 'invoice_id', 'payment_type')
     def _check_amount_does_not_exceed_invoice(self):
         for rec in self:
             if rec.amount <= 0:
-                raise ValidationError(_('Prepayment amount must be greater than zero.'))
-            # Skip the cap check when the invoice total is not yet known (draft with no amount)
-            if not rec.invoice_id.amount_total:
+                raise ValidationError(_('Payment amount must be greater than zero.'))
+            # Cap check only applies to on-account payments on invoices with a known total
+            if rec.payment_type != 'on_account' or not rec.invoice_id.amount_total:
                 continue
             other_active = rec.invoice_id.prepayment_ids.filtered(
                 lambda p: p.id != rec.id
+                and p.payment_type == 'on_account'
                 and p.account_payment_id
                 and p.account_payment_id.state in ('in_process', 'paid')
             )
             total = sum(other_active.mapped('amount')) + rec.amount
             if total > rec.invoice_id.amount_total:
                 raise ValidationError(
-                    _('Total prepayments (%s) would exceed the invoice total (%s). '
+                    _('Total payments on account (%s) would exceed the invoice total (%s). '
                       'Please enter a smaller amount.')
                     % (total, rec.invoice_id.amount_total)
                 )
@@ -129,37 +140,38 @@ class ConstructionInvoicePrepayment(models.Model):
         }
 
     def action_cancel(self):
-        """Cancel this prepayment and reverse the linked accounting payment."""
+        """Cancel this payment and reverse the linked accounting payment."""
         self.ensure_one()
         payment = self.account_payment_id
         if payment and payment.state not in ('cancel', 'draft'):
-            # Check the payment is not already reconciled against a bill
-            payable_lines = payment.move_id.line_ids.filtered(
-                lambda l: l.account_id.account_type == 'liability_payable'
-            )
-            if any(l.reconciled for l in payable_lines):
-                raise ValidationError(
-                    _('Cannot cancel prepayment %s: it has already been reconciled '
-                      'with a vendor bill. Please unreconcile it in accounting first.')
-                    % self.name
+            # For on-account payments: block if already reconciled against a bill
+            # (user must unreconcile first). For final payments, action_draft()
+            # handles unreconciliation automatically.
+            if self.payment_type == 'on_account':
+                payable_lines = payment.move_id.line_ids.filtered(
+                    lambda l: l.account_id.account_type == 'liability_payable'
                 )
-            # Must reset to draft before cancelling in Odoo 19
+                if any(l.reconciled for l in payable_lines):
+                    raise ValidationError(
+                        _('Cannot cancel payment %s: it has already been reconciled '
+                          'with a vendor bill. Please unreconcile it in accounting first.')
+                        % self.name
+                    )
+            # Reset to draft first (required in Odoo 19; also unreconciles final payments)
             payment.action_draft()
             payment.action_cancel()
         elif payment and payment.state == 'draft':
             payment.action_cancel()
         self.invoice_id.message_post(
-            body=_('Prepayment %s of %s cancelled.')
-            % (self.name, self.amount)
+            body=_('Payment %s of %s cancelled.') % (self.name, self.amount)
         )
 
 
 class ConstructionInvoicePrepaymentWizard(models.TransientModel):
     """
-    Wizard to register a payment on account for a draft construction invoice.
-    Creates an account.payment (vendor prepayment) immediately so the
-    disbursement is recorded in accounting, and links it to the invoice via
-    a construction.invoice.prepayment record.
+    Wizard to register a Pay-on-Account payment for a draft construction invoice.
+    Creates an account.payment immediately and links it to the invoice via a
+    construction.invoice.prepayment record (payment_type='on_account').
     """
     _name = 'construction.invoice.prepayment.wizard'
     _description = 'Pay on Account Wizard'
@@ -199,7 +211,7 @@ class ConstructionInvoicePrepaymentWizard(models.TransientModel):
     )
     memo = fields.Char(
         string='Memo / Reference',
-        help='Internal reference note for this prepayment',
+        help='Internal reference note for this payment',
     )
     receipt_file = fields.Binary(
         string='Receipt File',
@@ -251,7 +263,8 @@ class ConstructionInvoicePrepaymentWizard(models.TransientModel):
     def action_pay_on_account(self):
         """
         Validate inputs, create an account.payment for the vendor prepayment,
-        and record it as a construction.invoice.prepayment linked to the invoice.
+        and record it as a construction.invoice.prepayment (on_account) linked
+        to the invoice.
         """
         self.ensure_one()
         invoice = self.invoice_id
@@ -271,7 +284,6 @@ class ConstructionInvoicePrepaymentWizard(models.TransientModel):
         if self.amount <= 0:
             raise ValidationError(_('Payment amount must be greater than zero.'))
 
-        # Only check the cap when the invoice total is already known
         if invoice.amount_total:
             remaining = invoice.amount_total - invoice.amount_prepaid
             if self.amount > remaining + 0.001:
@@ -294,9 +306,9 @@ class ConstructionInvoicePrepaymentWizard(models.TransientModel):
         if self.post_payment == 'posted':
             payment.action_post()
 
-        # Record the prepayment linked to the invoice
         self.env['construction.invoice.prepayment'].create({
             'invoice_id': invoice.id,
+            'payment_type': 'on_account',
             'payment_date': self.payment_date,
             'amount': self.amount,
             'payment_source': self.payment_source,
@@ -306,7 +318,6 @@ class ConstructionInvoicePrepaymentWizard(models.TransientModel):
             'receipt_filename': self.receipt_filename,
         })
 
-        # Store payment source on the invoice if not already recorded
         if not invoice.payment_source:
             invoice.payment_source = self.payment_source
 

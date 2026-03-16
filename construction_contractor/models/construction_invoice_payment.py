@@ -5,10 +5,11 @@ from odoo.exceptions import ValidationError
 
 class ConstructionInvoicePaymentWizard(models.TransientModel):
     """
-    Wizard to register payment for a construction invoice.
-    Captures payment source (Payroll Card or Employer) and pre-fills
-    the appropriate accounting journal before opening Odoo's native
-    payment registration wizard.
+    Wizard to register a final payment against a posted construction invoice
+    (vendor bill must exist). Creates an account.payment directly, reconciles
+    it with the vendor bill, and records it as a construction.invoice.prepayment
+    (payment_type='final') so it appears alongside on-account payments in the
+    invoice's unified payment list.
     """
     _name = 'construction.invoice.payment.wizard'
     _description = 'Construction Invoice Payment Wizard'
@@ -36,9 +37,9 @@ class ConstructionInvoicePaymentWizard(models.TransientModel):
         ('employer_check', 'Employer Account - Check'),
     ], string='Payment Source', required=True, default='payroll_card',
         help='Select the account from which this invoice will be paid.')
-
     amount = fields.Monetary(
         string='Amount to Pay',
+        required=True,
         currency_field='currency_id',
     )
     payment_date = fields.Date(
@@ -92,10 +93,11 @@ class ConstructionInvoicePaymentWizard(models.TransientModel):
     # -------------------------------------------------------------------------
     def action_pay(self):
         """
-        Validate payment source, set invoice.payment_source, then open Odoo's
-        native account.payment.register wizard pre-filled with the correct journal.
+        Create an account.payment, post it, reconcile with the vendor bill,
+        and record it as a final construction payment line on the invoice.
         """
         self.ensure_one()
+        invoice = self.invoice_id
 
         if not self.journal_id:
             if self.payment_source == 'payroll_card':
@@ -109,36 +111,53 @@ class ConstructionInvoicePaymentWizard(models.TransientModel):
                       'Please set one on the project form first.')
                 )
 
-        if not self.invoice_id.account_move_id:
-            raise ValidationError(
-                _('Please create the vendor bill for this invoice first.')
-            )
+        if not invoice.account_move_id:
+            raise ValidationError(_('Please create the vendor bill for this invoice first.'))
 
-        move = self.invoice_id.account_move_id
+        if self.amount <= 0:
+            raise ValidationError(_('Payment amount must be greater than zero.'))
+
+        move = invoice.account_move_id
         if move.state == 'draft':
             move.action_post()
 
-        # Record the payment source and receipt on the invoice
-        self.invoice_id.payment_source = self.payment_source
-        if self.receipt_file:
-            self.invoice_id.write({
-                'payment_receipt_file': self.receipt_file,
-                'payment_receipt_filename': self.receipt_filename,
-            })
+        # Create and post the accounting payment
+        payment = self.env['account.payment'].create({
+            'payment_type': 'outbound',
+            'partner_type': 'supplier',
+            'partner_id': invoice.partner_id.id,
+            'amount': self.amount,
+            'date': self.payment_date,
+            'memo': self.memo or invoice.name,
+            'journal_id': self.journal_id.id,
+            'company_id': invoice.company_id.id,
+        })
+        payment.action_post()
 
-        # Open Odoo's native payment registration wizard, pre-filled
-        ctx = dict(
-            active_model='account.move',
-            active_ids=[move.id],
-            default_journal_id=self.journal_id.id,
-            default_amount=self.amount,
-            default_payment_date=self.payment_date,
-            default_ref=self.memo or self.invoice_id.name,
+        # Reconcile with the vendor bill's payable line
+        payable_lines = move.line_ids.filtered(
+            lambda l: l.account_id.account_type == 'liability_payable' and not l.reconciled
         )
-        return {
-            'type': 'ir.actions.act_window',
-            'res_model': 'account.payment.register',
-            'view_mode': 'form',
-            'target': 'new',
-            'context': ctx,
-        }
+        if payable_lines:
+            payable_account = payable_lines[:1].account_id
+            payment_lines = payment.move_id.line_ids.filtered(
+                lambda l: l.account_id == payable_account and not l.reconciled
+            )
+            if payment_lines:
+                (payable_lines[:1] | payment_lines).reconcile()
+
+        # Record as a final payment line on the invoice
+        invoice.payment_source = self.payment_source
+        self.env['construction.invoice.prepayment'].create({
+            'invoice_id': invoice.id,
+            'payment_type': 'final',
+            'payment_date': self.payment_date,
+            'amount': self.amount,
+            'payment_source': self.payment_source,
+            'memo': self.memo or invoice.name,
+            'account_payment_id': payment.id,
+            'receipt_file': self.receipt_file,
+            'receipt_filename': self.receipt_filename,
+        })
+
+        return {'type': 'ir.actions.act_window_close'}

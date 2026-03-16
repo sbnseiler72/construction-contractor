@@ -81,10 +81,10 @@
                         <field name="amount_residual" readonly="1" nolabel="1"/>
                     </div>
 
-                    <!-- Prepayment on account banner (draft only) -->
+                    <!-- Payments on account banner (draft only) -->
                     <div class="alert alert-info" role="alert"
                          invisible="state != 'draft' or amount_prepaid == 0">
-                        Payments on account recorded:
+                        Pay-on-account payments recorded:
                         <field name="amount_prepaid" readonly="1" nolabel="1"/>
                         — these will be automatically reconciled when the vendor bill is created.
                     </div>
@@ -128,24 +128,19 @@
                                widget="binary"/>
                         <field name="receipt_filename" invisible="1"/>
                     </group>
-                    <group string="Payment Receipt" invisible="not payment_receipt_file">
-                        <field name="payment_receipt_file" widget="image"
-                               options="{'size': [200, 200]}" nolabel="1" readonly="1" colspan="2"/>
-                        <field name="payment_receipt_filename" readonly="1"/>
-                        <button name="action_view_payment_receipt" string="View Full Size"
-                                type="object" icon="fa-search"
-                                class="btn-secondary"/>
-                    </group>
                     <group string="Notes">
                         <field name="notes" nolabel="1" placeholder="Additional remarks..."/>
                     </group>
 
-                    <!-- Payments on Account (visible when prepayments exist) -->
-                    <field name="prepayment_ids" string="Payments on Account"
+                    <!-- Unified payments list (on-account + final) -->
+                    <field name="prepayment_ids" string="Payments"
                            invisible="not prepayment_ids">
-                        <list string="Payments on Account" create="0" delete="0">
+                        <list string="Payments" create="0" delete="0">
                             <field name="name" readonly="1"/>
                             <field name="payment_date" readonly="1"/>
+                            <field name="payment_type" widget="badge" readonly="1"
+                                   decoration-info="payment_type == 'on_account'"
+                                   decoration-success="payment_type == 'final'"/>
                             <field name="amount" sum="Total" readonly="1"/>
                             <field name="currency_id" invisible="1"/>
                             <field name="payment_source" widget="badge" readonly="1"
@@ -162,7 +157,7 @@
                                     icon="fa-search" title="View Receipt"
                                     invisible="not receipt_file"/>
                             <button name="action_cancel" string="Cancel" type="object"
-                                    icon="fa-times" title="Cancel this prepayment"
+                                    icon="fa-times" title="Cancel this payment"
                                     invisible="state not in ('draft', 'posted', 'in_process')"/>
                         </list>
                     </field>
