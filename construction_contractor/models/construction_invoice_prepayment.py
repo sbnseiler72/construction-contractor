@@ -117,7 +117,7 @@ class ConstructionInvoicePrepayment(models.Model):
         self.ensure_one()
         if self.account_payment_id and self.account_payment_id.state in ('in_process', 'paid'):
             # Check the payment is not already reconciled against a bill
-            payable_lines = self.account_payment_id.line_ids.filtered(
+            payable_lines = self.account_payment_id.move_id.line_ids.filtered(
                 lambda l: l.account_id.account_type == 'liability_payable'
             )
             if any(l.reconciled for l in payable_lines):
