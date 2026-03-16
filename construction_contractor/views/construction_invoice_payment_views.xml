@@ -34,16 +34,11 @@
                         <strong>Warning:</strong> No journal configured for the selected payment source on this project.
                         Please set the Payroll Card Journal or Employer Journal on the project before registering payment.
                     </div>
-                    <group string="Receipt">
-                        <field name="receipt_file" widget="binary"
-                               filename="receipt_filename"
-                               nolabel="1" colspan="2"/>
-                        <field name="receipt_filename" invisible="1"/>
-                    </group>
-                    <div class="mt-2" invisible="not receipt_file">
+                    <group string="Receipt (optional)">
                         <field name="receipt_file" widget="image"
-                               options="{'size': [300, 300]}" nolabel="1"/>
-                    </div>
+                               nolabel="1" colspan="2"
+                               options="{'size': [0, 250]}"/>
+                    </group>
                 </sheet>
                 <footer>
                     <button name="action_pay" string="Register Payment"

@@ -51,11 +51,10 @@ class ConstructionInvoicePaymentWizard(models.TransientModel):
         string='Memo / Reference',
         help='Internal reference note for this payment',
     )
-    receipt_file = fields.Binary(
-        string='Receipt File',
+    receipt_file = fields.Image(
+        string='Receipt',
         attachment=True,
     )
-    receipt_filename = fields.Char(string='Receipt Filename')
     journal_id = fields.Many2one(
         'account.journal',
         string='Payment Journal',
@@ -157,7 +156,6 @@ class ConstructionInvoicePaymentWizard(models.TransientModel):
             'memo': self.memo or invoice.name,
             'account_payment_id': payment.id,
             'receipt_file': self.receipt_file,
-            'receipt_filename': self.receipt_filename,
         })
 
         return {'type': 'ir.actions.act_window_close'}

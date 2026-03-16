@@ -76,11 +76,10 @@ class ConstructionInvoicePayment(models.Model):
         string='Payment State',
         store=True,
     )
-    receipt_file = fields.Binary(
-        string='Receipt File',
+    receipt_file = fields.Image(
+        string='Receipt',
         attachment=True,
     )
-    receipt_filename = fields.Char(string='Receipt Filename')
     company_id = fields.Many2one(
         'res.company',
         related='invoice_id.company_id',
@@ -129,13 +128,19 @@ class ConstructionInvoicePayment(models.Model):
     # Actions
     # -------------------------------------------------------------------------
     def action_view_receipt(self):
-        """Open the receipt file in a new browser tab."""
+        """Open the receipt image in a full-size dialog."""
         self.ensure_one()
         if not self.receipt_file:
             return
+        wizard = self.env['construction.payment.receipt.wizard'].create({
+            'payment_id': self.id,
+        })
         return {
-            'type': 'ir.actions.act_url',
-            'url': '/web/image/construction.invoice.prepayment/%d/receipt_file' % self.id,
+            'type': 'ir.actions.act_window',
+            'name': _('Receipt — %s') % self.name,
+            'res_model': 'construction.payment.receipt.wizard',
+            'res_id': wizard.id,
+            'view_mode': 'form',
             'target': 'new',
         }
 
@@ -213,11 +218,10 @@ class ConstructionInvoicePrepaymentWizard(models.TransientModel):
         string='Memo / Reference',
         help='Internal reference note for this payment',
     )
-    receipt_file = fields.Binary(
-        string='Receipt File',
+    receipt_file = fields.Image(
+        string='Receipt',
         attachment=True,
     )
-    receipt_filename = fields.Char(string='Receipt Filename')
     post_payment = fields.Selection([
         ('draft', 'Save as Draft'),
         ('posted', 'Post Immediately'),
@@ -315,10 +319,31 @@ class ConstructionInvoicePrepaymentWizard(models.TransientModel):
             'memo': self.memo or invoice.name,
             'account_payment_id': payment.id,
             'receipt_file': self.receipt_file,
-            'receipt_filename': self.receipt_filename,
         })
 
         if not invoice.payment_source:
             invoice.payment_source = self.payment_source
 
         return {'type': 'ir.actions.act_window_close'}
+
+
+class ConstructionPaymentReceiptWizard(models.TransientModel):
+    """
+    Lightweight dialog used by action_view_receipt to display a payment's
+    receipt image at full size in an Odoo modal window.
+    """
+    _name = 'construction.payment.receipt.wizard'
+    _description = 'View Payment Receipt'
+
+    payment_id = fields.Many2one(
+        'construction.invoice.prepayment',
+        readonly=True,
+    )
+    receipt_file = fields.Image(
+        related='payment_id.receipt_file',
+        readonly=True,
+    )
+    payment_name = fields.Char(
+        related='payment_id.name',
+        readonly=True,
+    )

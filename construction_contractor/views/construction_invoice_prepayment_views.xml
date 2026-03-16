@@ -1,7 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- ===================================================================
-         Prepayment: Form View (read-only detail opened from invoice lines)
+         Receipt Dialog: full-size image preview (opened by action_view_receipt)
+    =================================================================== -->
+    <record id="view_construction_payment_receipt_wizard_form" model="ir.ui.view">
+        <field name="name">construction.payment.receipt.wizard.form</field>
+        <field name="model">construction.payment.receipt.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Receipt">
+                <sheet>
+                    <div class="oe_title mb-3">
+                        <h3>
+                            <i class="fa fa-file-image-o me-2 text-muted"/>
+                            <field name="payment_name" readonly="1"/>
+                        </h3>
+                    </div>
+                    <field name="receipt_file" widget="image"
+                           nolabel="1" readonly="1"
+                           options="{'size': [800, 600]}"/>
+                </sheet>
+                <footer>
+                    <button string="Close" class="btn-primary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- ===================================================================
+         Payment: Form View (read-only detail opened from invoice lines)
     =================================================================== -->
     <record id="view_construction_invoice_prepayment_form" model="ir.ui.view">
         <field name="name">construction.invoice.prepayment.form</field>
@@ -42,8 +68,7 @@
                     <group string="Receipt" invisible="not receipt_file">
                         <field name="receipt_file" widget="image"
                                readonly="1" nolabel="1" colspan="2"
-                               options="{'size': [400, 400]}"/>
-                        <field name="receipt_filename" invisible="1"/>
+                               options="{'size': [0, 400]}"/>
                     </group>
                 </sheet>
                 <chatter/>
@@ -86,22 +111,17 @@
                         <field name="journal_id" readonly="1"
                                help="Auto-selected based on payment source configured on the project"/>
                     </group>
-                    <group string="Receipt">
-                        <field name="receipt_file" widget="binary"
-                               filename="receipt_filename"
-                               nolabel="1" colspan="2"/>
-                        <field name="receipt_filename" invisible="1"/>
-                    </group>
-                    <div class="mt-2" invisible="not receipt_file" colspan="2">
-                        <field name="receipt_file" widget="image"
-                               options="{'size': [300, 300]}" nolabel="1"/>
-                    </div>
                     <div class="alert alert-warning" role="alert"
                          invisible="journal_id != False">
                         <strong>Warning:</strong> No journal configured for the selected
                         payment source on this project. Please set the Payroll Card Journal
                         or Employer Journal on the project before registering a payment.
                     </div>
+                    <group string="Receipt (optional)">
+                        <field name="receipt_file" widget="image"
+                               nolabel="1" colspan="2"
+                               options="{'size': [0, 250]}"/>
+                    </group>
                 </sheet>
                 <footer>
                     <button name="action_pay_on_account" string="Pay on Account"
