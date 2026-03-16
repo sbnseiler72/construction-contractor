@@ -95,6 +95,16 @@ class ConstructionInvoice(models.Model):
     )
     payment_receipt_filename = fields.Char(string='Payment Receipt Filename')
 
+    def action_view_payment_receipt(self):
+        self.ensure_one()
+        if not self.payment_receipt_file:
+            return
+        return {
+            'type': 'ir.actions.act_url',
+            'url': '/web/image/construction.invoice/%d/payment_receipt_file' % self.id,
+            'target': 'new',
+        }
+
     # Payment source — set when payment is registered via the payment wizard
     payment_source = fields.Selection([
         ('payroll_card', 'Payroll Card'),
