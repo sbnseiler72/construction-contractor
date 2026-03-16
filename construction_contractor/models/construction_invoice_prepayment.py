@@ -115,9 +115,10 @@ class ConstructionInvoicePrepayment(models.Model):
     def action_cancel(self):
         """Cancel this prepayment and reverse the linked accounting payment."""
         self.ensure_one()
-        if self.account_payment_id and self.account_payment_id.state in ('in_process', 'paid'):
+        payment = self.account_payment_id
+        if payment and payment.state not in ('cancel', 'draft'):
             # Check the payment is not already reconciled against a bill
-            payable_lines = self.account_payment_id.move_id.line_ids.filtered(
+            payable_lines = payment.move_id.line_ids.filtered(
                 lambda l: l.account_id.account_type == 'liability_payable'
             )
             if any(l.reconciled for l in payable_lines):
@@ -126,7 +127,11 @@ class ConstructionInvoicePrepayment(models.Model):
                       'with a vendor bill. Please unreconcile it in accounting first.')
                     % self.name
                 )
-            self.account_payment_id.action_cancel()
+            # Must reset to draft before cancelling in Odoo 19
+            payment.action_draft()
+            payment.action_cancel()
+        elif payment and payment.state == 'draft':
+            payment.action_cancel()
         self.invoice_id.message_post(
             body=_('Prepayment %s of %s cancelled.')
             % (self.name, self.amount)
