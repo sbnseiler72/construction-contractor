@@ -88,6 +88,13 @@ class ConstructionInvoice(models.Model):
         help='Uncheck to exclude this invoice from the contractor percentage calculation (e.g. insurance, government fees).',
     )
 
+    # Receipt for the final payment (uploaded in Register Payment wizard)
+    payment_receipt_file = fields.Binary(
+        string='Payment Receipt',
+        attachment=True,
+    )
+    payment_receipt_filename = fields.Char(string='Payment Receipt Filename')
+
     # Payment source — set when payment is registered via the payment wizard
     payment_source = fields.Selection([
         ('payroll_card', 'Payroll Card'),

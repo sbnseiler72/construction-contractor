@@ -50,6 +50,11 @@ class ConstructionInvoicePaymentWizard(models.TransientModel):
         string='Memo / Reference',
         help='Internal reference note for this payment',
     )
+    receipt_file = fields.Binary(
+        string='Receipt File',
+        attachment=True,
+    )
+    receipt_filename = fields.Char(string='Receipt Filename')
     journal_id = fields.Many2one(
         'account.journal',
         string='Payment Journal',
@@ -113,8 +118,13 @@ class ConstructionInvoicePaymentWizard(models.TransientModel):
         if move.state == 'draft':
             move.action_post()
 
-        # Record the payment source on the invoice before opening the payment wizard
+        # Record the payment source and receipt on the invoice
         self.invoice_id.payment_source = self.payment_source
+        if self.receipt_file:
+            self.invoice_id.write({
+                'payment_receipt_file': self.receipt_file,
+                'payment_receipt_filename': self.receipt_filename,
+            })
 
         # Open Odoo's native payment registration wizard, pre-filled
         ctx = dict(

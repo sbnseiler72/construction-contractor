@@ -128,6 +128,22 @@
                                widget="binary"/>
                         <field name="receipt_filename" invisible="1"/>
                     </group>
+                    <group string="Payment Receipt" invisible="not payment_receipt_file">
+                        <div colspan="2" class="d-flex align-items-center gap-3">
+                            <field name="payment_receipt_file" widget="image"
+                                   options="{'size': [120, 120]}" nolabel="1" readonly="1"/>
+                            <div>
+                                <field name="payment_receipt_filename" readonly="1" nolabel="1"/>
+                                <br/>
+                                <a t-att-href="'/web/image/construction.invoice/' + id + '/payment_receipt_file'"
+                                   target="_blank" class="btn btn-sm btn-secondary mt-1">
+                                    <i class="fa fa-search me-1"/> View Full Size
+                                </a>
+                            </div>
+                        </div>
+                        <field name="payment_receipt_filename" invisible="1"/>
+                        <field name="payment_receipt_file" invisible="1"/>
+                    </group>
                     <group string="Notes">
                         <field name="notes" nolabel="1" placeholder="Additional remarks..."/>
                     </group>
