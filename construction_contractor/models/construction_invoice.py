@@ -67,11 +67,16 @@ class ConstructionInvoice(models.Model):
         string='Receipt Reference',
         tracking=True,
     )
-    receipt_file = fields.Binary(
-        string='Invoice Document',
-        attachment=True,
+    invoice_image_ids = fields.One2many(
+        'construction.invoice.image',
+        'invoice_id',
+        string='Invoice Images',
     )
-    receipt_filename = fields.Char(string='Invoice Filename')
+    has_invoice_images = fields.Boolean(
+        string='Has Images',
+        compute='_compute_has_invoice_images',
+        store=True,
+    )
 
     project_phase_id = fields.Many2one(
         'construction.project.phase',
@@ -153,6 +158,11 @@ class ConstructionInvoice(models.Model):
     # -------------------------------------------------------------------------
     # Computed
     # -------------------------------------------------------------------------
+    @api.depends('invoice_image_ids')
+    def _compute_has_invoice_images(self):
+        for rec in self:
+            rec.has_invoice_images = bool(rec.invoice_image_ids)
+
     @api.depends(
         'account_move_id', 'account_move_id.amount_residual', 'amount_total',
         'prepayment_ids.amount', 'prepayment_ids.payment_type',

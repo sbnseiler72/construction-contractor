@@ -25,6 +25,8 @@
                        decoration-warning="payment_state == 'partial'"
                        decoration-info="payment_state == 'not_paid'"/>
                 <field name="amount_prepaid" sum="Total Prepaid" optional="show"/>
+                <field name="has_invoice_images" string="Images" optional="show"
+                       widget="boolean" readonly="1"/>
                 <field name="state" widget="badge"
                        decoration-info="state == 'draft'"
                        decoration-success="state == 'posted'"
@@ -124,9 +126,16 @@
                     </group>
                     <group string="Invoice Document">
                         <field name="receipt_ref" placeholder="e.g. INV-VND-0042"/>
-                        <field name="receipt_file" filename="receipt_filename"
-                               widget="binary"/>
-                        <field name="receipt_filename" invisible="1"/>
+                    </group>
+                    <group string="Invoice Images">
+                        <field name="invoice_image_ids" nolabel="1" colspan="2">
+                            <list string="Images">
+                                <field name="sequence" widget="handle"/>
+                                <field name="image" widget="image" readonly="0"
+                                       options="{'size': [80, 80]}" string="Preview"/>
+                                <field name="name" placeholder="Description (optional)"/>
+                            </list>
+                        </field>
                     </group>
                     <group string="Notes">
                         <field name="notes" nolabel="1" placeholder="Additional remarks..."/>
