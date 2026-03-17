@@ -132,7 +132,7 @@
                             <list string="Images">
                                 <field name="sequence" widget="handle"/>
                                 <field name="image" widget="image" readonly="0"
-                                       options="{'size': [80, 80]}" string="Preview"/>
+                                       options="{'size': [0, 600]}" string="Preview"/>
                                 <field name="name" placeholder="Description (optional)"/>
                             </list>
                         </field>
