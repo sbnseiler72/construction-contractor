@@ -2,6 +2,12 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 
+PAYMENT_SOURCE_SELECTION = [
+    ('payroll_card', 'Payroll Card'),
+    ('employer_cash', 'Employer Account - Cash'),
+    ('employer_check', 'Employer Account - Check'),
+]
+
 
 class ConstructionInvoicePayment(models.Model):
     """
@@ -58,11 +64,12 @@ class ConstructionInvoicePayment(models.Model):
         related='invoice_id.currency_id',
         store=True,
     )
-    payment_source = fields.Selection([
-        ('payroll_card', 'Payroll Card'),
-        ('employer_cash', 'Employer Account - Cash'),
-        ('employer_check', 'Employer Account - Check'),
-    ], string='Payment Source', required=True, tracking=True)
+    payment_source = fields.Selection(
+        PAYMENT_SOURCE_SELECTION,
+        string='Payment Source',
+        required=True,
+        tracking=True,
+    )
     memo = fields.Char(string='Memo / Reference')
     account_payment_id = fields.Many2one(
         'account.payment',
@@ -172,14 +179,15 @@ class ConstructionInvoicePayment(models.Model):
         )
 
 
-class ConstructionInvoicePrepaymentWizard(models.TransientModel):
+class ConstructionPaymentWizardMixin(models.AbstractModel):
     """
-    Wizard to register a Pay-on-Account payment for a draft construction invoice.
-    Creates an account.payment immediately and links it to the invoice via a
-    construction.invoice.prepayment record (payment_type='on_account').
+    Shared fields and helpers for payment wizard classes.
+
+    Both the Pay-on-Account wizard and the Register Payment wizard share the
+    same base fields, journal computation, and accounting payment creation logic.
     """
-    _name = 'construction.invoice.prepayment.wizard'
-    _description = 'Pay on Account Wizard'
+    _name = 'construction.payment.wizard.mixin'
+    _description = 'Construction Payment Wizard Mixin'
 
     invoice_id = fields.Many2one(
         'construction.invoice',
@@ -198,12 +206,13 @@ class ConstructionInvoicePrepaymentWizard(models.TransientModel):
         related='invoice_id.currency_id',
         readonly=True,
     )
-    payment_source = fields.Selection([
-        ('payroll_card', 'Payroll Card'),
-        ('employer_cash', 'Employer Account - Cash'),
-        ('employer_check', 'Employer Account - Check'),
-    ], string='Payment Source', required=True, default='payroll_card',
-        help='Select the account from which this prepayment will be made.')
+    payment_source = fields.Selection(
+        PAYMENT_SOURCE_SELECTION,
+        string='Payment Source',
+        required=True,
+        default='payroll_card',
+        help='Select the account from which this payment will be made.',
+    )
     amount = fields.Monetary(
         string='Amount to Pay',
         required=True,
@@ -222,12 +231,6 @@ class ConstructionInvoicePrepaymentWizard(models.TransientModel):
         string='Receipt',
         attachment=True,
     )
-    post_payment = fields.Selection([
-        ('draft', 'Save as Draft'),
-        ('posted', 'Post Immediately'),
-    ], string='Payment Status', required=True, default='posted',
-        help='Post Immediately records the payment in accounting right away. '
-             'Save as Draft lets you review before posting.')
     journal_id = fields.Many2one(
         'account.journal',
         string='Payment Journal',
@@ -235,6 +238,57 @@ class ConstructionInvoicePrepaymentWizard(models.TransientModel):
         readonly=True,
         store=False,
     )
+
+    @api.depends('payment_source', 'project_id')
+    def _compute_journal(self):
+        for rec in self:
+            if rec.payment_source == 'payroll_card':
+                rec.journal_id = rec.project_id.payroll_journal_id
+            else:
+                rec.journal_id = rec.project_id.employer_journal_id
+
+    def _raise_missing_journal(self):
+        """Raise a descriptive ValidationError when no journal is configured."""
+        if self.payment_source == 'payroll_card':
+            raise ValidationError(
+                _('This project does not have a Payroll Card Journal configured. '
+                  'Please create one from the project form first.')
+            )
+        raise ValidationError(
+            _('This project does not have an Employer Journal configured. '
+              'Please set one on the project form first.')
+        )
+
+    def _build_accounting_payment_vals(self, invoice):
+        """Return vals for creating an outbound supplier account.payment."""
+        return {
+            'payment_type': 'outbound',
+            'partner_type': 'supplier',
+            'partner_id': invoice.partner_id.id,
+            'amount': self.amount,
+            'date': self.payment_date,
+            'memo': self.memo or invoice.name,
+            'journal_id': self.journal_id.id,
+            'company_id': invoice.company_id.id,
+        }
+
+
+class ConstructionInvoicePrepaymentWizard(models.TransientModel):
+    """
+    Wizard to register a Pay-on-Account payment for a draft construction invoice.
+    Creates an account.payment immediately and links it to the invoice via a
+    construction.invoice.prepayment record (payment_type='on_account').
+    """
+    _name = 'construction.invoice.prepayment.wizard'
+    _description = 'Pay on Account Wizard'
+    _inherit = ['construction.payment.wizard.mixin']
+
+    post_payment = fields.Selection([
+        ('draft', 'Save as Draft'),
+        ('posted', 'Post Immediately'),
+    ], string='Payment Status', required=True, default='posted',
+        help='Post Immediately records the payment in accounting right away. '
+             'Save as Draft lets you review before posting.')
 
     # -------------------------------------------------------------------------
     # Defaults
@@ -251,17 +305,6 @@ class ConstructionInvoicePrepaymentWizard(models.TransientModel):
         return res
 
     # -------------------------------------------------------------------------
-    # Computed
-    # -------------------------------------------------------------------------
-    @api.depends('payment_source', 'project_id')
-    def _compute_journal(self):
-        for rec in self:
-            if rec.payment_source == 'payroll_card':
-                rec.journal_id = rec.project_id.payroll_journal_id
-            else:
-                rec.journal_id = rec.project_id.employer_journal_id
-
-    # -------------------------------------------------------------------------
     # Actions
     # -------------------------------------------------------------------------
     def action_pay_on_account(self):
@@ -274,16 +317,7 @@ class ConstructionInvoicePrepaymentWizard(models.TransientModel):
         invoice = self.invoice_id
 
         if not self.journal_id:
-            if self.payment_source == 'payroll_card':
-                raise ValidationError(
-                    _('This project does not have a Payroll Card Journal configured. '
-                      'Please create one from the project form first.')
-                )
-            else:
-                raise ValidationError(
-                    _('This project does not have an Employer Journal configured. '
-                      'Please set one on the project form first.')
-                )
+            self._raise_missing_journal()
 
         if self.amount <= 0:
             raise ValidationError(_('Payment amount must be greater than zero.'))
@@ -296,17 +330,9 @@ class ConstructionInvoicePrepaymentWizard(models.TransientModel):
                       paid=self.amount, balance=remaining)
                 )
 
-        # Create the accounting payment (outbound = paying a supplier)
-        payment = self.env['account.payment'].create({
-            'payment_type': 'outbound',
-            'partner_type': 'supplier',
-            'partner_id': invoice.partner_id.id,
-            'amount': self.amount,
-            'date': self.payment_date,
-            'memo': self.memo or invoice.name,
-            'journal_id': self.journal_id.id,
-            'company_id': invoice.company_id.id,
-        })
+        payment = self.env['account.payment'].create(
+            self._build_accounting_payment_vals(invoice)
+        )
         if self.post_payment == 'posted':
             payment.action_post()
 

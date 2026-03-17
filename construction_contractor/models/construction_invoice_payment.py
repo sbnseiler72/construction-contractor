@@ -13,55 +13,7 @@ class ConstructionInvoicePaymentWizard(models.TransientModel):
     """
     _name = 'construction.invoice.payment.wizard'
     _description = 'Construction Invoice Payment Wizard'
-
-    invoice_id = fields.Many2one(
-        'construction.invoice',
-        string='Invoice',
-        required=True,
-        readonly=True,
-    )
-    project_id = fields.Many2one(
-        'construction.project',
-        related='invoice_id.project_id',
-        string='Project',
-        readonly=True,
-    )
-    currency_id = fields.Many2one(
-        'res.currency',
-        related='invoice_id.currency_id',
-        readonly=True,
-    )
-    payment_source = fields.Selection([
-        ('payroll_card', 'Payroll Card'),
-        ('employer_cash', 'Employer Account - Cash'),
-        ('employer_check', 'Employer Account - Check'),
-    ], string='Payment Source', required=True, default='payroll_card',
-        help='Select the account from which this invoice will be paid.')
-    amount = fields.Monetary(
-        string='Amount to Pay',
-        required=True,
-        currency_field='currency_id',
-    )
-    payment_date = fields.Date(
-        string='Payment Date',
-        required=True,
-        default=fields.Date.today,
-    )
-    memo = fields.Char(
-        string='Memo / Reference',
-        help='Internal reference note for this payment',
-    )
-    receipt_file = fields.Image(
-        string='Receipt',
-        attachment=True,
-    )
-    journal_id = fields.Many2one(
-        'account.journal',
-        string='Payment Journal',
-        compute='_compute_journal',
-        readonly=True,
-        store=False,
-    )
+    _inherit = ['construction.payment.wizard.mixin']
 
     # -------------------------------------------------------------------------
     # Defaults
@@ -77,17 +29,6 @@ class ConstructionInvoicePaymentWizard(models.TransientModel):
         return res
 
     # -------------------------------------------------------------------------
-    # Computed
-    # -------------------------------------------------------------------------
-    @api.depends('payment_source', 'project_id')
-    def _compute_journal(self):
-        for rec in self:
-            if rec.payment_source == 'payroll_card':
-                rec.journal_id = rec.project_id.payroll_journal_id
-            else:
-                rec.journal_id = rec.project_id.employer_journal_id
-
-    # -------------------------------------------------------------------------
     # Actions
     # -------------------------------------------------------------------------
     def action_pay(self):
@@ -99,16 +40,7 @@ class ConstructionInvoicePaymentWizard(models.TransientModel):
         invoice = self.invoice_id
 
         if not self.journal_id:
-            if self.payment_source == 'payroll_card':
-                raise ValidationError(
-                    _('This project does not have a Payroll Card Journal configured. '
-                      'Please create one from the project form first.')
-                )
-            else:
-                raise ValidationError(
-                    _('This project does not have an Employer Journal configured. '
-                      'Please set one on the project form first.')
-                )
+            self._raise_missing_journal()
 
         if not invoice.account_move_id:
             raise ValidationError(_('Please create the vendor bill for this invoice first.'))
@@ -120,17 +52,9 @@ class ConstructionInvoicePaymentWizard(models.TransientModel):
         if move.state == 'draft':
             move.action_post()
 
-        # Create and post the accounting payment
-        payment = self.env['account.payment'].create({
-            'payment_type': 'outbound',
-            'partner_type': 'supplier',
-            'partner_id': invoice.partner_id.id,
-            'amount': self.amount,
-            'date': self.payment_date,
-            'memo': self.memo or invoice.name,
-            'journal_id': self.journal_id.id,
-            'company_id': invoice.company_id.id,
-        })
+        payment = self.env['account.payment'].create(
+            self._build_accounting_payment_vals(invoice)
+        )
         payment.action_post()
 
         # Reconcile with the vendor bill's payable line
@@ -145,7 +69,6 @@ class ConstructionInvoicePaymentWizard(models.TransientModel):
             if payment_lines:
                 (payable_lines[:1] | payment_lines).reconcile()
 
-        # Record as a final payment line on the invoice
         invoice.payment_source = self.payment_source
         self.env['construction.invoice.prepayment'].create({
             'invoice_id': invoice.id,
