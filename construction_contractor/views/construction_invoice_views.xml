@@ -25,6 +25,8 @@
                        decoration-warning="payment_state == 'partial'"
                        decoration-info="payment_state == 'not_paid'"/>
                 <field name="amount_prepaid" sum="Total Prepaid" optional="show"/>
+                <field name="has_invoice_images" string="Images" optional="show"
+                       widget="boolean" readonly="1"/>
                 <field name="state" widget="badge"
                        decoration-info="state == 'draft'"
                        decoration-success="state == 'posted'"
@@ -81,10 +83,10 @@
                         <field name="amount_residual" readonly="1" nolabel="1"/>
                     </div>
 
-                    <!-- Prepayment on account banner (draft only) -->
+                    <!-- Payments on account banner (draft only) -->
                     <div class="alert alert-info" role="alert"
                          invisible="state != 'draft' or amount_prepaid == 0">
-                        Payments on account recorded:
+                        Pay-on-account payments recorded:
                         <field name="amount_prepaid" readonly="1" nolabel="1"/>
                         — these will be automatically reconciled when the vendor bill is created.
                     </div>
@@ -124,18 +126,25 @@
                     </group>
                     <group string="Invoice Document">
                         <field name="receipt_ref" placeholder="e.g. INV-VND-0042"/>
-                        <field name="receipt_file" filename="receipt_filename"
-                               widget="binary"/>
-                        <field name="receipt_filename" invisible="1"/>
+                    </group>
+                    <group string="Invoice Images">
+                        <field name="invoice_image_ids" nolabel="1" colspan="2">
+                            <list string="Images">
+                                <field name="sequence" widget="handle"/>
+                                <field name="image" widget="image" readonly="0"
+                                       options="{'size': [80, 80]}" string="Preview"/>
+                                <field name="name" placeholder="Description (optional)"/>
+                            </list>
+                        </field>
                     </group>
                     <group string="Notes">
                         <field name="notes" nolabel="1" placeholder="Additional remarks..."/>
                     </group>
 
-                    <!-- Payments on Account (visible when prepayments exist) -->
-                    <field name="prepayment_ids" string="Payments on Account"
+                    <!-- Unified payments list (on-account + final) -->
+                    <field name="prepayment_ids" string="Payments"
                            invisible="not prepayment_ids">
-                        <list string="Payments on Account" create="0" delete="0">
+                        <list string="Payments" create="0" delete="0">
                             <field name="name" readonly="1"/>
                             <field name="payment_date" readonly="1"/>
                             <field name="amount" sum="Total" readonly="1"/>
@@ -143,14 +152,19 @@
                             <field name="payment_source" widget="badge" readonly="1"
                                    decoration-info="payment_source == 'payroll_card'"
                                    decoration-success="payment_source in ('employer_cash', 'employer_check')"/>
-                            <field name="memo" readonly="1"/>
                             <field name="state" widget="badge" readonly="1"
                                    decoration-success="state == 'posted'"
                                    decoration-info="state == 'in_process'"
                                    decoration-warning="state == 'draft'"
                                    decoration-danger="state == 'cancel'"/>
-                            <button name="action_cancel" string="Cancel" type="object"
-                                    icon="fa-times" title="Cancel this prepayment"
+                            <field name="receipt_file" widget="image" readonly="1"
+                                   options="{'size': [38, 38]}"
+                                   string="Receipt"/>
+                            <button name="action_view_receipt" type="object"
+                                    icon="fa-search-plus" title="View Full Receipt"
+                                    invisible="not receipt_file"/>
+                            <button name="action_cancel" type="object"
+                                    icon="fa-times" title="Cancel this payment"
                                     invisible="state not in ('draft', 'posted', 'in_process')"/>
                         </list>
                     </field>
