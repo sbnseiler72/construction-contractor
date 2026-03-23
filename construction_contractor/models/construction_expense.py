@@ -1,6 +1,15 @@
 # -*- coding: utf-8 -*-
+import re
+from datetime import datetime
+
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
+
+from ..utils import JalaliUtils
+
+# Compiled once at module load; matches the 8-digit date segment in filenames
+# such as "IMG-14040225-WA0000.jpg" or "PTT-20250610-WA0024.jpeg".
+_FILENAME_DATE_RE = re.compile(r'^[^-]+-(\d{8})-')
 
 
 class ConstructionExpense(models.Model):
@@ -22,6 +31,7 @@ class ConstructionExpense(models.Model):
         required=True,
         ondelete='restrict',
         tracking=True,
+        default=lambda self: self._default_project_id(),
     )
     date = fields.Date(
         string='Expense Date',
@@ -111,12 +121,66 @@ class ConstructionExpense(models.Model):
     )
 
     # -------------------------------------------------------------------------
+    # Default helpers
+    # -------------------------------------------------------------------------
+    @api.model
+    def _default_project_id(self):
+        """Pre-select a project for new expenses based on the current user's role.
+
+        Searches projects managed by the user first, preferring active ones
+        ('active' sorts before 'cancelled', 'closed', 'draft' alphabetically).
+        Falls back to any accessible active project.
+        """
+        Project = self.env['construction.project']
+        managed = Project.search(
+            [('manager_id', '=', self.env.user.id)],
+            order='state asc, date_start desc',
+            limit=1,
+        )
+        if managed:
+            return managed
+        return Project.search(
+            [('state', '=', 'active')],
+            order='date_start desc',
+            limit=1,
+        )
+
+    # -------------------------------------------------------------------------
     # ORM
     # -------------------------------------------------------------------------
     @api.onchange('expense_type_id')
     def _onchange_expense_type_contractor_fee(self):
         if self.expense_type_id:
             self.include_in_contractor_fee = self.expense_type_id.include_in_contractor_fee
+
+    @api.onchange('receipt_filename')
+    def _onchange_receipt_filename_date(self):
+        """Auto-fill the expense date from a date encoded in the receipt filename.
+
+        Supported patterns (8-digit segment between the first two '-' delimiters):
+          IMG-14040225-WA0000.jpg   → Jalali 1404/02/25
+          PTT-20250610-WA0024.jpeg  → Gregorian 2025/06/10
+
+        The field is left unchanged if no recognisable pattern is found.
+        """
+        if not self.receipt_filename:
+            return
+        match = _FILENAME_DATE_RE.search(self.receipt_filename)
+        if not match:
+            return
+        digits = match.group(1)
+        year = int(digits[:4])
+        try:
+            if JalaliUtils.JALALI_YEAR_MIN <= year <= JalaliUtils.JALALI_YEAR_MAX:
+                jy, jm, jd = int(digits[:4]), int(digits[4:6]), int(digits[6:])
+                gy, gm, gd = JalaliUtils.jalali_to_gregorian(jy, jm, jd)
+                self.date = fields.Date.to_date('%04d-%02d-%02d' % (gy, gm, gd))
+            elif JalaliUtils.GREGORIAN_YEAR_MIN <= year <= JalaliUtils.GREGORIAN_YEAR_MAX:
+                self.date = fields.Date.to_date(
+                    datetime.strptime(digits, '%Y%m%d').date().isoformat()
+                )
+        except ValueError:
+            pass  # Malformed date components — leave the field unchanged
 
     @api.model_create_multi
     def create(self, vals_list):
