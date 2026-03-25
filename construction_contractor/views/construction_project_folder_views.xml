@@ -28,9 +28,8 @@
             <form string="Project Folder">
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button name="%(action_construction_project_document)d"
-                                type="action" class="oe_stat_button" icon="fa-file-o"
-                                context="{'search_default_folder_id': active_id, 'default_folder_id': active_id, 'default_project_id': project_id}">
+                        <button name="action_view_documents"
+                                type="object" class="oe_stat_button" icon="fa-file-o">
                             <field name="document_count" widget="statinfo" string="Documents"/>
                         </button>
                     </div>

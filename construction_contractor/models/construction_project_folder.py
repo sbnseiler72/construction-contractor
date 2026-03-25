@@ -66,6 +66,21 @@ class ConstructionProjectFolder(models.Model):
         for folder in self:
             folder.document_count = len(folder.document_ids)
 
+    def action_view_documents(self):
+        """Open documents filtered by this folder."""
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': self.name,
+            'res_model': 'construction.project.document',
+            'view_mode': 'kanban,list,form',
+            'domain': [('folder_id', '=', self.id)],
+            'context': {
+                'default_folder_id': self.id,
+                'default_project_id': self.project_id.id,
+            },
+        }
+
     @api.model
     def _get_default_folder_structure(self):
         """Return list of default folder definitions for new projects."""
