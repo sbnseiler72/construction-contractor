@@ -110,7 +110,28 @@ class ConstructionProjectDocument(models.Model):
                 vals['code'] = self.env['ir.sequence'].next_by_code(
                     'construction.project.document'
                 ) or 'New'
+            # Auto-set name from filename if not provided
+            if not vals.get('name') and vals.get('file_name'):
+                vals['name'] = vals['file_name'].rsplit('.', 1)[0] if '.' in vals['file_name'] else vals['file_name']
         return super().create(vals_list)
+
+    @api.onchange('file_name')
+    def _onchange_file_name(self):
+        """Auto-detect file type from extension."""
+        if self.file_name:
+            ext = self.file_name.rsplit('.', 1)[-1].lower() if '.' in self.file_name else ''
+            image_exts = {'jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg', 'tiff'}
+            doc_exts = {'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'csv', 'odt'}
+            plan_exts = {'dwg', 'dxf', 'dwf'}
+            if ext in image_exts:
+                self.file_type = 'image'
+            elif ext in doc_exts:
+                self.file_type = 'document'
+            elif ext in plan_exts:
+                self.file_type = 'plan'
+            # Auto-set name if empty
+            if not self.name:
+                self.name = self.file_name.rsplit('.', 1)[0] if '.' in self.file_name else self.file_name
 
     @api.depends('file')
     def _compute_file_size(self):
@@ -134,9 +155,12 @@ class ConstructionProjectDocument(models.Model):
 
     @api.depends('file', 'file_type')
     def _compute_thumbnail(self):
-        for doc in self:
+        for doc in self.with_context(bin_size=False):
             if doc.file_type == 'image' and doc.file:
-                doc.thumbnail = doc.file
+                try:
+                    doc.thumbnail = doc.file
+                except Exception:
+                    doc.thumbnail = False
             else:
                 doc.thumbnail = False
 
