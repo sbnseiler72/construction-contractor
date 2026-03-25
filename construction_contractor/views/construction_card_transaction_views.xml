@@ -16,6 +16,7 @@
                 <field name="date" widget="jalali_date"/>
                 <field name="transaction_type"/>
                 <field name="description"/>
+                <field name="currency_id" column_invisible="1"/>
                 <field name="amount" sum="Total"/>
                 <field name="receipt_ref"/>
                 <field name="performed_by"/>
