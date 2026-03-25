@@ -114,9 +114,13 @@ class ConstructionProjectDocument(models.Model):
 
     @api.depends('file')
     def _compute_file_size(self):
-        for doc in self:
+        # Read without bin_size context so we get actual base64 data
+        for doc in self.with_context(bin_size=False):
             if doc.file:
-                size = len(base64.b64decode(doc.file))
+                try:
+                    size = len(base64.b64decode(doc.file))
+                except Exception:
+                    size = 0
                 doc.file_size = size
                 if size < 1024:
                     doc.file_size_display = f'{size} B'
