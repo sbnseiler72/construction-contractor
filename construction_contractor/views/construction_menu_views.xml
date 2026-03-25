@@ -24,9 +24,16 @@
     <menuitem id="menu_construction_all_documents"
               name="Project Documents"
               parent="menu_construction_projects"
-              action="action_construction_all_documents"
+              action="action_construction_project_folder"
               groups="construction_contractor.group_construction_manager"
               sequence="20"/>
+
+    <menuitem id="menu_construction_all_files"
+              name="All Files (Search)"
+              parent="menu_construction_projects"
+              action="action_construction_all_documents"
+              groups="construction_contractor.group_construction_manager"
+              sequence="30"/>
 
     <!-- Transactions -->
     <menuitem id="menu_construction_transactions"

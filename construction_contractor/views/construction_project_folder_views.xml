@@ -237,13 +237,13 @@
     <!-- ===================================================================
          Actions
     =================================================================== -->
-    <!-- Main action: opened from project smart button - shows root folders -->
+    <!-- Menu action: shows all root folders grouped by project -->
     <record id="action_construction_project_folder" model="ir.actions.act_window">
-        <field name="name">Project Folders</field>
+        <field name="name">Project Documents</field>
         <field name="res_model">construction.project.folder</field>
         <field name="view_mode">kanban,list,form</field>
         <field name="search_view_id" ref="view_construction_project_folder_search"/>
-        <field name="context">{'search_default_root_folders': 1}</field>
+        <field name="context">{'search_default_root_folders': 1, 'search_default_group_project': 1}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create your first folder
