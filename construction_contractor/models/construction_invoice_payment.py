@@ -26,6 +26,8 @@ class ConstructionInvoicePaymentWizard(models.TransientModel):
             invoice = self.env['construction.invoice'].browse(invoice_id)
             res['amount'] = invoice.amount_residual
             res['memo'] = invoice.invoice_number or invoice.name
+            if invoice.invoice_date:
+                res['payment_date'] = invoice.invoice_date
         return res
 
     # -------------------------------------------------------------------------
