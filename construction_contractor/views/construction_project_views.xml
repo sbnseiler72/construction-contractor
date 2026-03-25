@@ -76,7 +76,14 @@
                         </button>
                         <button name="action_view_documents"
                                 type="object" class="oe_stat_button" icon="fa-folder-open">
-                            <field name="document_count" widget="statinfo" string="Documents"/>
+                            <div class="d-flex flex-column align-items-center">
+                                <span class="o_stat_text">
+                                    <field name="folder_count" class="fw-bold"/> Folders
+                                </span>
+                                <span class="o_stat_text text-muted small">
+                                    <field name="document_count"/> Files
+                                </span>
+                            </div>
                         </button>
                     </div>
 

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- ===================================================================
-         Project Document: Kanban View (Default - Folder-like UI)
+         Project Document: Kanban View (File cards with thumbnails)
     =================================================================== -->
     <record id="view_construction_project_document_kanban" model="ir.ui.view">
         <field name="name">construction.project.document.kanban</field>
         <field name="model">construction.project.document</field>
         <field name="arch" type="xml">
-            <kanban class="o_kanban_mobile" sample="1">
+            <kanban sample="1">
                 <field name="id"/>
                 <field name="name"/>
                 <field name="file_name"/>
@@ -22,71 +22,63 @@
                 <field name="uploaded_by"/>
                 <templates>
                     <t t-name="card">
-                        <div class="d-flex align-items-start">
-                            <!-- Thumbnail / Icon -->
-                            <div class="me-2" style="width:64px; height:64px; flex-shrink:0;">
+                        <div class="d-flex flex-column" style="min-height: 150px;">
+                            <!-- Top: thumbnail or type icon -->
+                            <div class="d-flex align-items-center justify-content-center mb-2"
+                                 style="height: 80px; overflow: hidden;">
                                 <t t-if="record.thumbnail.raw_value">
                                     <field name="thumbnail" widget="image"
-                                           options="{'size': [64, 64]}"
-                                           class="rounded"/>
+                                           options="{'size': [0, 80]}"
+                                           class="rounded w-100 object-fit-cover"/>
                                 </t>
                                 <t t-elif="record.file_type.raw_value == 'image'">
-                                    <div class="d-flex align-items-center justify-content-center bg-info-subtle rounded h-100 w-100">
-                                        <i class="fa fa-image fa-2x text-info"/>
-                                    </div>
+                                    <i class="fa fa-image fa-3x text-info"/>
                                 </t>
                                 <t t-elif="record.file_type.raw_value == 'plan'">
-                                    <div class="d-flex align-items-center justify-content-center bg-primary-subtle rounded h-100 w-100">
-                                        <i class="fa fa-map fa-2x text-primary"/>
-                                    </div>
+                                    <i class="fa fa-map fa-3x text-primary"/>
                                 </t>
                                 <t t-elif="record.file_type.raw_value == 'permit'">
-                                    <div class="d-flex align-items-center justify-content-center bg-success-subtle rounded h-100 w-100">
-                                        <i class="fa fa-certificate fa-2x text-success"/>
-                                    </div>
+                                    <i class="fa fa-certificate fa-3x text-success"/>
+                                </t>
+                                <t t-elif="record.file_type.raw_value == 'document'">
+                                    <i class="fa fa-file-pdf-o fa-3x text-danger"/>
                                 </t>
                                 <t t-elif="record.file_type.raw_value == 'report'">
-                                    <div class="d-flex align-items-center justify-content-center bg-warning-subtle rounded h-100 w-100">
-                                        <i class="fa fa-bar-chart fa-2x text-warning"/>
-                                    </div>
+                                    <i class="fa fa-bar-chart fa-3x text-warning"/>
                                 </t>
                                 <t t-else="">
-                                    <div class="d-flex align-items-center justify-content-center bg-secondary-subtle rounded h-100 w-100">
-                                        <i class="fa fa-file-o fa-2x text-secondary"/>
-                                    </div>
+                                    <i class="fa fa-file-o fa-3x text-secondary"/>
                                 </t>
                             </div>
-                            <!-- Content -->
-                            <div class="flex-grow-1 overflow-hidden">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <strong class="text-truncate"><field name="name"/></strong>
-                                    <button name="action_toggle_star" type="object"
-                                            class="btn btn-link p-0 ms-1">
-                                        <i t-attf-class="fa #{record.is_starred.raw_value ? 'fa-star text-warning' : 'fa-star-o text-muted'}"/>
-                                    </button>
-                                </div>
-                                <div class="text-muted small text-truncate">
-                                    <field name="file_name"/>
-                                </div>
-                                <div class="d-flex align-items-center gap-1 mt-1 flex-wrap">
-                                    <span t-if="record.phase_id.value"
-                                          class="badge text-bg-info text-truncate"
-                                          style="max-width: 120px;">
-                                        <field name="phase_id"/>
-                                    </span>
-                                    <span t-if="record.folder_id.value"
-                                          class="badge text-bg-secondary text-truncate"
-                                          style="max-width: 120px;">
-                                        <i class="fa fa-folder-o me-1"/><field name="folder_id"/>
-                                    </span>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center mt-1">
-                                    <span class="text-muted small">
-                                        <field name="file_size_display"/>
-                                    </span>
-                                    <field name="tag_ids" widget="many2many_tags"
-                                           options="{'color_field': 'color'}"/>
-                                </div>
+
+                            <!-- Name + Star -->
+                            <div class="d-flex justify-content-between align-items-start">
+                                <strong class="text-truncate flex-grow-1" style="font-size: 13px;">
+                                    <field name="name"/>
+                                </strong>
+                                <button name="action_toggle_star" type="object"
+                                        class="btn btn-link p-0 ms-1" style="line-height: 1;">
+                                    <i t-attf-class="fa #{record.is_starred.raw_value ? 'fa-star text-warning' : 'fa-star-o text-muted'}"/>
+                                </button>
+                            </div>
+
+                            <!-- File info -->
+                            <div class="text-muted small text-truncate">
+                                <field name="file_name"/>
+                            </div>
+                            <div class="text-muted small">
+                                <field name="file_size_display"/>
+                            </div>
+
+                            <!-- Badges -->
+                            <div class="d-flex flex-wrap gap-1 mt-auto pt-1">
+                                <span t-if="record.phase_id.value"
+                                      class="badge text-bg-info text-truncate"
+                                      style="max-width: 100px; font-size: 10px;">
+                                    <field name="phase_id"/>
+                                </span>
+                                <field name="tag_ids" widget="many2many_tags"
+                                       options="{'color_field': 'color'}"/>
                             </div>
                         </div>
                     </t>
@@ -103,6 +95,7 @@
         <field name="model">construction.project.document</field>
         <field name="arch" type="xml">
             <list string="Project Documents" decoration-bf="is_starred == True">
+                <field name="is_starred" widget="boolean_favorite" nolabel="1"/>
                 <field name="code" optional="hide"/>
                 <field name="name"/>
                 <field name="file_name"/>
@@ -115,7 +108,6 @@
                 <field name="date" widget="jalali_date"/>
                 <field name="uploaded_by"/>
                 <field name="project_id" column_invisible="context.get('default_project_id')"/>
-                <field name="is_starred" widget="boolean_favorite" nolabel="1"/>
             </list>
         </field>
     </record>
@@ -132,12 +124,12 @@
                     <div class="oe_title">
                         <div class="o_row">
                             <field name="code" readonly="1" class="text-muted"/>
+                            <field name="is_starred" widget="boolean_favorite" nolabel="1"/>
                         </div>
                         <label for="name"/>
                         <h1>
                             <field name="name" placeholder="Document Name"/>
                         </h1>
-                        <field name="is_starred" widget="boolean_favorite" nolabel="1"/>
                     </div>
 
                     <group>
@@ -231,7 +223,7 @@
     <!-- ===================================================================
          Actions
     =================================================================== -->
-    <!-- Main action: opened from smart button on project or from menu -->
+    <!-- Action for viewing documents inside a folder (opened from folder) -->
     <record id="action_construction_project_document" model="ir.actions.act_window">
         <field name="name">Project Documents</field>
         <field name="res_model">construction.project.document</field>
@@ -240,10 +232,9 @@
         <field name="context">{}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-                Upload your first project document
+                Upload your first document
             </p>
             <p>
-                Organize project files by folder, phase, and tags.
                 Upload plans, site photos, permits, reports, and more.
             </p>
         </field>

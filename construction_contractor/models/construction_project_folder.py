@@ -44,7 +44,16 @@ class ConstructionProjectFolder(models.Model):
     description = fields.Text(string='Description')
     document_count = fields.Integer(
         string='Documents',
-        compute='_compute_document_count',
+        compute='_compute_counts',
+    )
+    subfolder_count = fields.Integer(
+        string='Sub-folders',
+        compute='_compute_counts',
+    )
+    total_document_count = fields.Integer(
+        string='Total Documents',
+        compute='_compute_counts',
+        help='Total documents including sub-folders',
     )
     color = fields.Integer(string='Color')
 
@@ -61,20 +70,81 @@ class ConstructionProjectFolder(models.Model):
         if not self._check_recursion():
             raise ValidationError('Error! You cannot create recursive folders.')
 
-    @api.depends('document_ids')
-    def _compute_document_count(self):
+    @api.depends('document_ids', 'child_ids', 'child_ids.total_document_count')
+    def _compute_counts(self):
         for folder in self:
             folder.document_count = len(folder.document_ids)
+            folder.subfolder_count = len(folder.child_ids)
+            # Recursive total: own documents + all sub-folder totals
+            sub_total = sum(child.total_document_count for child in folder.child_ids)
+            folder.total_document_count = folder.document_count + sub_total
 
-    def action_view_documents(self):
-        """Open documents filtered by this folder."""
+    def action_open_folder(self):
+        """Navigate into this folder - show its contents (sub-folders + documents)."""
         self.ensure_one()
         return {
             'type': 'ir.actions.act_window',
             'name': self.name,
+            'res_model': 'construction.project.folder',
+            'view_mode': 'form',
+            'res_id': self.id,
+            'target': 'current',
+        }
+
+    def action_open_subfolder_kanban(self):
+        """Open sub-folders of this folder as kanban cards."""
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': self.name,
+            'res_model': 'construction.project.folder',
+            'view_mode': 'kanban,list,form',
+            'domain': [('parent_id', '=', self.id)],
+            'context': {
+                'default_parent_id': self.id,
+                'default_project_id': self.project_id.id,
+            },
+        }
+
+    def action_view_documents(self):
+        """Open documents in this folder as kanban/list."""
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': '%s - Documents' % self.name,
             'res_model': 'construction.project.document',
             'view_mode': 'kanban,list,form',
             'domain': [('folder_id', '=', self.id)],
+            'context': {
+                'default_folder_id': self.id,
+                'default_project_id': self.project_id.id,
+            },
+        }
+
+    def action_create_subfolder(self):
+        """Quick-create a sub-folder inside this folder."""
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'New Sub-folder',
+            'res_model': 'construction.project.folder',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_parent_id': self.id,
+                'default_project_id': self.project_id.id,
+            },
+        }
+
+    def action_upload_document(self):
+        """Quick-upload a document into this folder."""
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Upload Document',
+            'res_model': 'construction.project.document',
+            'view_mode': 'form',
+            'target': 'new',
             'context': {
                 'default_folder_id': self.id,
                 'default_project_id': self.project_id.id,

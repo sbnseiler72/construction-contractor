@@ -218,6 +218,7 @@ class ConstructionProject(models.Model):
     financial_balance_count = fields.Integer(compute='_compute_counts')
     contractor_fee_payment_count = fields.Integer(compute='_compute_counts')
     document_count = fields.Integer(compute='_compute_counts')
+    folder_count = fields.Integer(compute='_compute_counts')
 
     # -------------------------------------------------------------------------
     # Constraints
@@ -326,6 +327,9 @@ class ConstructionProject(models.Model):
             project.document_count = self.env['construction.project.document'].search_count([
                 ('project_id', '=', project.id),
             ])
+            project.folder_count = self.env['construction.project.folder'].search_count([
+                ('project_id', '=', project.id),
+            ])
 
     # -------------------------------------------------------------------------
     # ORM overrides
@@ -432,28 +436,29 @@ class ConstructionProject(models.Model):
         return True
 
     def action_view_documents(self):
+        """Open the folder-based file manager for this project."""
         return {
             'type': 'ir.actions.act_window',
-            'name': _('Project Documents'),
+            'name': _('%s - Documents') % self.name,
+            'res_model': 'construction.project.folder',
+            'view_mode': 'kanban,list,form',
+            'domain': [('project_id', '=', self.id)],
+            'context': {
+                'default_project_id': self.id,
+                'search_default_root_folders': 1,
+            },
+        }
+
+    def action_view_all_files(self):
+        """Open flat list of all documents across all folders for this project."""
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('%s - All Files') % self.name,
             'res_model': 'construction.project.document',
             'view_mode': 'kanban,list,form',
             'domain': [('project_id', '=', self.id)],
             'context': {
                 'default_project_id': self.id,
-                'search_default_group_folder': 1,
-            },
-        }
-
-    def action_view_folders(self):
-        return {
-            'type': 'ir.actions.act_window',
-            'name': _('Project Folders'),
-            'res_model': 'construction.project.folder',
-            'view_mode': 'list,form',
-            'domain': [('project_id', '=', self.id)],
-            'context': {
-                'default_project_id': self.id,
-                'search_default_root_folders': 1,
             },
         }
 
