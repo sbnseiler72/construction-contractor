@@ -163,7 +163,7 @@
                     ============================================ -->
                     <separator string="Documents"/>
                     <field name="document_ids" nolabel="1"
-                           context="{'default_project_id': project_id, 'default_folder_id': active_id}">
+                           context="{'default_project_id': project_id, 'default_folder_id': id}">
                         <list editable="bottom">
                             <field name="name" placeholder="Document name"/>
                             <field name="file" filename="file_name" widget="binary"/>
