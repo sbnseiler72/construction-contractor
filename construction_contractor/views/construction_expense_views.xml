@@ -17,6 +17,7 @@
                 <field name="description"/>
                 <field name="partner_id"/>
                 <field name="payment_source"/>
+                <field name="currency_id" column_invisible="1"/>
                 <field name="amount" sum="Total"/>
                 <field name="receipt_ref"/>
                 <field name="state" widget="badge"

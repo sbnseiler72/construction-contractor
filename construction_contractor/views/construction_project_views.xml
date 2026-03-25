@@ -15,6 +15,7 @@
                 <field name="manager_id"/>
                 <field name="date_start" widget="jalali_date"/>
                 <field name="date_end" widget="jalali_date"/>
+                <field name="currency_id" column_invisible="1"/>
                 <field name="contracted_amount" sum="Total Contracted"/>
                 <field name="state" widget="badge"
                        decoration-info="state == 'draft'"

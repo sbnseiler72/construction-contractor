@@ -35,7 +35,7 @@ class ConstructionFinancialBalance(models.Model):
         ('employer_cash', 'Employer Cash'),
         ('employer_check', 'Employer Check'),
     ], string='Payment Source', readonly=True)
-    amount = fields.Float(string='Amount', readonly=True)
+    amount = fields.Monetary(string='Amount', currency_field='currency_id', readonly=True)
     currency_id = fields.Many2one(
         'res.currency',
         string='Currency',
