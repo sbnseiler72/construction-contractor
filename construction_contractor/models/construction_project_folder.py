@@ -53,6 +53,7 @@ class ConstructionProjectFolder(models.Model):
     total_document_count = fields.Integer(
         string='Total Documents',
         compute='_compute_counts',
+        recursive=True,
         help='Total documents including sub-folders',
     )
     color = fields.Integer(string='Color')
