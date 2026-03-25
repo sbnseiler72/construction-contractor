@@ -45,14 +45,17 @@ class ConstructionProjectFolder(models.Model):
     document_count = fields.Integer(
         string='Documents',
         compute='_compute_counts',
+        store=True,
     )
     subfolder_count = fields.Integer(
         string='Sub-folders',
         compute='_compute_counts',
+        store=True,
     )
     total_document_count = fields.Integer(
         string='Total Documents',
         compute='_compute_counts',
+        store=True,
         recursive=True,
         help='Total documents including sub-folders',
     )
