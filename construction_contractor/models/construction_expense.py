@@ -229,3 +229,13 @@ class ConstructionExpense(models.Model):
 
     def action_reset_draft(self):
         self.write({'state': 'draft'})
+
+    def action_open_form(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': self._name,
+            'res_id': self.id,
+            'view_mode': 'form',
+            'target': 'current',
+        }
