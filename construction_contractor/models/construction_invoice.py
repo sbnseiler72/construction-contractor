@@ -28,6 +28,7 @@ class ConstructionInvoice(models.Model):
         required=True,
         ondelete='restrict',
         tracking=True,
+        default=lambda self: self._default_project_id(),
     )
     invoice_date = fields.Date(
         string='Invoice Date',
@@ -154,6 +155,30 @@ class ConstructionInvoice(models.Model):
         related='project_id.company_id',
         store=True,
     )
+
+    # -------------------------------------------------------------------------
+    # Default helpers
+    # -------------------------------------------------------------------------
+    @api.model
+    def _default_project_id(self):
+        """Pre-select a project for new invoices based on the current user's role.
+
+        Searches projects managed by the user first, preferring active ones.
+        Falls back to any accessible active project.
+        """
+        Project = self.env['construction.project']
+        managed = Project.search(
+            [('manager_id', '=', self.env.user.id)],
+            order='state asc, date_start desc',
+            limit=1,
+        )
+        if managed:
+            return managed
+        return Project.search(
+            [('state', '=', 'active')],
+            order='date_start desc',
+            limit=1,
+        )
 
     # -------------------------------------------------------------------------
     # Computed

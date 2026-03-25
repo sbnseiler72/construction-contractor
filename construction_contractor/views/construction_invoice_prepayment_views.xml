@@ -118,9 +118,14 @@
                         or Employer Journal on the project before registering a payment.
                     </div>
                     <group string="Receipt (optional)">
-                        <field name="receipt_file" widget="image"
-                               nolabel="1" colspan="2"
-                               options="{'size': [0, 250]}"/>
+                        <field name="receipt_file" filename="receipt_filename"
+                               widget="binary" nolabel="1" colspan="2"/>
+                        <field name="receipt_filename" invisible="1"/>
+                        <div class="mt-2" invisible="not receipt_file" colspan="2">
+                            <field name="receipt_file" widget="image" readonly="1"
+                                   class="img img-fluid rounded"
+                                   style="max-height:300px;"/>
+                        </div>
                     </group>
                 </sheet>
                 <footer>

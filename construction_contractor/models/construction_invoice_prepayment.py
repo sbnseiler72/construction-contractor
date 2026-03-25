@@ -1,6 +1,15 @@
 # -*- coding: utf-8 -*-
+import re
+from datetime import datetime
+
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
+
+from ..utils import JalaliUtils
+
+# Compiled once at module load; matches the 8-digit date segment in filenames
+# such as "IMG-14040225-WA0000.jpg" or "PTT-20250610-WA0024.jpeg".
+_FILENAME_DATE_RE = re.compile(r'^[^-]+-(\d{8})-')
 
 PAYMENT_SOURCE_SELECTION = [
     ('payroll_card', 'Payroll Card'),
@@ -227,10 +236,11 @@ class ConstructionPaymentWizardMixin(models.AbstractModel):
         string='Memo / Reference',
         help='Internal reference note for this payment',
     )
-    receipt_file = fields.Image(
+    receipt_file = fields.Binary(
         string='Receipt',
         attachment=True,
     )
+    receipt_filename = fields.Char(string='Receipt Filename')
     journal_id = fields.Many2one(
         'account.journal',
         string='Payment Journal',
@@ -246,6 +256,35 @@ class ConstructionPaymentWizardMixin(models.AbstractModel):
                 rec.journal_id = rec.project_id.payroll_journal_id
             else:
                 rec.journal_id = rec.project_id.employer_journal_id
+
+    @api.onchange('receipt_filename')
+    def _onchange_receipt_filename_date(self):
+        """Auto-fill payment_date from a date encoded in the receipt filename.
+
+        Supported patterns (8-digit segment between the first two '-' delimiters):
+          IMG-14040225-WA0000.jpg   → Jalali 1404/02/25
+          PTT-20250610-WA0024.jpeg  → Gregorian 2025/06/10
+
+        The field is left unchanged if no recognisable pattern is found.
+        """
+        if not self.receipt_filename:
+            return
+        match = _FILENAME_DATE_RE.search(self.receipt_filename)
+        if not match:
+            return
+        digits = match.group(1)
+        year = int(digits[:4])
+        try:
+            if JalaliUtils.JALALI_YEAR_MIN <= year <= JalaliUtils.JALALI_YEAR_MAX:
+                jy, jm, jd = int(digits[:4]), int(digits[4:6]), int(digits[6:])
+                gy, gm, gd = JalaliUtils.jalali_to_gregorian(jy, jm, jd)
+                self.payment_date = fields.Date.to_date('%04d-%02d-%02d' % (gy, gm, gd))
+            elif JalaliUtils.GREGORIAN_YEAR_MIN <= year <= JalaliUtils.GREGORIAN_YEAR_MAX:
+                self.payment_date = fields.Date.to_date(
+                    datetime.strptime(digits, '%Y%m%d').date().isoformat()
+                )
+        except ValueError:
+            pass  # Malformed date components — leave the field unchanged
 
     def _raise_missing_journal(self):
         """Raise a descriptive ValidationError when no journal is configured."""
@@ -302,6 +341,8 @@ class ConstructionInvoicePrepaymentWizard(models.TransientModel):
             if invoice.amount_total:
                 res['amount'] = max(invoice.amount_total - invoice.amount_prepaid, 0.0)
             res['memo'] = invoice.invoice_number or invoice.name
+            if invoice.invoice_date:
+                res['payment_date'] = invoice.invoice_date
         return res
 
     # -------------------------------------------------------------------------
