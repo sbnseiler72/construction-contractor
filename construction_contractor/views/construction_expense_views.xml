@@ -7,23 +7,27 @@
         <field name="name">construction.expense.list</field>
         <field name="model">construction.expense</field>
         <field name="arch" type="xml">
-            <list string="Expenses" decoration-muted="state == 'cancelled'"
+            <list string="Expenses" editable="bottom"
+                  decoration-muted="state == 'cancelled'"
                   decoration-success="state == 'confirmed'">
-                <field name="name"/>
+                <field name="name" readonly="1"/>
                 <field name="project_id"/>
                 <field name="date" widget="jalali_date"/>
                 <field name="project_phase_id" optional="show"/>
                 <field name="expense_type_id"/>
                 <field name="description"/>
-                <field name="partner_id"/>
+                <field name="partner_id" optional="hide"/>
                 <field name="payment_source"/>
                 <field name="currency_id" column_invisible="1"/>
                 <field name="amount" sum="Total"/>
-                <field name="receipt_ref"/>
-                <field name="state" widget="badge"
+                <field name="receipt_ref" optional="hide"/>
+                <field name="state" widget="badge" readonly="1"
                        decoration-info="state == 'draft'"
                        decoration-success="state == 'confirmed'"
                        decoration-danger="state == 'cancelled'"/>
+                <button name="action_open_form" type="object"
+                        icon="fa-external-link" title="Open Full Form"
+                        string="" class="btn-sm btn-secondary"/>
             </list>
         </field>
     </record>
