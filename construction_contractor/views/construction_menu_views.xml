@@ -21,6 +21,13 @@
               groups="construction_contractor.group_construction_manager"
               sequence="10"/>
 
+    <menuitem id="menu_construction_all_documents"
+              name="Project Documents"
+              parent="menu_construction_projects"
+              action="action_construction_all_documents"
+              groups="construction_contractor.group_construction_manager"
+              sequence="20"/>
+
     <!-- Transactions -->
     <menuitem id="menu_construction_transactions"
               name="Transactions"
@@ -132,4 +139,11 @@
               action="action_construction_expense_type"
               groups="construction_contractor.group_construction_accountant"
               sequence="20"/>
+
+    <menuitem id="menu_construction_document_tags"
+              name="Document Tags"
+              parent="menu_construction_configuration"
+              action="action_construction_document_tag"
+              groups="construction_contractor.group_construction_accountant"
+              sequence="30"/>
 </odoo>

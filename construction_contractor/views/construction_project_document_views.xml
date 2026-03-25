@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ===================================================================
+         Project Document: Kanban View (Default - Folder-like UI)
+    =================================================================== -->
+    <record id="view_construction_project_document_kanban" model="ir.ui.view">
+        <field name="name">construction.project.document.kanban</field>
+        <field name="model">construction.project.document</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" sample="1">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="file_name"/>
+                <field name="file_type"/>
+                <field name="file_size_display"/>
+                <field name="phase_id"/>
+                <field name="folder_id"/>
+                <field name="date"/>
+                <field name="is_starred"/>
+                <field name="thumbnail"/>
+                <field name="tag_ids"/>
+                <field name="uploaded_by"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex align-items-start">
+                            <!-- Thumbnail / Icon -->
+                            <div class="me-2" style="width:64px; height:64px; flex-shrink:0;">
+                                <t t-if="record.thumbnail.raw_value">
+                                    <field name="thumbnail" widget="image"
+                                           options="{'size': [64, 64]}"
+                                           class="rounded"/>
+                                </t>
+                                <t t-elif="record.file_type.raw_value == 'image'">
+                                    <div class="d-flex align-items-center justify-content-center bg-info-subtle rounded h-100 w-100">
+                                        <i class="fa fa-image fa-2x text-info"/>
+                                    </div>
+                                </t>
+                                <t t-elif="record.file_type.raw_value == 'plan'">
+                                    <div class="d-flex align-items-center justify-content-center bg-primary-subtle rounded h-100 w-100">
+                                        <i class="fa fa-map fa-2x text-primary"/>
+                                    </div>
+                                </t>
+                                <t t-elif="record.file_type.raw_value == 'permit'">
+                                    <div class="d-flex align-items-center justify-content-center bg-success-subtle rounded h-100 w-100">
+                                        <i class="fa fa-certificate fa-2x text-success"/>
+                                    </div>
+                                </t>
+                                <t t-elif="record.file_type.raw_value == 'report'">
+                                    <div class="d-flex align-items-center justify-content-center bg-warning-subtle rounded h-100 w-100">
+                                        <i class="fa fa-bar-chart fa-2x text-warning"/>
+                                    </div>
+                                </t>
+                                <t t-else="">
+                                    <div class="d-flex align-items-center justify-content-center bg-secondary-subtle rounded h-100 w-100">
+                                        <i class="fa fa-file-o fa-2x text-secondary"/>
+                                    </div>
+                                </t>
+                            </div>
+                            <!-- Content -->
+                            <div class="flex-grow-1 overflow-hidden">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <strong class="text-truncate"><field name="name"/></strong>
+                                    <button name="action_toggle_star" type="object"
+                                            class="btn btn-link p-0 ms-1">
+                                        <i t-attf-class="fa #{record.is_starred.raw_value ? 'fa-star text-warning' : 'fa-star-o text-muted'}"/>
+                                    </button>
+                                </div>
+                                <div class="text-muted small text-truncate">
+                                    <field name="file_name"/>
+                                </div>
+                                <div class="d-flex align-items-center gap-1 mt-1 flex-wrap">
+                                    <span t-if="record.phase_id.value"
+                                          class="badge text-bg-info text-truncate"
+                                          style="max-width: 120px;">
+                                        <field name="phase_id"/>
+                                    </span>
+                                    <span t-if="record.folder_id.value"
+                                          class="badge text-bg-secondary text-truncate"
+                                          style="max-width: 120px;">
+                                        <i class="fa fa-folder-o me-1"/><field name="folder_id"/>
+                                    </span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mt-1">
+                                    <span class="text-muted small">
+                                        <field name="file_size_display"/>
+                                    </span>
+                                    <field name="tag_ids" widget="many2many_tags"
+                                           options="{'color_field': 'color'}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- ===================================================================
+         Project Document: List View
+    =================================================================== -->
+    <record id="view_construction_project_document_list" model="ir.ui.view">
+        <field name="name">construction.project.document.list</field>
+        <field name="model">construction.project.document</field>
+        <field name="arch" type="xml">
+            <list string="Project Documents" decoration-bf="is_starred == True">
+                <field name="code" optional="hide"/>
+                <field name="name"/>
+                <field name="file_name"/>
+                <field name="file" filename="file_name" widget="binary"/>
+                <field name="file_type"/>
+                <field name="file_size_display" string="Size"/>
+                <field name="folder_id"/>
+                <field name="phase_id"/>
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                <field name="date" widget="jalali_date"/>
+                <field name="uploaded_by"/>
+                <field name="project_id" column_invisible="context.get('default_project_id')"/>
+                <field name="is_starred" widget="boolean_favorite" nolabel="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ===================================================================
+         Project Document: Form View
+    =================================================================== -->
+    <record id="view_construction_project_document_form" model="ir.ui.view">
+        <field name="name">construction.project.document.form</field>
+        <field name="model">construction.project.document</field>
+        <field name="arch" type="xml">
+            <form string="Project Document">
+                <sheet>
+                    <div class="oe_title">
+                        <div class="o_row">
+                            <field name="code" readonly="1" class="text-muted"/>
+                        </div>
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Document Name"/>
+                        </h1>
+                        <field name="is_starred" widget="boolean_favorite" nolabel="1"/>
+                    </div>
+
+                    <group>
+                        <group string="File Details">
+                            <field name="file" filename="file_name"/>
+                            <field name="file_name" invisible="1"/>
+                            <field name="file_type"/>
+                            <field name="file_size_display" readonly="1"/>
+                            <field name="date" widget="jalali_date"/>
+                        </group>
+                        <group string="Organization">
+                            <field name="project_id"/>
+                            <field name="folder_id" domain="[('project_id', '=', project_id)]"/>
+                            <field name="phase_id"/>
+                            <field name="tag_ids" widget="many2many_tags"
+                                   options="{'color_field': 'color', 'no_create_edit': False}"/>
+                            <field name="uploaded_by"/>
+                        </group>
+                    </group>
+
+                    <!-- Image preview for image type -->
+                    <group string="Preview" invisible="file_type != 'image'">
+                        <field name="thumbnail" widget="image" readonly="1"
+                               options="{'size': [0, 400]}" nolabel="1" colspan="2"/>
+                    </group>
+
+                    <group string="Notes">
+                        <field name="description" nolabel="1"
+                               placeholder="Document description, notes, or review comments..."/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ===================================================================
+         Project Document: Search View
+    =================================================================== -->
+    <record id="view_construction_project_document_search" model="ir.ui.view">
+        <field name="name">construction.project.document.search</field>
+        <field name="model">construction.project.document</field>
+        <field name="arch" type="xml">
+            <search string="Search Documents">
+                <field name="name" string="Document"/>
+                <field name="file_name"/>
+                <field name="project_id"/>
+                <field name="folder_id"/>
+                <field name="phase_id"/>
+                <field name="tag_ids"/>
+                <field name="uploaded_by"/>
+                <separator/>
+                <!-- Type filters -->
+                <filter string="Images" name="filter_images"
+                        domain="[('file_type', '=', 'image')]"
+                        icon="fa-image"/>
+                <filter string="Documents" name="filter_documents"
+                        domain="[('file_type', '=', 'document')]"/>
+                <filter string="Plans / Drawings" name="filter_plans"
+                        domain="[('file_type', '=', 'plan')]"/>
+                <filter string="Permits" name="filter_permits"
+                        domain="[('file_type', '=', 'permit')]"/>
+                <filter string="Reports" name="filter_reports"
+                        domain="[('file_type', '=', 'report')]"/>
+                <separator/>
+                <filter string="Starred" name="filter_starred"
+                        domain="[('is_starred', '=', True)]"
+                        icon="fa-star"/>
+                <separator/>
+                <filter string="My Uploads" name="filter_my_uploads"
+                        domain="[('uploaded_by', '=', uid)]"/>
+                <separator/>
+                <group>
+                    <filter string="Folder" name="group_folder"
+                            context="{'group_by': 'folder_id'}"/>
+                    <filter string="Phase" name="group_phase"
+                            context="{'group_by': 'phase_id'}"/>
+                    <filter string="Type" name="group_type"
+                            context="{'group_by': 'file_type'}"/>
+                    <filter string="Uploaded By" name="group_uploaded_by"
+                            context="{'group_by': 'uploaded_by'}"/>
+                    <filter string="Date" name="group_date"
+                            context="{'group_by': 'date:month'}"/>
+                    <filter string="Project" name="group_project"
+                            context="{'group_by': 'project_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ===================================================================
+         Actions
+    =================================================================== -->
+    <!-- Main action: opened from smart button on project or from menu -->
+    <record id="action_construction_project_document" model="ir.actions.act_window">
+        <field name="name">Project Documents</field>
+        <field name="res_model">construction.project.document</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="view_construction_project_document_search"/>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Upload your first project document
+            </p>
+            <p>
+                Organize project files by folder, phase, and tags.
+                Upload plans, site photos, permits, reports, and more.
+            </p>
+        </field>
+    </record>
+
+    <!-- Cross-project document search action (for menu) -->
+    <record id="action_construction_all_documents" model="ir.actions.act_window">
+        <field name="name">All Documents</field>
+        <field name="res_model">construction.project.document</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="view_construction_project_document_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No documents found
+            </p>
+            <p>
+                Search and browse documents across all projects.
+            </p>
+        </field>
+    </record>
+</odoo>

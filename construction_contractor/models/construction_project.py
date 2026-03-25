@@ -197,12 +197,27 @@ class ConstructionProject(models.Model):
         string='Contractor Fee Payments',
     )
 
+    # -------------------------------------------------------------------------
+    # Document Archive
+    # -------------------------------------------------------------------------
+    folder_ids = fields.One2many(
+        'construction.project.folder',
+        'project_id',
+        string='Folders',
+    )
+    document_ids = fields.One2many(
+        'construction.project.document',
+        'project_id',
+        string='Documents',
+    )
+
     # Related record counts for smart buttons
     expense_count = fields.Integer(compute='_compute_counts')
     card_transaction_count = fields.Integer(compute='_compute_counts')
     invoice_count = fields.Integer(compute='_compute_counts')
     financial_balance_count = fields.Integer(compute='_compute_counts')
     contractor_fee_payment_count = fields.Integer(compute='_compute_counts')
+    document_count = fields.Integer(compute='_compute_counts')
 
     # -------------------------------------------------------------------------
     # Constraints
@@ -306,6 +321,9 @@ class ConstructionProject(models.Model):
                 ('project_id', '=', project.id),
             ])
             project.contractor_fee_payment_count = self.env['construction.contractor.fee.payment'].search_count([
+                ('project_id', '=', project.id),
+            ])
+            project.document_count = self.env['construction.project.document'].search_count([
                 ('project_id', '=', project.id),
             ])
 
@@ -413,6 +431,45 @@ class ConstructionProject(models.Model):
         self.contractor_fee_journal_id = journal
         return True
 
+    def action_view_documents(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Project Documents'),
+            'res_model': 'construction.project.document',
+            'view_mode': 'kanban,list,form',
+            'domain': [('project_id', '=', self.id)],
+            'context': {
+                'default_project_id': self.id,
+                'search_default_group_folder': 1,
+            },
+        }
+
+    def action_view_folders(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Project Folders'),
+            'res_model': 'construction.project.folder',
+            'view_mode': 'list,form',
+            'domain': [('project_id', '=', self.id)],
+            'context': {
+                'default_project_id': self.id,
+                'search_default_root_folders': 1,
+            },
+        }
+
+    def _create_default_folders(self):
+        """Create the default folder structure for a newly activated project."""
+        Folder = self.env['construction.project.folder']
+        for project in self:
+            existing = Folder.search_count([('project_id', '=', project.id)])
+            if existing:
+                continue
+            for folder_vals in Folder._get_default_folder_structure():
+                Folder.create({
+                    **folder_vals,
+                    'project_id': project.id,
+                })
+
     def action_set_active(self):
         for rec in self:
             if not rec.contracted_amount or rec.contracted_amount <= 0:
@@ -420,6 +477,7 @@ class ConstructionProject(models.Model):
                     _('Please enter the Contracted Amount before activating the project.')
                 )
         self.write({'state': 'active'})
+        self._create_default_folders()
 
     def action_set_closed(self):
         for rec in self:

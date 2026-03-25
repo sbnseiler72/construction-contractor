@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Document sequence -->
+        <record id="seq_construction_project_document" model="ir.sequence">
+            <field name="name">Construction Project Document</field>
+            <field name="code">construction.project.document</field>
+            <field name="prefix">DOC/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Default Document Tags -->
+        <record id="document_tag_plan" model="construction.document.tag">
+            <field name="name">نقشه</field>  <!-- Plan -->
+            <field name="color">1</field>
+        </record>
+        <record id="document_tag_drawing" model="construction.document.tag">
+            <field name="name">نقشه اجرایی</field>  <!-- Drawing -->
+            <field name="color">2</field>
+        </record>
+        <record id="document_tag_permit" model="construction.document.tag">
+            <field name="name">مجوز</field>  <!-- Permit -->
+            <field name="color">3</field>
+        </record>
+        <record id="document_tag_contract" model="construction.document.tag">
+            <field name="name">قرارداد</field>  <!-- Contract -->
+            <field name="color">4</field>
+        </record>
+        <record id="document_tag_photo" model="construction.document.tag">
+            <field name="name">عکس</field>  <!-- Photo -->
+            <field name="color">5</field>
+        </record>
+        <record id="document_tag_report" model="construction.document.tag">
+            <field name="name">گزارش</field>  <!-- Report -->
+            <field name="color">6</field>
+        </record>
+        <record id="document_tag_invoice_copy" model="construction.document.tag">
+            <field name="name">کپی فاکتور</field>  <!-- Invoice Copy -->
+            <field name="color">7</field>
+        </record>
+        <record id="document_tag_inspection" model="construction.document.tag">
+            <field name="name">بازرسی</field>  <!-- Inspection -->
+            <field name="color">8</field>
+        </record>
+        <record id="document_tag_asbuilt" model="construction.document.tag">
+            <field name="name">مستند اجرایی</field>  <!-- As-Built -->
+            <field name="color">9</field>
+        </record>
+        <record id="document_tag_specification" model="construction.document.tag">
+            <field name="name">مشخصات فنی</field>  <!-- Specification -->
+            <field name="color">10</field>
+        </record>
+    </data>
+</odoo>
