@@ -61,7 +61,7 @@ class ConstructionProjectFolder(models.Model):
     )
     color = fields.Integer(string='Color')
 
-    name_parent_project_uniq = models.Constraint(
+    _name_parent_project_uniq = models.Constraint(
         'unique (name, parent_id, project_id)',
         'A folder with this name already exists at this level!',
     )

@@ -18,4 +18,4 @@ class ConstructionExpenseType(models.Model):
         help='If unchecked, expenses of this type are excluded from the contractor percentage calculation.',
     )
 
-    key_unique = models.Constraint('unique(key)', 'Expense type key must be unique.')
+    _key_unique = models.Constraint('unique(key)', 'Expense type key must be unique.')

@@ -11,4 +11,4 @@ class ConstructionDocumentTag(models.Model):
     name = fields.Char(string='Tag Name', required=True, translate=True)
     color = fields.Integer(string='Color Index')
 
-    name_uniq = models.Constraint('unique (name)', 'Tag name must be unique!')
+    _name_uniq = models.Constraint('unique (name)', 'Tag name must be unique!')
