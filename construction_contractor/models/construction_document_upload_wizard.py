@@ -53,6 +53,9 @@ class DocumentUploadWizard(models.TransientModel):
     )
     tag_ids = fields.Many2many(
         'construction.document.tag',
+        'construction_doc_upload_tag_rel',
+        'wizard_id',
+        'tag_id',
         string='Tags (apply to all)',
     )
     line_ids = fields.One2many(
