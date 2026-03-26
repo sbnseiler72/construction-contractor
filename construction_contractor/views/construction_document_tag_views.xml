@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ===================================================================
+         Document Tag: List View
+    =================================================================== -->
+    <record id="view_construction_document_tag_list" model="ir.ui.view">
+        <field name="name">construction.document.tag.list</field>
+        <field name="model">construction.document.tag</field>
+        <field name="arch" type="xml">
+            <list string="Document Tags" editable="bottom">
+                <field name="name"/>
+                <field name="color" widget="color_picker"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ===================================================================
+         Document Tag: Form View
+    =================================================================== -->
+    <record id="view_construction_document_tag_form" model="ir.ui.view">
+        <field name="name">construction.document.tag.form</field>
+        <field name="model">construction.document.tag</field>
+        <field name="arch" type="xml">
+            <form string="Document Tag">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="color" widget="color_picker"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_construction_document_tag" model="ir.actions.act_window">
+        <field name="name">Document Tags</field>
+        <field name="res_model">construction.document.tag</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ===================================================================
+         Project Folder: Kanban View (File Manager - Main Entry Point)
+
+         This is the first thing users see when they click "Documents"
+         on a project. Shows folders as big, clickable cards.
+    =================================================================== -->
+    <record id="view_construction_project_folder_kanban" model="ir.ui.view">
+        <field name="name">construction.project.folder.kanban</field>
+        <field name="model">construction.project.folder</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_small_column" sample="1"
+                    default_order="sequence, name" on_create="quick_create"
+                    quick_create_view="construction_contractor.view_construction_project_folder_quick_create">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="color"/>
+                <field name="phase_id"/>
+                <field name="document_count"/>
+                <field name="subfolder_count"/>
+                <field name="total_document_count"/>
+                <templates>
+                    <t t-name="card">
+                        <!-- Clickable folder card -->
+                        <div t-attf-class="d-flex flex-column align-items-center text-center p-3"
+                             style="min-height: 140px; cursor: pointer;">
+                            <!-- Folder icon -->
+                            <div class="mb-2" style="font-size: 48px; line-height: 1;">
+                                <t t-if="record.subfolder_count.raw_value > 0">
+                                    <i class="fa fa-folder text-warning" style="opacity: 0.85;"/>
+                                </t>
+                                <t t-else="">
+                                    <i class="fa fa-folder text-warning"/>
+                                </t>
+                            </div>
+                            <!-- Folder name -->
+                            <strong class="text-truncate w-100 mb-1" style="font-size: 14px;">
+                                <field name="name"/>
+                            </strong>
+                            <!-- Phase badge -->
+                            <div t-if="record.phase_id.value" class="mb-1">
+                                <span class="badge text-bg-info text-truncate"
+                                      style="max-width: 140px; font-size: 10px;">
+                                    <field name="phase_id"/>
+                                </span>
+                            </div>
+                            <!-- Counts row -->
+                            <div class="d-flex gap-2 mt-auto">
+                                <span t-if="record.subfolder_count.raw_value > 0"
+                                      class="badge text-bg-secondary"
+                                      style="font-size: 11px;">
+                                    <i class="fa fa-folder-o me-1"/>
+                                    <field name="subfolder_count"/>
+                                </span>
+                                <span class="badge text-bg-primary"
+                                      style="font-size: 11px;">
+                                    <i class="fa fa-file-o me-1"/>
+                                    <field name="total_document_count"/>
+                                </span>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- ===================================================================
+         Folder: Quick Create Form (inline in kanban)
+    =================================================================== -->
+    <record id="view_construction_project_folder_quick_create" model="ir.ui.view">
+        <field name="name">construction.project.folder.quick.create</field>
+        <field name="model">construction.project.folder</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name" placeholder="Folder name..."/>
+                    <field name="project_id" invisible="context.get('default_project_id')"/>
+                    <field name="phase_id" placeholder="Phase (optional)"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- ===================================================================
+         Project Folder: Form View (File Browser - Inside a Folder)
+
+         When user clicks a folder, this view acts as a file browser:
+         - Top: folder info + action buttons (New Folder, Upload File)
+         - Middle: sub-folders as inline cards
+         - Bottom: documents as inline list with direct upload
+    =================================================================== -->
+    <record id="view_construction_project_folder_form" model="ir.ui.view">
+        <field name="name">construction.project.folder.form</field>
+        <field name="model">construction.project.folder</field>
+        <field name="arch" type="xml">
+            <form string="Project Folder">
+                <header>
+                    <button name="action_upload_document" string="Upload Documents"
+                            type="object" class="btn-primary"
+                            icon="fa-upload"/>
+                    <button name="action_create_subfolder" string="New Folder"
+                            type="object" class="btn-secondary"
+                            icon="fa-folder-plus"/>
+                </header>
+                <sheet>
+                    <!-- Smart buttons -->
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_documents"
+                                type="object" class="oe_stat_button" icon="fa-file-o">
+                            <field name="document_count" widget="statinfo" string="Documents"/>
+                        </button>
+                        <button name="action_open_subfolder_kanban"
+                                type="object" class="oe_stat_button" icon="fa-folder-o"
+                                invisible="subfolder_count == 0">
+                            <field name="subfolder_count" widget="statinfo" string="Sub-folders"/>
+                        </button>
+                    </div>
+
+                    <!-- Folder title -->
+                    <div class="oe_title">
+                        <h1>
+                            <i class="fa fa-folder text-warning me-2"/>
+                            <field name="name" placeholder="Folder Name"/>
+                        </h1>
+                    </div>
+
+                    <!-- Folder metadata -->
+                    <group>
+                        <group>
+                            <field name="project_id" readonly="context.get('default_project_id')"/>
+                            <field name="parent_id" domain="[('project_id', '=', project_id), ('id', '!=', id)]"/>
+                            <field name="phase_id"/>
+                        </group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="total_document_count" string="Total Files (incl. sub-folders)"/>
+                        </group>
+                    </group>
+
+                    <field name="description" placeholder="Folder description or notes..." nolabel="1"/>
+
+                    <!-- ============================================
+                         Sub-folders Section
+                    ============================================ -->
+                    <separator string="Sub-folders" invisible="subfolder_count == 0"/>
+                    <field name="child_ids" nolabel="1" invisible="subfolder_count == 0"
+                           context="{'default_project_id': project_id}">
+                        <list>
+                            <field name="sequence" widget="handle"/>
+                            <button name="action_open_folder" type="object"
+                                    icon="fa-folder text-warning" title="Open Folder"/>
+                            <field name="name" class="fw-bold"/>
+                            <field name="phase_id"/>
+                            <field name="document_count" string="Files"/>
+                            <field name="subfolder_count" string="Folders"/>
+                        </list>
+                    </field>
+
+                    <!-- ============================================
+                         Documents Section (inline file list)
+                    ============================================ -->
+                    <separator string="Documents"/>
+                    <field name="document_ids" nolabel="1"
+                           context="{'default_project_id': project_id, 'default_folder_id': id}">
+                        <list editable="bottom">
+                            <field name="name" placeholder="Document name"/>
+                            <field name="file" filename="file_name" widget="binary"/>
+                            <field name="file_name" column_invisible="1"/>
+                            <field name="file_type"/>
+                            <field name="file_size_display" string="Size" readonly="1"/>
+                            <field name="phase_id"/>
+                            <field name="tag_ids" widget="many2many_tags"
+                                   options="{'color_field': 'color'}"/>
+                            <field name="date" widget="jalali_date"/>
+                            <field name="is_starred" widget="boolean_favorite" nolabel="1"/>
+                            <field name="project_id" column_invisible="1"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ===================================================================
+         Project Folder: List View
+    =================================================================== -->
+    <record id="view_construction_project_folder_list" model="ir.ui.view">
+        <field name="name">construction.project.folder.list</field>
+        <field name="model">construction.project.folder</field>
+        <field name="arch" type="xml">
+            <list string="Project Folders" decoration-bf="parent_id == False">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="parent_id"/>
+                <field name="phase_id"/>
+                <field name="document_count" string="Files"/>
+                <field name="subfolder_count" string="Sub-folders"/>
+                <field name="total_document_count" string="Total Files"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ===================================================================
+         Project Folder: Search View
+    =================================================================== -->
+    <record id="view_construction_project_folder_search" model="ir.ui.view">
+        <field name="name">construction.project.folder.search</field>
+        <field name="model">construction.project.folder</field>
+        <field name="arch" type="xml">
+            <search string="Search Folders">
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="phase_id"/>
+                <separator/>
+                <filter string="Root Folders" name="root_folders"
+                        domain="[('parent_id', '=', False)]"/>
+                <filter string="Has Documents" name="has_documents"
+                        domain="[('document_count', '>', 0)]"/>
+                <filter string="Empty Folders" name="empty_folders"
+                        domain="[('document_count', '=', 0), ('subfolder_count', '=', 0)]"/>
+                <separator/>
+                <group>
+                    <filter string="Project" name="group_project"
+                            context="{'group_by': 'project_id'}"/>
+                    <filter string="Phase" name="group_phase"
+                            context="{'group_by': 'phase_id'}"/>
+                    <filter string="Parent Folder" name="group_parent"
+                            context="{'group_by': 'parent_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ===================================================================
+         Actions
+    =================================================================== -->
+    <!-- Menu action: shows all root folders grouped by project -->
+    <record id="action_construction_project_folder" model="ir.actions.act_window">
+        <field name="name">Project Documents</field>
+        <field name="res_model">construction.project.folder</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="view_construction_project_folder_search"/>
+        <field name="context">{'search_default_root_folders': 1, 'search_default_group_project': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first folder
+            </p>
+            <p>
+                Organize project documents into folders by phase, type, or any structure you need.
+            </p>
+        </field>
+    </record>
+</odoo>

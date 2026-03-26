@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ===================================================================
+         Multi-File Upload Wizard
+    =================================================================== -->
+    <record id="view_construction_document_upload_wizard_form" model="ir.ui.view">
+        <field name="name">construction.document.upload.wizard.form</field>
+        <field name="model">construction.document.upload.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Upload Documents">
+                <group>
+                    <group>
+                        <field name="folder_id"/>
+                        <field name="project_id"/>
+                    </group>
+                    <group>
+                        <field name="phase_id" placeholder="Apply to all files..."/>
+                        <field name="tag_ids" widget="many2many_tags"
+                               options="{'color_field': 'color', 'no_create_edit': False}"
+                               placeholder="Apply to all files..."/>
+                    </group>
+                </group>
+
+                <separator string="Files to Upload"/>
+
+                <field name="line_ids" nolabel="1">
+                    <list editable="bottom">
+                        <field name="file" filename="file_name" widget="binary" required="1"/>
+                        <field name="file_name" column_invisible="1"/>
+                        <field name="name" placeholder="Auto-filled from filename"/>
+                        <field name="file_type"/>
+                    </list>
+                </field>
+
+                <footer>
+                    <button name="action_upload" string="Upload All"
+                            type="object" class="btn-primary"
+                            icon="fa-upload"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
