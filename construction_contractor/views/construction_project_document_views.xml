@@ -32,22 +32,22 @@
                                            class="rounded w-100 object-fit-cover"/>
                                 </t>
                                 <t t-elif="record.file_type.raw_value == 'image'">
-                                    <i class="fa fa-image fa-3x text-info"/>
+                                    <i class="fa fa-image fa-3x text-info" title="Image"/>
                                 </t>
                                 <t t-elif="record.file_type.raw_value == 'plan'">
-                                    <i class="fa fa-map fa-3x text-primary"/>
+                                    <i class="fa fa-map fa-3x text-primary" title="Plan"/>
                                 </t>
                                 <t t-elif="record.file_type.raw_value == 'permit'">
-                                    <i class="fa fa-certificate fa-3x text-success"/>
+                                    <i class="fa fa-certificate fa-3x text-success" title="Permit"/>
                                 </t>
                                 <t t-elif="record.file_type.raw_value == 'document'">
-                                    <i class="fa fa-file-pdf-o fa-3x text-danger"/>
+                                    <i class="fa fa-file-pdf-o fa-3x text-danger" title="Document"/>
                                 </t>
                                 <t t-elif="record.file_type.raw_value == 'report'">
-                                    <i class="fa fa-bar-chart fa-3x text-warning"/>
+                                    <i class="fa fa-bar-chart fa-3x text-warning" title="Report"/>
                                 </t>
                                 <t t-else="">
-                                    <i class="fa fa-file-o fa-3x text-secondary"/>
+                                    <i class="fa fa-file-o fa-3x text-secondary" title="File"/>
                                 </t>
                             </div>
 

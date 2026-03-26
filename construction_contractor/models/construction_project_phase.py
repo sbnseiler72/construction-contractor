@@ -13,6 +13,4 @@ class ConstructionProjectPhase(models.Model):
     sequence = fields.Integer(default=10)
     active = fields.Boolean(default=True)
 
-    _sql_constraints = [
-        ('key_unique', 'unique(key)', 'Phase key must be unique.'),
-    ]
+    key_unique = models.Constraint('unique(key)', 'Phase key must be unique.')
