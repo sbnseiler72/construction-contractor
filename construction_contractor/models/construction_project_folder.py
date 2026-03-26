@@ -141,12 +141,12 @@ class ConstructionProjectFolder(models.Model):
         }
 
     def action_upload_document(self):
-        """Quick-upload a document into this folder."""
+        """Open multi-file upload wizard for this folder."""
         self.ensure_one()
         return {
             'type': 'ir.actions.act_window',
-            'name': 'Upload Document',
-            'res_model': 'construction.project.document',
+            'name': 'Upload Documents',
+            'res_model': 'construction.document.upload.wizard',
             'view_mode': 'form',
             'target': 'new',
             'context': {

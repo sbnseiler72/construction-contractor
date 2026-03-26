@@ -32,6 +32,7 @@
         'views/construction_document_tag_views.xml',
         'views/construction_project_folder_views.xml',
         'views/construction_project_document_views.xml',
+        'views/construction_document_upload_wizard_views.xml',
         'views/construction_project_phase_views.xml',
         'views/construction_expense_type_views.xml',
         'views/construction_project_views.xml',

@@ -97,7 +97,7 @@
         <field name="arch" type="xml">
             <form string="Project Folder">
                 <header>
-                    <button name="action_upload_document" string="Upload Document"
+                    <button name="action_upload_document" string="Upload Documents"
                             type="object" class="btn-primary"
                             icon="fa-upload"/>
                     <button name="action_create_subfolder" string="New Folder"

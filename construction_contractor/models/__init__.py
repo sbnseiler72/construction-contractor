@@ -14,3 +14,4 @@ from . import construction_contractor_fee_calculation
 from . import construction_document_tag
 from . import construction_project_folder
 from . import construction_project_document
+from . import construction_document_upload_wizard
