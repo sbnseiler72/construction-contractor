@@ -165,17 +165,17 @@
                                          class="modal fade" role="dialog" tabindex="-1" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered modal-lg">
                                             <div class="modal-content">
-                                                <header class="modal-header py-2">
+                                                <div class="modal-header py-2">
                                                     <h5 class="modal-title">
                                                         <i class="fa fa-file-image-o me-2" title="Receipt Image"/>
                                                         <field name="name"/> — Receipt
                                                     </h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"/>
-                                                </header>
-                                                <main class="modal-body p-1 text-center">
+                                                </div>
+                                                <div class="modal-body p-1 text-center">
                                                     <img t-att-src="'/web/image/construction.expense/' + record.id.raw_value + '/receipt_file'"
                                                          class="img-fluid rounded" alt="Receipt"/>
-                                                </main>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
