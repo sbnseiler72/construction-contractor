@@ -25,7 +25,7 @@ class ConstructionProjectFolder(models.Model):
         ondelete='cascade',
         index=True,
     )
-    parent_path = fields.Char(index=True, unaccent=False)
+    parent_path = fields.Char(index=True)
     child_ids = fields.One2many(
         'construction.project.folder',
         'parent_id',
@@ -43,12 +43,12 @@ class ConstructionProjectFolder(models.Model):
     sequence = fields.Integer(string='Sequence', default=10)
     description = fields.Text(string='Description')
     document_count = fields.Integer(
-        string='Documents',
+        string='Document Count',
         compute='_compute_counts',
         store=True,
     )
     subfolder_count = fields.Integer(
-        string='Sub-folders',
+        string='Sub-folder Count',
         compute='_compute_counts',
         store=True,
     )
@@ -61,13 +61,10 @@ class ConstructionProjectFolder(models.Model):
     )
     color = fields.Integer(string='Color')
 
-    _sql_constraints = [
-        (
-            'name_parent_project_uniq',
-            'unique (name, parent_id, project_id)',
-            'A folder with this name already exists at this level!',
-        ),
-    ]
+    _name_parent_project_uniq = models.Constraint(
+        'unique (name, parent_id, project_id)',
+        'A folder with this name already exists at this level!',
+    )
 
     @api.constrains('parent_id')
     def _check_parent_id(self):

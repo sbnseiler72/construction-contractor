@@ -28,10 +28,10 @@
                             <!-- Folder icon -->
                             <div class="mb-2" style="font-size: 48px; line-height: 1;">
                                 <t t-if="record.subfolder_count.raw_value > 0">
-                                    <i class="fa fa-folder text-warning" style="opacity: 0.85;"/>
+                                    <i class="fa fa-folder text-warning" style="opacity: 0.85;" title="Folder"/>
                                 </t>
                                 <t t-else="">
-                                    <i class="fa fa-folder text-warning"/>
+                                    <i class="fa fa-folder text-warning" title="Folder"/>
                                 </t>
                             </div>
                             <!-- Folder name -->
@@ -50,12 +50,12 @@
                                 <span t-if="record.subfolder_count.raw_value > 0"
                                       class="badge text-bg-secondary"
                                       style="font-size: 11px;">
-                                    <i class="fa fa-folder-o me-1"/>
+                                    <i class="fa fa-folder-o me-1" title="Sub-folders"/>
                                     <field name="subfolder_count"/>
                                 </span>
                                 <span class="badge text-bg-primary"
                                       style="font-size: 11px;">
-                                    <i class="fa fa-file-o me-1"/>
+                                    <i class="fa fa-file-o me-1" title="Documents"/>
                                     <field name="total_document_count"/>
                                 </span>
                             </div>
@@ -121,7 +121,7 @@
                     <!-- Folder title -->
                     <div class="oe_title">
                         <h1>
-                            <i class="fa fa-folder text-warning me-2"/>
+                            <i class="fa fa-folder text-warning me-2" title="Folder"/>
                             <field name="name" placeholder="Folder Name"/>
                         </h1>
                     </div>
